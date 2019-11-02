@@ -12,6 +12,7 @@
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
 #include <argos3/core/utility/math/rng.h>
+#include <argos3/core/utility/math/vector2.h>
 
 using namespace argos;
 
@@ -124,7 +125,7 @@ private:
 
   void DoWalk();
   void DoCollisionAvoidance(const CVector2& c_diffusion);
-  
+
   CVector2 DiffusionVector(bool& b_collision);
   void SetWheelSpeedsFromVector(const CVector2& c_heading);
 

@@ -57,6 +57,42 @@ CFootBotIndividualLevyWalk::SStochasticParams::SStochasticParams()
 /****************************************/
 /****************************************/
 
+void CFootBotIndividualLevyWalk::SDiffusionParams::Init(TConfigurationNode& t_node) {
+   try {
+      CRange<CDegrees> cGoStraightAngleRangeDegrees(CDegrees(-10.0f), CDegrees(10.0f));
+      GetNodeAttribute(t_node, "go_straight_angle_range", cGoStraightAngleRangeDegrees);
+      GoStraightAngleRange.Set(ToRadians(cGoStraightAngleRangeDegrees.GetMin()),
+                               ToRadians(cGoStraightAngleRangeDegrees.GetMax()));
+      GetNodeAttribute(t_node, "delta", Delta);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller diffusion parameters.", ex);
+   }
+}
+
+/****************************************/
+/****************************************/
+
+void CFootBotIndividualLevyWalk::SWheelTurningParams::Init(TConfigurationNode& t_node) {
+   try {
+      TurningMechanism = NO_TURN;
+      CDegrees cAngle;
+      GetNodeAttribute(t_node, "hard_turn_angle_threshold", cAngle);
+      HardTurnOnAngleThreshold = ToRadians(cAngle);
+      GetNodeAttribute(t_node, "soft_turn_angle_threshold", cAngle);
+      SoftTurnOnAngleThreshold = ToRadians(cAngle);
+      GetNodeAttribute(t_node, "no_turn_angle_threshold", cAngle);
+      NoTurnAngleThreshold = ToRadians(cAngle);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller wheel turning parameters.", ex);
+   }
+}
+
+
+/****************************************/
+/****************************************/
+
 CFootBotIndividualLevyWalk::CFootBotIndividualLevyWalk():
    m_pcWheels(NULL),
    m_pcProximity(NULL),
@@ -74,7 +110,7 @@ void CFootBotIndividualLevyWalk::Init(TConfigurationNode& t_node) {
       m_sWheelTurningParams.Init(GetNode(t_node, "wheel_turning"));
    }
    catch(CARGoSException& ex) {
-      THROW_ARGOSEXCEPTION_NESTED("ERROR CFootBotIndividualLevyWalk - Init \"" << GetId() << "\"", ex);
+      THROW_ARGOSEXCEPTION_NESTED("Error initalizing robot \"" << GetId() << "\"", ex);
    }
 
    m_pcRNG = CRandom::CreateRNG("argos");
@@ -100,9 +136,10 @@ void CFootBotIndividualLevyWalk::ControlStep() {
       }
       case SStateData::STATE_COLLISIONAVOIDANCE: {
          AvoidCollision();
+         break;
       }
       default: {
-         LOGERR << "ERROR CFootBotIndividualLevyWalk - Invalid State" << std::endl;
+         LOGERR << "Error invalid state \"" << GetId() << "\"" << std::endl;
       }
    }
 }
@@ -153,7 +190,7 @@ void CFootBotIndividualLevyWalk::InitWalkState()
 {
    m_sStateData.RemainingWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
 
-   m_sStateData.State = m_sStateData.STATE_WALK;
+   m_sStateData.State = SStateData::STATE_WALK;
 }
 
 Real CFootBotIndividualLevyWalk::GenerateRandomTimeLevyAlphaDistributedVariable()
@@ -213,7 +250,7 @@ void CFootBotIndividualLevyWalk::InitRotateState()
    m_sStateData.RemainingRotateSimulationTicks = T;
    m_sStateData.RotateVelocity = Sign(U) * (Y / (Real)T);
 
-   m_sStateData.State = m_sStateData.STATE_ROTATE;
+   m_sStateData.State = SStateData::STATE_ROTATE;
 }
 
 /****************************************/
@@ -333,7 +370,7 @@ void CFootBotIndividualLevyWalk::SetWheelSpeedsFromVector(const CVector2& c_head
 
 void CFootBotIndividualLevyWalk::InitCollisionAvoidanceState() 
 {
-   m_sStateData.State = m_sStateData.STATE_COLLISIONAVOIDANCE;
+   m_sStateData.State = SStateData::STATE_COLLISIONAVOIDANCE;
 }
 
 /****************************************/

@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_ilw/footbot_ilw_automoc.cpp
+
+/home/stef/Documents/CollectiveLevyWalk/controllers/footbot_ilw/footbot_ilw.cpp
+footbot_ilw.h
+/home/stef/Documents/CollectiveLevyWalk/controllers/footbot_ilw/footbot_ilw.h
+argos3/plugins/robots/foot-bot/simulator/footbot_entity.h
+-
+argos3/core/utility/configuration/argos_configuration.h
+-
+argos3/core/utility/math/vector2.h
+-
+argos3/core/utility/logging/argos_log.h
+-
+
+/home/stef/Documents/CollectiveLevyWalk/controllers/footbot_ilw/footbot_ilw.h
+argos3/core/control_interface/ci_controller.h
+-
+argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h
+-
+argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h
+-
+argos3/core/utility/math/rng.h
+-
+argos3/core/utility/math/vector2.h
+-
+
