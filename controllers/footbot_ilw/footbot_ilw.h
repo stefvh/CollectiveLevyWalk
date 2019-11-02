@@ -11,6 +11,7 @@
 #include <argos3/core/control_interface/ci_controller.h>
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 #include <argos3/plugins/robots/foot-bot/control_interface/ci_footbot_proximity_sensor.h>
+#include <argos3/core/utility/math/rng.h>
 
 using namespace argos;
 
@@ -28,8 +29,42 @@ public:
       STATE_COLLISIONAVOIDANCE
     } State;
 
+    float LevyAlphaExponent;
+
+    int RemainingWalkSimulationTicks;
+    int RemainingRotateSimulationTicks;
+
     SStateData();
     void Reset();
+  };
+  struct SExperimentParams 
+  {
+    int TicksPerSecond;
+
+    SExperimentParams();
+  };
+  struct SFootbotParams 
+  {
+    int InterwheelDistance;
+
+    SFootbotParams();
+  };
+  struct SWheelVelocityParams 
+  {
+    Real WalkVelocity;
+    Real MaxVelocity;
+
+    SWheelVelocityParams();
+  };
+  struct SStochasticParams 
+  {
+    std::map<float,float> MapAlphaExponentToStdDevOfRandomVariableX;
+    int NormalizationFactorN;
+    int MaxRandomLevyAlphaDistributedValue;
+
+    CRange<Real> RotationAngleProbRange;
+
+    SStochasticParams();
   };
   struct SDiffusionParams
   {
@@ -51,8 +86,6 @@ public:
     CRadians SoftTurnOnAngleThreshold;
     CRadians NoTurnAngleThreshold;
 
-    Real MaxSpeed;
-
     void Init(TConfigurationNode &t_tree);
   };
 
@@ -68,6 +101,10 @@ private:
   CCI_FootBotProximitySensor *m_pcProximity;
 
   SStateData m_sStateData;
+  SExperimentParams m_sExperimentParams;
+  SFootbotParams m_sFootbotParams;
+  SWheelVelocityParams m_sWheelVelocityParams;
+  SStochasticParams m_sStochasticParams;
   SDiffusionParams m_sDiffusionParams;
   SWheelTurningParams m_sWheelTurningParams;
 
@@ -78,6 +115,9 @@ private:
   void Walk();
   void Rotate();
   void AvoidCollision();
+
+  Real GenerateRandomLevyAlphaDistributedVariable();
+  Real GenerateRandomTimeLevyAlphaDistributedVariable();
 };
 
 #endif

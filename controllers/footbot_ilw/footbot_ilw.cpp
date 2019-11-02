@@ -1,5 +1,59 @@
 #include "footbot_ilw.h"
 
+#include <argos3/plugins/robots/foot-bot/simulator/footbot_entity.h>
+#include <argos3/core/utility/configuration/argos_configuration.h>
+#include <argos3/core/utility/math/vector2.h>
+#include <argos3/core/utility/logging/argos_log.h>
+
+/****************************************/
+/****************************************/
+
+CFootBotIndividualLevyWalk::SStateData::SStateData() :
+   LevyAlphaExponent(1.0f) {}
+
+/****************************************/
+/****************************************/
+
+CFootBotIndividualLevyWalk::SExperimentParams::SExperimentParams() :
+   TicksPerSecond(10) {}
+
+/****************************************/
+/****************************************/
+
+CFootBotIndividualLevyWalk::SFootbotParams::SFootbotParams() :
+   InterwheelDistance(14) {}
+
+/****************************************/
+/****************************************/
+
+CFootBotIndividualLevyWalk::SWheelVelocityParams::SWheelVelocityParams() :
+   WalkVelocity(17.0),
+   MaxVelocity(20.0) {}
+
+/****************************************/
+/****************************************/
+
+CFootBotIndividualLevyWalk::SStochasticParams::SStochasticParams()
+{
+   MapAlphaExponentToStdDevOfRandomVariableX[1.0f] = 1.0f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.1f] = 0.938291f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.2f] = 0.878829f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.3f] = 0.819837f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.4f] = 0.759679f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.5f] = 0.696575f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.6f] = 0.628231f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.7f] = 0.55116f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.8f] = 0.458638f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.9f] = 0.333819f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.95f] = 0.241176f;
+   MapAlphaExponentToStdDevOfRandomVariableX[1.99f] = 0.110693f;
+
+   NormalizationFactorN = 100;
+   MaxRandomLevyAlphaDistributedValue = 59;
+
+   RotationAngleProbRange.Set(-M_PI, M_PI);
+}
+
 /****************************************/
 /****************************************/
 
@@ -64,14 +118,49 @@ void CFootBotIndividualLevyWalk::Initialize() {
 /****************************************/
 
 void CFootBotIndividualLevyWalk::Walk() {
-    
+   m_sStateData.RemainingWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
+   m_pcWheels->SetLinearVelocity(m_sWheelVelocityParams.WalkVelocity, m_sWheelVelocityParams.WalkVelocity);
+}
+
+Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable() 
+{
+   Real L = 0.0;
+   for(size_t i = 0; i < m_sStochasticParams.NormalizationFactorN; ++i) {
+      Real X = m_pcRNG->Gaussian(1.0, 0.0); // TODO: change stddev based on alpha
+      Real Y = m_pcRNG->Gaussian(1.0, 0.0);
+
+      Real V = X / ::pow(Abs(Y), (1.0 / m_sStateData.LevyAlphaExponent));
+
+      L += V;
+   }
+   L /= ::pow(m_sStochasticParams.NormalizationFactorN, (1.0 / m_sStateData.LevyAlphaExponent));
+
+   return L;
+}
+
+Real CFootBotIndividualLevyWalk::GenerateRandomTimeLevyAlphaDistributedVariable()
+{
+   Real L;
+   do {
+      L = GenerateRandomLevyAlphaDistributedVariable();
+   } while (Abs(L) > m_sStochasticParams.MaxRandomLevyAlphaDistributedValue);
+
+   Real T = ((Real) m_sExperimentParams.TicksPerSecond) * (1.0 + Abs(L));
+   return T;
 }
 
 /****************************************/
 /****************************************/
 
 void CFootBotIndividualLevyWalk::Rotate() {
+   Real U = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleProbRange);
+   Real Y = (Abs(U) * (Real)m_sFootbotParams.InterwheelDistance) / (2.0 * (Real)m_sExperimentParams.TicksPerSecond);
+   
+   int T = Ceil(Y / m_sWheelVelocityParams.MaxVelocity);
+   
+   Real fRotateVelocity = Sign(U) * (Y / (Real)T);
 
+   m_sStateData.RemainingRotateSimulationTicks = T;
 }
 
 /****************************************/
@@ -84,7 +173,7 @@ void CFootBotIndividualLevyWalk::AvoidCollision() {
 /****************************************/
 /****************************************/
 
-CVector2 CFootBotForaging::DiffusionVector(bool& b_collision) {
+CVector2 CFootBotIndividualLevyWalk::DiffusionVector(bool& b_collision) {
    const CCI_FootBotProximitySensor::TReadings& tProxReads = m_pcProximity->GetReadings();
    CVector2 cDiffusionVector;
    for(size_t i = 0; i < tProxReads.size(); ++i) {
@@ -108,7 +197,7 @@ CVector2 CFootBotForaging::DiffusionVector(bool& b_collision) {
 /****************************************/
 /****************************************/
 
-void CFootBotForaging::SetWheelSpeedsFromVector(const CVector2& c_heading) {
+void CFootBotIndividualLevyWalk::SetWheelSpeedsFromVector(const CVector2& c_heading) {
    CRadians cHeadingAngle = c_heading.Angle().SignedNormalize();
    Real fHeadingLength = c_heading.Length();
    Real fBaseAngularWheelSpeed = Min<Real>(fHeadingLength, m_sWheelTurningParams.MaxSpeed);
