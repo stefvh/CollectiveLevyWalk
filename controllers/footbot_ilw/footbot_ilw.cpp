@@ -99,7 +99,7 @@ void CFootBotIndividualLevyWalk::ControlStep() {
          break;
       }
       case SStateData::STATE_COLLISIONAVOIDANCE: {
-          AvoidCollision();
+         AvoidCollision();
       }
       default: {
          LOGERR << "ERROR CFootBotIndividualLevyWalk - Invalid State" << std::endl;
@@ -111,15 +111,60 @@ void CFootBotIndividualLevyWalk::ControlStep() {
 /****************************************/
 
 void CFootBotIndividualLevyWalk::Initialize() {
-
+   // State transition
+   InitWalkState();
 }
 
 /****************************************/
 /****************************************/
 
 void CFootBotIndividualLevyWalk::Walk() {
-   m_sStateData.RemainingWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
+   bool bCollision;
+   CVector2 cDiffusion = DiffusionVector(bCollision);
+
+   if (bCollision) 
+   {
+      InitCollisionAvoidanceState();
+      DoCollisionAvoidance(cDiffusion);
+   } else {
+      DoWalk();
+   }
+}
+
+void CFootBotIndividualLevyWalk::DoWalk() 
+{
+   // Act
    m_pcWheels->SetLinearVelocity(m_sWheelVelocityParams.WalkVelocity, m_sWheelVelocityParams.WalkVelocity);
+
+   // Update state
+   m_sStateData.RemainingWalkSimulationTicks -= 1;
+
+   // State transition
+   if (m_sStateData.RemainingWalkSimulationTicks <= 0) 
+   {
+      InitRotateState();
+   }
+}
+
+/****************************************/
+/****************************************/
+
+void CFootBotIndividualLevyWalk::InitWalkState() 
+{
+   m_sStateData.RemainingWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
+
+   m_sStateData.State = m_sStateData.STATE_WALK;
+}
+
+Real CFootBotIndividualLevyWalk::GenerateRandomTimeLevyAlphaDistributedVariable()
+{
+   Real L;
+   do {
+      L = GenerateRandomLevyAlphaDistributedVariable();
+   } while (Abs(L) > m_sStochasticParams.MaxRandomLevyAlphaDistributedValue);
+
+   Real T = ((Real) m_sExperimentParams.TicksPerSecond) * (1.0 + Abs(L));
+   return T;
 }
 
 Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable() 
@@ -138,40 +183,60 @@ Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable()
    return L;
 }
 
-Real CFootBotIndividualLevyWalk::GenerateRandomTimeLevyAlphaDistributedVariable()
-{
-   Real L;
-   do {
-      L = GenerateRandomLevyAlphaDistributedVariable();
-   } while (Abs(L) > m_sStochasticParams.MaxRandomLevyAlphaDistributedValue);
+/****************************************/
+/****************************************/
 
-   Real T = ((Real) m_sExperimentParams.TicksPerSecond) * (1.0 + Abs(L));
-   return T;
+void CFootBotIndividualLevyWalk::Rotate() {
+   // Act
+   m_pcWheels->SetLinearVelocity(m_sStateData.RotateVelocity, -m_sStateData.RotateVelocity);
+
+   // Update state
+   m_sStateData.RemainingRotateSimulationTicks -= 1;
+
+   // State transition
+   if (m_sStateData.RemainingRotateSimulationTicks <= 0)
+   {
+      InitWalkState();
+   }
 }
 
 /****************************************/
 /****************************************/
 
-void CFootBotIndividualLevyWalk::Rotate() {
+void CFootBotIndividualLevyWalk::InitRotateState() 
+{
    Real U = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleProbRange);
    Real Y = (Abs(U) * (Real)m_sFootbotParams.InterwheelDistance) / (2.0 * (Real)m_sExperimentParams.TicksPerSecond);
    
    int T = Ceil(Y / m_sWheelVelocityParams.MaxVelocity);
-   
-   Real fRotateVelocity = Sign(U) * (Y / (Real)T);
 
    m_sStateData.RemainingRotateSimulationTicks = T;
+   m_sStateData.RotateVelocity = Sign(U) * (Y / (Real)T);
+
+   m_sStateData.State = m_sStateData.STATE_ROTATE;
 }
 
 /****************************************/
 /****************************************/
 
 void CFootBotIndividualLevyWalk::AvoidCollision() {
+   bool bCollision;
+   CVector2 cDiffusion = DiffusionVector(bCollision);
 
+   if (bCollision) 
+   {
+      DoCollisionAvoidance(cDiffusion);
+   } else {
+      InitWalkState();
+      DoWalk();
+   }
 }
 
-/****************************************/
-/****************************************/
+void CFootBotIndividualLevyWalk::DoCollisionAvoidance(const CVector2& c_diffusion) 
+{
+   // Act
+   SetWheelSpeedsFromVector(m_sWheelVelocityParams.MaxVelocity * c_diffusion);
+}
 
 CVector2 CFootBotIndividualLevyWalk::DiffusionVector(bool& b_collision) {
    const CCI_FootBotProximitySensor::TReadings& tProxReads = m_pcProximity->GetReadings();
@@ -194,14 +259,12 @@ CVector2 CFootBotIndividualLevyWalk::DiffusionVector(bool& b_collision) {
    }
 }
 
-/****************************************/
-/****************************************/
-
 void CFootBotIndividualLevyWalk::SetWheelSpeedsFromVector(const CVector2& c_heading) {
    CRadians cHeadingAngle = c_heading.Angle().SignedNormalize();
    Real fHeadingLength = c_heading.Length();
-   Real fBaseAngularWheelSpeed = Min<Real>(fHeadingLength, m_sWheelTurningParams.MaxSpeed);
-   /* State transition logic */
+   Real fBaseAngularWheelSpeed = Min<Real>(fHeadingLength, m_sWheelVelocityParams.MaxVelocity);
+
+   // State transition (TurningMechanism)
    if(m_sWheelTurningParams.TurningMechanism == SWheelTurningParams::HARD_TURN) {
       if(Abs(cHeadingAngle) <= m_sWheelTurningParams.SoftTurnOnAngleThreshold) {
          m_sWheelTurningParams.TurningMechanism = SWheelTurningParams::SOFT_TURN;
@@ -223,47 +286,55 @@ void CFootBotIndividualLevyWalk::SetWheelSpeedsFromVector(const CVector2& c_head
          m_sWheelTurningParams.TurningMechanism = SWheelTurningParams::SOFT_TURN;
       }
    }
-   /* Wheel speeds based on current turning state */
+
+   // Wheel speeds based on current turning state
    Real fSpeed1, fSpeed2;
    switch(m_sWheelTurningParams.TurningMechanism) {
       case SWheelTurningParams::NO_TURN: {
-         /* Just go straight */
+         // Just go straight
          fSpeed1 = fBaseAngularWheelSpeed;
          fSpeed2 = fBaseAngularWheelSpeed;
          break;
       }
       case SWheelTurningParams::SOFT_TURN: {
-         /* Both wheels go straight, but one is faster than the other */
+         // Both wheels go straight, but one is faster than the other
          Real fSpeedFactor = (m_sWheelTurningParams.HardTurnOnAngleThreshold - Abs(cHeadingAngle)) / m_sWheelTurningParams.HardTurnOnAngleThreshold;
          fSpeed1 = fBaseAngularWheelSpeed - fBaseAngularWheelSpeed * (1.0 - fSpeedFactor);
          fSpeed2 = fBaseAngularWheelSpeed + fBaseAngularWheelSpeed * (1.0 - fSpeedFactor);
          break;
       }
       case SWheelTurningParams::HARD_TURN: {
-         /* Opposite wheel speeds */
-         fSpeed1 = -m_sWheelTurningParams.MaxSpeed;
-         fSpeed2 =  m_sWheelTurningParams.MaxSpeed;
+         // Opposite wheel speeds
+         fSpeed1 = -m_sWheelVelocityParams.MaxVelocity;
+         fSpeed2 =  m_sWheelVelocityParams.MaxVelocity;
          break;
       }
    }
-   /* Apply the calculated speeds to the appropriate wheels */
+
+   // Apply the calculated speeds to the appropriate wheels
    Real fLeftWheelSpeed, fRightWheelSpeed;
    if(cHeadingAngle > CRadians::ZERO) {
-      /* Turn Left */
+      // Turn Left
       fLeftWheelSpeed  = fSpeed1;
       fRightWheelSpeed = fSpeed2;
    }
    else {
-      /* Turn Right */
+      // Turn Right
       fLeftWheelSpeed  = fSpeed2;
       fRightWheelSpeed = fSpeed1;
    }
-   /* Finally, set the wheel speeds */
+
+   // Finally, set the wheel speeds
    m_pcWheels->SetLinearVelocity(fLeftWheelSpeed, fRightWheelSpeed);
 }
 
 /****************************************/
 /****************************************/
+
+void CFootBotIndividualLevyWalk::InitCollisionAvoidanceState() 
+{
+   m_sStateData.State = m_sStateData.STATE_COLLISIONAVOIDANCE;
+}
 
 /****************************************/
 /****************************************/

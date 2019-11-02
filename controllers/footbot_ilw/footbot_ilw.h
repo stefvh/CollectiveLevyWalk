@@ -32,7 +32,9 @@ public:
     float LevyAlphaExponent;
 
     int RemainingWalkSimulationTicks;
+
     int RemainingRotateSimulationTicks;
+    Real RotateVelocity;
 
     SStateData();
     void Reset();
@@ -115,6 +117,16 @@ private:
   void Walk();
   void Rotate();
   void AvoidCollision();
+
+  void InitWalkState();
+  void InitRotateState();
+  void InitCollisionAvoidanceState();
+
+  void DoWalk();
+  void DoCollisionAvoidance(const CVector2& c_diffusion);
+  
+  CVector2 DiffusionVector(bool& b_collision);
+  void SetWheelSpeedsFromVector(const CVector2& c_heading);
 
   Real GenerateRandomLevyAlphaDistributedVariable();
   Real GenerateRandomTimeLevyAlphaDistributedVariable();
