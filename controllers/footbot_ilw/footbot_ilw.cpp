@@ -8,7 +8,11 @@
 /****************************************/
 
 CFootBotIndividualLevyWalk::SStateData::SStateData() :
-   State(STATE_INITIALIZE) {}
+   State(STATE_INITIALIZE),
+   ToWalkSimulationTicks(0),
+   WalkedSimulationTicks(0),
+   ToRotateSimulationTicks(0),
+   RotatedSimulationTicks(0) {}
 
 void CFootBotIndividualLevyWalk::SStateData::Init(TConfigurationNode &t_node) 
 {
@@ -225,10 +229,10 @@ void CFootBotIndividualLevyWalk::DoWalk()
    m_pcWheels->SetLinearVelocity(m_sWheelVelocityParams.WalkVelocity, m_sWheelVelocityParams.WalkVelocity);
 
    // Update state
-   m_sStateData.RemainingWalkSimulationTicks -= 1;
+   m_sStateData.WalkedSimulationTicks++;
 
    // State transition
-   if (m_sStateData.RemainingWalkSimulationTicks <= 0) 
+   if (m_sStateData.ToWalkSimulationTicks - m_sStateData.WalkedSimulationTicks <= 0) 
    {
       InitRotateState();
    }
@@ -239,7 +243,8 @@ void CFootBotIndividualLevyWalk::DoWalk()
 
 void CFootBotIndividualLevyWalk::InitWalkState() 
 {
-   m_sStateData.RemainingWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
+   m_sStateData.ToWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
+   m_sStateData.WalkedSimulationTicks = 0;
 
    m_sStateData.State = SStateData::STATE_WALK;
 }
@@ -279,10 +284,10 @@ void CFootBotIndividualLevyWalk::Rotate() {
    m_pcWheels->SetLinearVelocity(m_sStateData.RotateVelocity, -m_sStateData.RotateVelocity);
 
    // Update state
-   m_sStateData.RemainingRotateSimulationTicks -= 1;
+   m_sStateData.RotatedSimulationTicks++;
 
    // State transition
-   if (m_sStateData.RemainingRotateSimulationTicks <= 0)
+   if (m_sStateData.ToRotateSimulationTicks - m_sStateData.RotatedSimulationTicks <= 0)
    {
       InitWalkState();
    }
@@ -298,7 +303,8 @@ void CFootBotIndividualLevyWalk::InitRotateState()
    
    int T = Ceil(Y / m_sWheelVelocityParams.MaxVelocity);
 
-   m_sStateData.RemainingRotateSimulationTicks = T;
+   m_sStateData.ToRotateSimulationTicks = T;
+   m_sStateData.RotatedSimulationTicks = 0;
    m_sStateData.RotateVelocity = Sign(U) * (Y / (Real)T);
 
    m_sStateData.State = SStateData::STATE_ROTATE;

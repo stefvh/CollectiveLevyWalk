@@ -37,7 +37,7 @@ void CFootBotCollectiveLevyWalk::ControlStep() {
    switch(m_sStateData.State) {
       case SStateData::STATE_INITIALIZE: {
          Initialize();
-         LOG << m_pcRABA->GetSize() << std::endl;
+         LOG << m_pcRABA->GetSize() << "|" << GetId().size() << std::endl;
          break;
       }
       case SStateData::STATE_WALK: {

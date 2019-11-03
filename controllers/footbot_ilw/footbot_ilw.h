@@ -32,9 +32,11 @@ public:
 
     float LevyAlphaExponent;
 
-    int RemainingWalkSimulationTicks;
+    int ToWalkSimulationTicks;
+    int WalkedSimulationTicks;
 
-    int RemainingRotateSimulationTicks;
+    int ToRotateSimulationTicks;
+    int RotatedSimulationTicks;
     Real RotateVelocity;
 
     SStateData();
