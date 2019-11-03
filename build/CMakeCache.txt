@@ -226,6 +226,9 @@ collective_levy_walk_BINARY_DIR:STATIC=/home/stef/Documents/CollectiveLevyWalk/b
 collective_levy_walk_SOURCE_DIR:STATIC=/home/stef/Documents/CollectiveLevyWalk
 
 //Dependencies for the target
+footbot_clw_LIB_DEPENDS:STATIC=general;footbot_ilw;general;argos3core_simulator;general;argos3plugin_simulator_footbot;general;argos3plugin_simulator_genericrobot;
+
+//Dependencies for the target
 footbot_foraging_LIB_DEPENDS:STATIC=general;argos3core_simulator;general;argos3plugin_simulator_footbot;general;argos3plugin_simulator_genericrobot;
 
 //Dependencies for the target
@@ -359,7 +362,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

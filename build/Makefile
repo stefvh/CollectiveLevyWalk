@@ -163,6 +163,32 @@ footbot_ilw_automoc/fast:
 .PHONY : footbot_ilw_automoc/fast
 
 #=============================================================================
+# Target rules for targets named footbot_clw
+
+# Build rule for target.
+footbot_clw: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 footbot_clw
+.PHONY : footbot_clw
+
+# fast build rule for target.
+footbot_clw/fast:
+	$(MAKE) -f controllers/footbot_clw/CMakeFiles/footbot_clw.dir/build.make controllers/footbot_clw/CMakeFiles/footbot_clw.dir/build
+.PHONY : footbot_clw/fast
+
+#=============================================================================
+# Target rules for targets named footbot_clw_automoc
+
+# Build rule for target.
+footbot_clw_automoc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 footbot_clw_automoc
+.PHONY : footbot_clw_automoc
+
+# fast build rule for target.
+footbot_clw_automoc/fast:
+	$(MAKE) -f controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/build.make controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/build
+.PHONY : footbot_clw_automoc/fast
+
+#=============================================================================
 # Target rules for targets named foraging_loop_functions
 
 # Build rule for target.
@@ -200,6 +226,8 @@ help:
 	@echo "... footbot_foraging_automoc"
 	@echo "... footbot_ilw"
 	@echo "... footbot_ilw_automoc"
+	@echo "... footbot_clw"
+	@echo "... footbot_clw_automoc"
 	@echo "... foraging_loop_functions"
 	@echo "... foraging_loop_functions_automoc"
 .PHONY : help

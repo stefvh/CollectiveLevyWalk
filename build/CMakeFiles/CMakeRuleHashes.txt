@@ -1,4 +1,5 @@
 # Hashes of file build rules.
+1aa1c6a59e235d21ed59f8e2f4236564 controllers/footbot_clw/CMakeFiles/footbot_clw_automoc
 cd76b6fc91f858f204030c8a758648f6 controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc
 eff26076eab6f09002eb19fa2df6abec controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc
 1d3281cb2347a67388de9ccdc899c733 loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc

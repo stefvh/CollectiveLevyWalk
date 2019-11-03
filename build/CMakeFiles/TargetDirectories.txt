@@ -10,6 +10,10 @@
 /home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_ilw/CMakeFiles/rebuild_cache.dir
 /home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir
 /home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir
+/home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_clw/CMakeFiles/rebuild_cache.dir
+/home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_clw/CMakeFiles/edit_cache.dir
+/home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_clw/CMakeFiles/footbot_clw.dir
+/home/stef/Documents/CollectiveLevyWalk/build/controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir
 /home/stef/Documents/CollectiveLevyWalk/build/loop_functions/CMakeFiles/edit_cache.dir
 /home/stef/Documents/CollectiveLevyWalk/build/loop_functions/CMakeFiles/rebuild_cache.dir
 /home/stef/Documents/CollectiveLevyWalk/build/loop_functions/foraging_loop_functions/CMakeFiles/edit_cache.dir

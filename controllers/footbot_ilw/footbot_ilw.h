@@ -38,6 +38,7 @@ public:
     Real RotateVelocity;
 
     SStateData();
+    void Init(TConfigurationNode &t_node);
     void Reset();
   };
   struct SExperimentParams 
@@ -58,6 +59,7 @@ public:
     Real MaxVelocity;
 
     SWheelVelocityParams();
+    void Init(TConfigurationNode &t_node);
   };
   struct SStochasticParams 
   {
@@ -68,13 +70,15 @@ public:
     CRange<Real> RotationAngleProbRange;
 
     SStochasticParams();
+    void Init(TConfigurationNode &t_node);
   };
   struct SDiffusionParams
   {
     Real Delta;
     CRange<CRadians> GoStraightAngleRange;
 
-    void Init(TConfigurationNode &t_tree);
+    SDiffusionParams();
+    void Init(TConfigurationNode &t_node);
   };
   struct SWheelTurningParams
   {
@@ -89,7 +93,8 @@ public:
     CRadians SoftTurnOnAngleThreshold;
     CRadians NoTurnAngleThreshold;
 
-    void Init(TConfigurationNode &t_tree);
+    SWheelTurningParams();
+    void Init(TConfigurationNode &t_node);
   };
 
 public:
@@ -99,7 +104,7 @@ public:
   virtual void Init(TConfigurationNode &t_node);
   virtual void ControlStep();
 
-private:
+protected:
   CCI_DifferentialSteeringActuator *m_pcWheels;
   CCI_FootBotProximitySensor *m_pcProximity;
 
@@ -113,7 +118,12 @@ private:
 
   CRandom::CRNG *m_pcRNG;
 
-private:
+protected:
+  virtual void InitActuators();
+  virtual void InitSensors();
+  virtual void InitParams(TConfigurationNode &t_node);
+  virtual void InitUtilities();
+
   void Initialize();
   void Walk();
   void Rotate();

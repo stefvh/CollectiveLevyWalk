@@ -2,14 +2,23 @@
 
 #include <argos3/plugins/robots/foot-bot/simulator/footbot_entity.h>
 #include <argos3/core/utility/configuration/argos_configuration.h>
-#include <argos3/core/utility/math/vector2.h>
 #include <argos3/core/utility/logging/argos_log.h>
 
 /****************************************/
 /****************************************/
 
 CFootBotIndividualLevyWalk::SStateData::SStateData() :
-   LevyAlphaExponent(1.0f) {}
+   State(STATE_INITIALIZE) {}
+
+void CFootBotIndividualLevyWalk::SStateData::Init(TConfigurationNode &t_node) 
+{
+   try {
+      GetNodeAttribute(t_node, "levy_alpha_exponent", LevyAlphaExponent);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller state parameters.", ex);
+   }
+}
 
 /****************************************/
 /****************************************/
@@ -26,9 +35,18 @@ CFootBotIndividualLevyWalk::SFootbotParams::SFootbotParams() :
 /****************************************/
 /****************************************/
 
-CFootBotIndividualLevyWalk::SWheelVelocityParams::SWheelVelocityParams() :
-   WalkVelocity(17.0),
-   MaxVelocity(20.0) {}
+CFootBotIndividualLevyWalk::SWheelVelocityParams::SWheelVelocityParams() {}
+
+void CFootBotIndividualLevyWalk::SWheelVelocityParams::Init(TConfigurationNode &t_node) 
+{
+   try {
+      GetNodeAttribute(t_node, "walk_velocity", WalkVelocity);
+      GetNodeAttribute(t_node, "max_velocity", MaxVelocity);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller wheel velocity parameters.", ex);
+   }
+}
 
 /****************************************/
 /****************************************/
@@ -48,14 +66,24 @@ CFootBotIndividualLevyWalk::SStochasticParams::SStochasticParams()
    MapAlphaExponentToStdDevOfRandomVariableX[1.95f] = 0.241176f;
    MapAlphaExponentToStdDevOfRandomVariableX[1.99f] = 0.110693f;
 
-   NormalizationFactorN = 100;
-   MaxRandomLevyAlphaDistributedValue = 59;
-
    RotationAngleProbRange.Set(-M_PI, M_PI);
+}
+
+void CFootBotIndividualLevyWalk::SStochasticParams::Init(TConfigurationNode& t_node) 
+{
+   try {
+      GetNodeAttribute(t_node, "normalization_factor_n", NormalizationFactorN);
+      GetNodeAttribute(t_node, "max_random_levy_alpha_distributed_value", MaxRandomLevyAlphaDistributedValue);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller stochastic parameters.", ex);
+   }
 }
 
 /****************************************/
 /****************************************/
+
+CFootBotIndividualLevyWalk::SDiffusionParams::SDiffusionParams() {}
 
 void CFootBotIndividualLevyWalk::SDiffusionParams::Init(TConfigurationNode& t_node) {
    try {
@@ -73,9 +101,11 @@ void CFootBotIndividualLevyWalk::SDiffusionParams::Init(TConfigurationNode& t_no
 /****************************************/
 /****************************************/
 
+CFootBotIndividualLevyWalk::SWheelTurningParams::SWheelTurningParams() :
+   TurningMechanism(NO_TURN) {}
+
 void CFootBotIndividualLevyWalk::SWheelTurningParams::Init(TConfigurationNode& t_node) {
    try {
-      TurningMechanism = NO_TURN;
       CDegrees cAngle;
       GetNodeAttribute(t_node, "hard_turn_angle_threshold", cAngle);
       HardTurnOnAngleThreshold = ToRadians(cAngle);
@@ -88,7 +118,6 @@ void CFootBotIndividualLevyWalk::SWheelTurningParams::Init(TConfigurationNode& t
       THROW_ARGOSEXCEPTION_NESTED("Error initializing controller wheel turning parameters.", ex);
    }
 }
-
 
 /****************************************/
 /****************************************/
@@ -103,18 +132,40 @@ CFootBotIndividualLevyWalk::CFootBotIndividualLevyWalk():
 
 void CFootBotIndividualLevyWalk::Init(TConfigurationNode& t_node) {
    try {
-      m_pcWheels    = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
-      m_pcProximity = GetSensor  <CCI_FootBotProximitySensor      >("footbot_proximity"    );
-
-      m_sDiffusionParams.Init(GetNode(t_node, "diffusion"));
-      m_sWheelTurningParams.Init(GetNode(t_node, "wheel_turning"));
+      InitActuators();
+      InitSensors();
+      InitParams(t_node);
+      InitUtilities();
    }
    catch(CARGoSException& ex) {
       THROW_ARGOSEXCEPTION_NESTED("Error initalizing robot \"" << GetId() << "\"", ex);
    }
 
-   m_pcRNG = CRandom::CreateRNG("argos");
    Reset();
+}
+
+void CFootBotIndividualLevyWalk::InitActuators() 
+{
+   m_pcWheels    = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
+}
+
+void CFootBotIndividualLevyWalk::InitSensors() 
+{
+   m_pcProximity = GetSensor  <CCI_FootBotProximitySensor>("footbot_proximity");
+}
+
+void CFootBotIndividualLevyWalk::InitParams(TConfigurationNode &t_node) 
+{
+   m_sStateData.Init(GetNode(t_node, "state"));
+   m_sWheelVelocityParams.Init(GetNode(t_node, "wheel_velocity"));
+   m_sStochasticParams.Init(GetNode(t_node, "stochastic"));
+   m_sDiffusionParams.Init(GetNode(t_node, "diffusion"));
+   m_sWheelTurningParams.Init(GetNode(t_node, "wheel_turning"));
+}
+
+void CFootBotIndividualLevyWalk::InitUtilities() 
+{
+   m_pcRNG = CRandom::CreateRNG("argos");
 }
 
 /****************************************/
