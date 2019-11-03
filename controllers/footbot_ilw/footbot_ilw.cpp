@@ -299,8 +299,8 @@ void CFootBotIndividualLevyWalk::Rotate() {
 void CFootBotIndividualLevyWalk::InitRotateState() 
 {
    Real U = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleProbRange);
-   Real Y = (Abs(U) * (Real)m_sFootbotParams.InterwheelDistance) / (2.0 * (Real)m_sExperimentParams.TicksPerSecond);
-   
+   Real Y = (Abs(U) * (Real)m_sFootbotParams.InterwheelDistance) / (2.0 * (1.0 / (Real)m_sExperimentParams.TicksPerSecond));
+
    int T = Ceil(Y / m_sWheelVelocityParams.MaxVelocity);
 
    m_sStateData.ToRotateSimulationTicks = T;
