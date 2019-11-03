@@ -69,7 +69,7 @@ public:
     int NormalizationFactorN;
     int MaxRandomLevyAlphaDistributedValue;
 
-    CRange<Real> RotationAngleProbRange;
+    CRange<CRadians> RotationAngleProbRange;
 
     SStochasticParams();
     void Init(TConfigurationNode &t_node);
@@ -132,7 +132,8 @@ protected:
   void AvoidCollision();
 
   void InitWalkState();
-  void InitRotateState();
+  void InitRotateStateAsUniform();
+  void InitRotateStateFromAngle(CRadians c_angle);
   void InitCollisionAvoidanceState();
 
   virtual void DoWalk();

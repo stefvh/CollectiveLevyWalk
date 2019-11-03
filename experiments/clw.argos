@@ -36,6 +36,7 @@
         <wheel_turning        hard_turn_angle_threshold="90"
                               soft_turn_angle_threshold="70"
                               no_turn_angle_threshold="10"                  />
+        <communication        communication_range="135"                     />
         <collective_levy_walk short_long_step_threshold="90"                />
       </params>
     </footbot_clw_controller>
@@ -69,7 +70,7 @@
       <position method="uniform" min="-2,-2,0" max="-1,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="3" max_trials="100">
-        <foot-bot id="fb" rab_data_size="4">
+        <foot-bot id="fb" rab_data_size="4" rab_range="1.35">
           <controller config="fclw" />
         </foot-bot>
       </entity>

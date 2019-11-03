@@ -1,7 +1,32 @@
 #include "footbot_clw.h"
 
+#include <algorithm>
+
 #include <argos3/core/utility/configuration/argos_configuration.h>
 #include <argos3/core/utility/logging/argos_log.h>
+
+/****************************************/
+/****************************************/
+
+CFootBotCollectiveLevyWalk::SCommunicationStateData::SCommunicationStateData() {}
+
+void CFootBotCollectiveLevyWalk::SCommunicationStateData::Reset() {
+    PreviouslyReceivedMessages.clear();
+}
+
+/****************************************/
+/****************************************/
+
+CFootBotCollectiveLevyWalk::SCommunicationParams::SCommunicationParams() {}
+
+void CFootBotCollectiveLevyWalk::SCommunicationParams::Init(TConfigurationNode& t_node) {
+   try {
+      GetNodeAttribute(t_node, "communication_range", CommunicationRange);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller communication parameters.", ex);
+   }
+}
 
 /****************************************/
 /****************************************/
@@ -39,6 +64,7 @@ void CFootBotCollectiveLevyWalk::InitSensors() {
 
 void CFootBotCollectiveLevyWalk::InitParams(TConfigurationNode& t_node) {
     CFootBotIndividualLevyWalk::InitParams(t_node);
+    m_sCommunicationParams.Init(GetNode(t_node,"communication"));
     m_sCollectiveLevyWalkParams.Init(GetNode(t_node,"collective_levy_walk"));
 }
 
@@ -54,20 +80,67 @@ void CFootBotCollectiveLevyWalk::Reset() {
 /****************************************/
 
 void CFootBotCollectiveLevyWalk::DoWalk() {
-    if (m_sStateData.ToWalkSimulationTicks > 15) {
+    bool bRepulsiveRotation = false;
+
+    if (m_sStateData.ToWalkSimulationTicks > m_sCollectiveLevyWalkParams.ShortLongStepThreshold) {
         // Long step
         CByteArray cByteArray;
         cByteArray << GetId();
         m_pcRABA->SetData(cByteArray);
+
+        m_sCommunicationStateData.PreviouslyReceivedMessages.clear();
     } else {
         // Short step
         const CCI_RangeAndBearingSensor::TReadings& tPackets = m_pcRABS->GetReadings();
+        TMessages tMessages;
+        TSources tSources;
         for(size_t i = 0; i < tPackets.size(); ++i) {
-            //LOG << i << "->Data:" << tPackets[0].Data << std::endl;
+            CCI_RangeAndBearingSensor::SPacket tPacket = tPackets[i];
+            tMessages.push_back(tPacket.Data.ToCArray());
+            tSources.push_back(SMessageSource(tPacket.Range, tPacket.HorizontalBearing));
         }
+
+        std::sort(tMessages.begin(), tMessages.end());
+        if(!(std::includes( m_sCommunicationStateData.PreviouslyReceivedMessages.begin(),
+                            m_sCommunicationStateData.PreviouslyReceivedMessages.end(),
+                            tMessages.begin(),
+                            tMessages.end())))
+        {
+            InitRotateStateAsRepulsiveForce(tSources);
+            Rotate();
+
+            bRepulsiveRotation = true;
+        }
+
+        m_sCommunicationStateData.PreviouslyReceivedMessages = tMessages;
     }
 
-    CFootBotIndividualLevyWalk::DoWalk();
+    if (!bRepulsiveRotation) 
+    {
+        CFootBotIndividualLevyWalk::DoWalk();
+    }
+}
+
+/****************************************/
+/****************************************/
+
+void CFootBotCollectiveLevyWalk::InitRotateStateAsRepulsiveForce(TSources t_sources) {
+    CVector2 cAveragedRepulsiveForceVector;
+
+    Real fInverseCommunicationRange = 1.0 / m_sCommunicationParams.CommunicationRange;
+    for(size_t i = 0; i < t_sources.size(); ++i) {
+        SMessageSource sSource = t_sources[i];
+        CVector2 cPosition(sSource.Distance, sSource.Angle);
+
+        Real fInverseLength = 1.0 / sSource.Distance;
+        Real fCommonFactor = (fInverseLength - fInverseCommunicationRange) / (fInverseLength * fInverseLength * fInverseLength);
+
+        cAveragedRepulsiveForceVector += -cPosition * fCommonFactor;
+    }
+
+    cAveragedRepulsiveForceVector /= t_sources.size();
+
+    CFootBotIndividualLevyWalk::InitRotateStateFromAngle(cAveragedRepulsiveForceVector.Angle());
 }
 
 /****************************************/

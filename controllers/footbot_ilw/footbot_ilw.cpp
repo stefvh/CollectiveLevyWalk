@@ -70,7 +70,7 @@ CFootBotIndividualLevyWalk::SStochasticParams::SStochasticParams()
    MapAlphaExponentToStdDevOfRandomVariableX[1.95f] = 0.241176f;
    MapAlphaExponentToStdDevOfRandomVariableX[1.99f] = 0.110693f;
 
-   RotationAngleProbRange.Set(-M_PI, M_PI);
+   RotationAngleProbRange.Set(-CRadians::PI, CRadians::PI);
 }
 
 void CFootBotIndividualLevyWalk::SStochasticParams::Init(TConfigurationNode& t_node) 
@@ -234,7 +234,7 @@ void CFootBotIndividualLevyWalk::DoWalk()
    // State transition
    if (m_sStateData.ToWalkSimulationTicks - m_sStateData.WalkedSimulationTicks <= 0) 
    {
-      InitRotateState();
+      InitRotateStateAsUniform();
    }
 }
 
@@ -296,16 +296,21 @@ void CFootBotIndividualLevyWalk::Rotate() {
 /****************************************/
 /****************************************/
 
-void CFootBotIndividualLevyWalk::InitRotateState() 
+void CFootBotIndividualLevyWalk::InitRotateStateAsUniform() 
 {
-   Real U = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleProbRange);
-   Real Y = (Abs(U) * (Real)m_sFootbotParams.InterwheelDistance) / (2.0 * (1.0 / (Real)m_sExperimentParams.TicksPerSecond));
+   CRadians fAngle = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleProbRange);
+   InitRotateStateFromAngle(fAngle);
+}
+
+void CFootBotIndividualLevyWalk::InitRotateStateFromAngle(CRadians c_angle) {
+   Real A = c_angle.GetValue();
+   Real Y = (Abs(A) * (Real)m_sFootbotParams.InterwheelDistance) / (2.0 * (1.0 / (Real)m_sExperimentParams.TicksPerSecond));
 
    int T = Ceil(Y / m_sWheelVelocityParams.MaxVelocity);
 
    m_sStateData.ToRotateSimulationTicks = T;
    m_sStateData.RotatedSimulationTicks = 0;
-   m_sStateData.RotateVelocity = Sign(U) * (Y / (Real)T);
+   m_sStateData.RotateVelocity = Sign(A) * (Y / (Real)T);
 
    m_sStateData.State = SStateData::STATE_ROTATE;
 }

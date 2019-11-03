@@ -18,13 +18,28 @@ using namespace argos;
 class CFootBotCollectiveLevyWalk : public CFootBotIndividualLevyWalk 
 {
 public:
+  typedef std::vector<UInt8*> TMessages;
+  struct SCommunicationStateData 
+  {
+    TMessages PreviouslyReceivedMessages;
+
+    SCommunicationStateData();
+    void Reset();
+  };
+  struct SCommunicationParams
+  {
+    int CommunicationRange;
+
+    SCommunicationParams();
+    void Init(TConfigurationNode &t_node);
+  };
   struct SCollectiveLevyWalkParams
   {
     Real ShortLongStepThreshold;
 
     SCollectiveLevyWalkParams();
     void Init(TConfigurationNode &t_node);
-  };
+  }; 
 public:
   CFootBotCollectiveLevyWalk();
   virtual ~CFootBotCollectiveLevyWalk() {}
@@ -34,15 +49,31 @@ public:
 protected:
   CCI_RangeAndBearingActuator*  m_pcRABA;
   CCI_RangeAndBearingSensor* m_pcRABS;
-
+  
+  SCommunicationStateData m_sCommunicationStateData;
+  SCommunicationParams m_sCommunicationParams;
   SCollectiveLevyWalkParams m_sCollectiveLevyWalkParams;
+  
+  struct SMessageSource
+  {
+    Real Distance;
+    CRadians Angle;
+
+    explicit SMessageSource(Real f_distance, CRadians c_angle): 
+        Distance(f_distance),
+        Angle(c_angle) {}
+  };
+  typedef std::vector<SMessageSource> TSources;
 
 protected:
   virtual void InitActuators();
   virtual void InitSensors();
   virtual void InitParams(TConfigurationNode &t_node);
 
+  void InitRotateStateAsRepulsiveForce(TSources t_sources);
+
   virtual void DoWalk();
+
 };
 
 #endif
