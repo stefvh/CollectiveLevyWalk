@@ -1,6 +1,21 @@
 #include "footbot_clw.h"
 
+#include <argos3/core/utility/configuration/argos_configuration.h>
 #include <argos3/core/utility/logging/argos_log.h>
+
+/****************************************/
+/****************************************/
+
+CFootBotCollectiveLevyWalk::SCollectiveLevyWalkParams::SCollectiveLevyWalkParams() {}
+
+void CFootBotCollectiveLevyWalk::SCollectiveLevyWalkParams::Init(TConfigurationNode& t_node) {
+   try {
+      GetNodeAttribute(t_node, "short_long_step_threshold", ShortLongStepThreshold);
+   }
+   catch(CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller collective levy walk parameters.", ex);
+   }
+}
 
 /****************************************/
 /****************************************/
@@ -22,6 +37,11 @@ void CFootBotCollectiveLevyWalk::InitSensors() {
     m_pcRABS = GetSensor<CCI_RangeAndBearingSensor>("range_and_bearing");
 }
 
+void CFootBotCollectiveLevyWalk::InitParams(TConfigurationNode& t_node) {
+    CFootBotIndividualLevyWalk::InitParams(t_node);
+    m_sCollectiveLevyWalkParams.Init(GetNode(t_node,"collective_levy_walk"));
+}
+
 /****************************************/
 /****************************************/
 
@@ -33,29 +53,21 @@ void CFootBotCollectiveLevyWalk::Reset() {
 /****************************************/
 /****************************************/
 
-void CFootBotCollectiveLevyWalk::ControlStep() {
-   switch(m_sStateData.State) {
-      case SStateData::STATE_INITIALIZE: {
-         Initialize();
-         LOG << m_pcRABA->GetSize() << "|" << GetId().size() << std::endl;
-         break;
-      }
-      case SStateData::STATE_WALK: {
-         Walk();
-         break;
-      }
-      case SStateData::STATE_ROTATE: {
-         Rotate();
-         break;
-      }
-      case SStateData::STATE_COLLISIONAVOIDANCE: {
-         AvoidCollision();
-         break;
-      }
-      default: {
-         LOGERR << "Error invalid state \"" << GetId() << "\"" << std::endl;
-      }
-   }
+void CFootBotCollectiveLevyWalk::DoWalk() {
+    if (m_sStateData.ToWalkSimulationTicks > 15) {
+        // Long step
+        CByteArray cByteArray;
+        cByteArray << GetId();
+        m_pcRABA->SetData(cByteArray);
+    } else {
+        // Short step
+        const CCI_RangeAndBearingSensor::TReadings& tPackets = m_pcRABS->GetReadings();
+        for(size_t i = 0; i < tPackets.size(); ++i) {
+            //LOG << i << "->Data:" << tPackets[0].Data << std::endl;
+        }
+    }
+
+    CFootBotIndividualLevyWalk::DoWalk();
 }
 
 /****************************************/

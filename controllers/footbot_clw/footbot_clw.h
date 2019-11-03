@@ -18,19 +18,31 @@ using namespace argos;
 class CFootBotCollectiveLevyWalk : public CFootBotIndividualLevyWalk 
 {
 public:
+  struct SCollectiveLevyWalkParams
+  {
+    Real ShortLongStepThreshold;
+
+    SCollectiveLevyWalkParams();
+    void Init(TConfigurationNode &t_node);
+  };
+public:
   CFootBotCollectiveLevyWalk();
   virtual ~CFootBotCollectiveLevyWalk() {}
 
   virtual void Reset();
-  virtual void ControlStep();
 
 protected:
   CCI_RangeAndBearingActuator*  m_pcRABA;
   CCI_RangeAndBearingSensor* m_pcRABS;
 
+  SCollectiveLevyWalkParams m_sCollectiveLevyWalkParams;
+
 protected:
   virtual void InitActuators();
   virtual void InitSensors();
+  virtual void InitParams(TConfigurationNode &t_node);
+
+  virtual void DoWalk();
 };
 
 #endif

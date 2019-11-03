@@ -11,6 +11,8 @@
 /home/stef/Documents/CollectiveLevyWalk/controllers/footbot_clw/footbot_clw.cpp
 footbot_clw.h
 /home/stef/Documents/CollectiveLevyWalk/controllers/footbot_clw/footbot_clw.h
+argos3/core/utility/configuration/argos_configuration.h
+-
 argos3/core/utility/logging/argos_log.h
 -
 

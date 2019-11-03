@@ -14,7 +14,7 @@ CFootBotIndividualLevyWalk::SStateData::SStateData() :
    ToRotateSimulationTicks(0),
    RotatedSimulationTicks(0) {}
 
-void CFootBotIndividualLevyWalk::SStateData::Init(TConfigurationNode &t_node) 
+void CFootBotIndividualLevyWalk::SStateData::Init(TConfigurationNode& t_node) 
 {
    try {
       GetNodeAttribute(t_node, "levy_alpha_exponent", LevyAlphaExponent);
@@ -41,7 +41,7 @@ CFootBotIndividualLevyWalk::SFootbotParams::SFootbotParams() :
 
 CFootBotIndividualLevyWalk::SWheelVelocityParams::SWheelVelocityParams() {}
 
-void CFootBotIndividualLevyWalk::SWheelVelocityParams::Init(TConfigurationNode &t_node) 
+void CFootBotIndividualLevyWalk::SWheelVelocityParams::Init(TConfigurationNode& t_node) 
 {
    try {
       GetNodeAttribute(t_node, "walk_velocity", WalkVelocity);

@@ -135,7 +135,7 @@ protected:
   void InitRotateState();
   void InitCollisionAvoidanceState();
 
-  void DoWalk();
+  virtual void DoWalk();
   void DoCollisionAvoidance(const CVector2& c_diffusion);
 
   CVector2 DiffusionVector(bool& b_collision);

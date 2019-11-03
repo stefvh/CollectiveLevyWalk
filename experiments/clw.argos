@@ -26,16 +26,17 @@
         <range_and_bearing implementation="medium" medium="rab" />
       </sensors>
       <params>
-        <state          levy_alpha_exponent="1.0"                     />
-        <wheel_velocity walk_velocity="17.0"
-                        max_velocity="20.0"                           />
-        <stochastic     normalization_factor_n="100"
-                        max_random_levy_alpha_distributed_value="59"  />
-        <diffusion      go_straight_angle_range="-5:5"
-                        delta="0.1"                                   />
-        <wheel_turning  hard_turn_angle_threshold="90"
-                        soft_turn_angle_threshold="70"
-                        no_turn_angle_threshold="10"                  />
+        <state                levy_alpha_exponent="1.0"                     />
+        <wheel_velocity       walk_velocity="17.0"
+                              max_velocity="20.0"                           />
+        <stochastic           normalization_factor_n="100"
+                              max_random_levy_alpha_distributed_value="59"  />
+        <diffusion            go_straight_angle_range="-5:5"
+                              delta="0.1"                                   />
+        <wheel_turning        hard_turn_angle_threshold="90"
+                              soft_turn_angle_threshold="70"
+                              no_turn_angle_threshold="10"                  />
+        <collective_levy_walk short_long_step_threshold="90"                />
       </params>
     </footbot_clw_controller>
 
@@ -68,7 +69,7 @@
       <position method="uniform" min="-2,-2,0" max="-1,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="3" max_trials="100">
-        <foot-bot id="fb">
+        <foot-bot id="fb" rab_data_size="4">
           <controller config="fclw" />
         </foot-bot>
       </entity>
