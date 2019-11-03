@@ -18,7 +18,7 @@ using namespace argos;
 class CFootBotCollectiveLevyWalk : public CFootBotIndividualLevyWalk 
 {
 public:
-  typedef std::vector<UInt8*> TMessages;
+  typedef std::vector<UInt32> TMessages;
   struct SCommunicationStateData 
   {
     TMessages PreviouslyReceivedMessages;
@@ -39,7 +39,8 @@ public:
 
     SCollectiveLevyWalkParams();
     void Init(TConfigurationNode &t_node);
-  }; 
+  };
+
 public:
   CFootBotCollectiveLevyWalk();
   virtual ~CFootBotCollectiveLevyWalk() {}

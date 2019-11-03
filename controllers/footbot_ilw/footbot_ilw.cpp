@@ -136,6 +136,7 @@ CFootBotIndividualLevyWalk::CFootBotIndividualLevyWalk():
 
 void CFootBotIndividualLevyWalk::Init(TConfigurationNode& t_node) {
    try {
+      InitId();
       InitActuators();
       InitSensors();
       InitParams(t_node);
@@ -146,6 +147,16 @@ void CFootBotIndividualLevyWalk::Init(TConfigurationNode& t_node) {
    }
 
    Reset();
+}
+
+void CFootBotIndividualLevyWalk::InitId()
+{
+   try {
+      m_uint32Id = std::stoi(GetId());
+   } 
+   catch (CARGoSException& ex) {
+      THROW_ARGOSEXCEPTION_NESTED("Error initalizing Id as UInt32 \"" << GetId() << "\"", ex);
+   }
 }
 
 void CFootBotIndividualLevyWalk::InitActuators() 
@@ -263,15 +274,16 @@ Real CFootBotIndividualLevyWalk::GenerateRandomTimeLevyAlphaDistributedVariable(
 Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable() 
 {
    Real L = 0.0;
+   Real fInverseLevyAlphaExponent = 1.0 / m_sStateData.LevyAlphaExponent;
    for(size_t i = 0; i < m_sStochasticParams.NormalizationFactorN; ++i) {
       Real X = m_pcRNG->Gaussian(1.0, 0.0); // TODO: change stddev based on alpha
       Real Y = m_pcRNG->Gaussian(1.0, 0.0);
 
-      Real V = X / ::pow(Abs(Y), (1.0 / m_sStateData.LevyAlphaExponent));
+      Real V = X / std::pow(Abs(Y), fInverseLevyAlphaExponent);
 
       L += V;
    }
-   L /= ::pow(m_sStochasticParams.NormalizationFactorN, (1.0 / m_sStateData.LevyAlphaExponent));
+   L /= std::pow(m_sStochasticParams.NormalizationFactorN, fInverseLevyAlphaExponent);
 
    return L;
 }

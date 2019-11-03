@@ -72,8 +72,8 @@ void CFootBotCollectiveLevyWalk::InitParams(TConfigurationNode& t_node) {
 /****************************************/
 
 void CFootBotCollectiveLevyWalk::Reset() {
+    CFootBotIndividualLevyWalk::Reset();
     m_pcRABA->ClearData();
-    //m_pcRABA->SetData(0, LAST_EXPLORATION_NONE);
 }
 
 /****************************************/
@@ -85,7 +85,7 @@ void CFootBotCollectiveLevyWalk::DoWalk() {
     if (m_sStateData.ToWalkSimulationTicks > m_sCollectiveLevyWalkParams.ShortLongStepThreshold) {
         // Long step
         CByteArray cByteArray;
-        cByteArray << GetId();
+        cByteArray << m_uint32Id;
         m_pcRABA->SetData(cByteArray);
 
         m_sCommunicationStateData.PreviouslyReceivedMessages.clear();
@@ -96,7 +96,7 @@ void CFootBotCollectiveLevyWalk::DoWalk() {
         TSources tSources;
         for(size_t i = 0; i < tPackets.size(); ++i) {
             CCI_RangeAndBearingSensor::SPacket tPacket = tPackets[i];
-            tMessages.push_back(tPacket.Data.ToCArray());
+            tMessages.push_back(tPacket.Data.PopFront<UInt32>());
             tSources.push_back(SMessageSource(tPacket.Range, tPacket.HorizontalBearing));
         }
 

@@ -38,6 +38,8 @@
                               no_turn_angle_threshold="10"                  />
         <communication        communication_range="135"                     />
         <collective_levy_walk short_long_step_threshold="90"                />
+        <adaptation           to_decrease_exponent_ticks="50"
+                              erfc_transition_interval="2.0"                />
       </params>
     </footbot_acrw_controller>
 
@@ -70,7 +72,7 @@
       <position method="uniform" min="-2,-2,0" max="-1,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="3" max_trials="100">
-        <foot-bot id="fb" rab_data_size="4" rab_range="1.35">
+        <foot-bot id="" rab_data_size="4" rab_range="1.35">
           <controller config="facrw" />
         </foot-bot>
       </entity>

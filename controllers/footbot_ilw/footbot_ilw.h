@@ -107,6 +107,8 @@ public:
   virtual void ControlStep();
 
 protected:
+  UInt32 m_uint32Id;
+
   CCI_DifferentialSteeringActuator *m_pcWheels;
   CCI_FootBotProximitySensor *m_pcProximity;
 
@@ -121,6 +123,7 @@ protected:
   CRandom::CRNG *m_pcRNG;
 
 protected:
+  void InitId();
   virtual void InitActuators();
   virtual void InitSensors();
   virtual void InitParams(TConfigurationNode &t_node);
