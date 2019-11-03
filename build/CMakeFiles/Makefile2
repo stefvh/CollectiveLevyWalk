@@ -66,6 +66,7 @@ CMAKE_BINARY_DIR = /home/stef/Documents/CollectiveLevyWalk/build
 controllers/all: controllers/footbot_foraging/all
 controllers/all: controllers/footbot_ilw/all
 controllers/all: controllers/footbot_clw/all
+controllers/all: controllers/footbot_acrw/all
 
 .PHONY : controllers/all
 
@@ -73,6 +74,7 @@ controllers/all: controllers/footbot_clw/all
 controllers/clean: controllers/footbot_foraging/clean
 controllers/clean: controllers/footbot_ilw/clean
 controllers/clean: controllers/footbot_clw/clean
+controllers/clean: controllers/footbot_acrw/clean
 
 .PHONY : controllers/clean
 
@@ -80,6 +82,7 @@ controllers/clean: controllers/footbot_clw/clean
 controllers/preinstall: controllers/footbot_foraging/preinstall
 controllers/preinstall: controllers/footbot_ilw/preinstall
 controllers/preinstall: controllers/footbot_clw/preinstall
+controllers/preinstall: controllers/footbot_acrw/preinstall
 
 .PHONY : controllers/preinstall
 
@@ -109,7 +112,7 @@ controllers/footbot_foraging/preinstall:
 controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/all: controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/all
 	$(MAKE) -f controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/build.make controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/depend
 	$(MAKE) -f controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/build.make controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=5,6,7 "Built target footbot_foraging"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=9,10,11 "Built target footbot_foraging"
 .PHONY : controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/all
 
 # Include target in all.
@@ -146,7 +149,7 @@ clean: controllers/footbot_foraging/CMakeFiles/footbot_foraging.dir/clean
 controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/all:
 	$(MAKE) -f controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/build.make controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/depend
 	$(MAKE) -f controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/build.make controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=8 "Built target footbot_foraging_automoc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=12 "Built target footbot_foraging_automoc"
 .PHONY : controllers/footbot_foraging/CMakeFiles/footbot_foraging_automoc.dir/all
 
 # Build rule for subdir invocation for target.
@@ -197,7 +200,7 @@ controllers/footbot_ilw/preinstall:
 controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/all: controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/all
 	$(MAKE) -f controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/build.make controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/depend
 	$(MAKE) -f controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/build.make controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=9,10,11 "Built target footbot_ilw"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=13,14,15 "Built target footbot_ilw"
 .PHONY : controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/all
 
 # Include target in all.
@@ -234,7 +237,7 @@ clean: controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/clean
 controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/all:
 	$(MAKE) -f controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/build.make controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/depend
 	$(MAKE) -f controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/build.make controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=12 "Built target footbot_ilw_automoc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=16 "Built target footbot_ilw_automoc"
 .PHONY : controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/all
 
 # Build rule for subdir invocation for target.
@@ -286,7 +289,7 @@ controllers/footbot_clw/CMakeFiles/footbot_clw.dir/all: controllers/footbot_ilw/
 controllers/footbot_clw/CMakeFiles/footbot_clw.dir/all: controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/all
 	$(MAKE) -f controllers/footbot_clw/CMakeFiles/footbot_clw.dir/build.make controllers/footbot_clw/CMakeFiles/footbot_clw.dir/depend
 	$(MAKE) -f controllers/footbot_clw/CMakeFiles/footbot_clw.dir/build.make controllers/footbot_clw/CMakeFiles/footbot_clw.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=1,2,3 "Built target footbot_clw"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=5,6,7 "Built target footbot_clw"
 .PHONY : controllers/footbot_clw/CMakeFiles/footbot_clw.dir/all
 
 # Include target in all.
@@ -323,7 +326,7 @@ clean: controllers/footbot_clw/CMakeFiles/footbot_clw.dir/clean
 controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/all:
 	$(MAKE) -f controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/build.make controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/depend
 	$(MAKE) -f controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/build.make controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=4 "Built target footbot_clw_automoc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=8 "Built target footbot_clw_automoc"
 .PHONY : controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/all
 
 # Build rule for subdir invocation for target.
@@ -345,6 +348,96 @@ controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/clean:
 
 # clean rule for target.
 clean: controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory controllers/footbot_acrw
+
+# Convenience name for "all" pass in the directory.
+controllers/footbot_acrw/all: controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all
+
+.PHONY : controllers/footbot_acrw/all
+
+# Convenience name for "clean" pass in the directory.
+controllers/footbot_acrw/clean: controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/clean
+controllers/footbot_acrw/clean: controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/clean
+
+.PHONY : controllers/footbot_acrw/clean
+
+# Convenience name for "preinstall" pass in the directory.
+controllers/footbot_acrw/preinstall:
+
+.PHONY : controllers/footbot_acrw/preinstall
+
+#=============================================================================
+# Target rules for target controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir
+
+# All Build rule for target.
+controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all: controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/all
+controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all: controllers/footbot_clw/CMakeFiles/footbot_clw.dir/all
+controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all: controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/all
+	$(MAKE) -f controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/build.make controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/depend
+	$(MAKE) -f controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/build.make controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=1,2,3 "Built target footbot_acrw"
+.PHONY : controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all
+
+# Include target in all.
+all: controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 12
+	$(MAKE) -f CMakeFiles/Makefile2 controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/rule
+
+# Convenience name for target.
+footbot_acrw: controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/rule
+
+.PHONY : footbot_acrw
+
+# clean rule for target.
+controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/clean:
+	$(MAKE) -f controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/build.make controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/clean
+.PHONY : controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/clean
+
+# clean rule for target.
+clean: controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir
+
+# All Build rule for target.
+controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/all:
+	$(MAKE) -f controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/build.make controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/depend
+	$(MAKE) -f controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/build.make controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=4 "Built target footbot_acrw_automoc"
+.PHONY : controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/all
+
+# Build rule for subdir invocation for target.
+controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/rule
+
+# Convenience name for target.
+footbot_acrw_automoc: controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/rule
+
+.PHONY : footbot_acrw_automoc
+
+# clean rule for target.
+controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/clean:
+	$(MAKE) -f controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/build.make controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/clean
+.PHONY : controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/clean
+
+# clean rule for target.
+clean: controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/clean
 
 .PHONY : clean
 
@@ -393,7 +486,7 @@ loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/al
 loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/all: loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/all
 	$(MAKE) -f loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/build.make loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/depend
 	$(MAKE) -f loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/build.make loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=13,14,15,16 "Built target foraging_loop_functions"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=17,18,19,20 "Built target foraging_loop_functions"
 .PHONY : loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/all
 
 # Include target in all.
@@ -430,7 +523,7 @@ clean: loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions
 loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/all:
 	$(MAKE) -f loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/build.make loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/depend
 	$(MAKE) -f loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/build.make loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=17 "Built target foraging_loop_functions_automoc"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=21 "Built target foraging_loop_functions_automoc"
 .PHONY : loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/all
 
 # Build rule for subdir invocation for target.

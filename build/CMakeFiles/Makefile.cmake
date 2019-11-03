@@ -12,6 +12,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.5.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.5.1/CMakeSystem.cmake"
   "../controllers/CMakeLists.txt"
+  "../controllers/footbot_acrw/CMakeLists.txt"
   "../controllers/footbot_clw/CMakeLists.txt"
   "../controllers/footbot_foraging/CMakeLists.txt"
   "../controllers/footbot_ilw/CMakeLists.txt"
@@ -71,6 +72,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "controllers/footbot_foraging/CMakeFiles/CMakeDirectoryInformation.cmake"
   "controllers/footbot_ilw/CMakeFiles/CMakeDirectoryInformation.cmake"
   "controllers/footbot_clw/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "controllers/footbot_acrw/CMakeFiles/CMakeDirectoryInformation.cmake"
   "loop_functions/CMakeFiles/CMakeDirectoryInformation.cmake"
   "loop_functions/foraging_loop_functions/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
@@ -83,6 +85,8 @@ set(CMAKE_DEPEND_INFO_FILES
   "controllers/footbot_ilw/CMakeFiles/footbot_ilw_automoc.dir/DependInfo.cmake"
   "controllers/footbot_clw/CMakeFiles/footbot_clw.dir/DependInfo.cmake"
   "controllers/footbot_clw/CMakeFiles/footbot_clw_automoc.dir/DependInfo.cmake"
+  "controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/DependInfo.cmake"
+  "controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/DependInfo.cmake"
   "loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir/DependInfo.cmake"
   "loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/DependInfo.cmake"
   )
