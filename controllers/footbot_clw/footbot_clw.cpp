@@ -140,7 +140,7 @@ void CFootBotCollectiveLevyWalk::InitRotateStateAsRepulsiveForce(TSources t_sour
 
     cAveragedRepulsiveForceVector /= t_sources.size();
 
-    CFootBotIndividualLevyWalk::InitRotateStateFromAngle(cAveragedRepulsiveForceVector.Angle());
+    InitRotateStateFromAngle(cAveragedRepulsiveForceVector.Angle());
 }
 
 /****************************************/

@@ -12,7 +12,8 @@ CFootBotIndividualLevyWalk::SStateData::SStateData() :
    ToWalkSimulationTicks(0),
    WalkedSimulationTicks(0),
    ToRotateSimulationTicks(0),
-   RotatedSimulationTicks(0) {}
+   RotatedSimulationTicks(0),
+   TargetFound(false) {}
 
 void CFootBotIndividualLevyWalk::SStateData::Init(TConfigurationNode& t_node) 
 {
@@ -129,6 +130,7 @@ void CFootBotIndividualLevyWalk::SWheelTurningParams::Init(TConfigurationNode& t
 CFootBotIndividualLevyWalk::CFootBotIndividualLevyWalk():
    m_pcWheels(NULL),
    m_pcProximity(NULL),
+   m_pcGround(NULL),
    m_pcRNG(NULL) {}
 
 /****************************************/
@@ -161,12 +163,13 @@ void CFootBotIndividualLevyWalk::InitId()
 
 void CFootBotIndividualLevyWalk::InitActuators() 
 {
-   m_pcWheels    = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
+   m_pcWheels = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
 }
 
 void CFootBotIndividualLevyWalk::InitSensors() 
 {
-   m_pcProximity = GetSensor  <CCI_FootBotProximitySensor>("footbot_proximity");
+   m_pcProximity = GetSensor<CCI_FootBotProximitySensor>("footbot_proximity");
+   m_pcGround = GetSensor<CCI_FootBotMotorGroundSensor>("footbot_motor_ground");
 }
 
 void CFootBotIndividualLevyWalk::InitParams(TConfigurationNode &t_node) 
@@ -247,6 +250,28 @@ void CFootBotIndividualLevyWalk::DoWalk()
    {
       InitRotateStateAsUniform();
    }
+}
+
+void CFootBotIndividualLevyWalk::DetectTargets() {
+   const CCI_FootBotMotorGroundSensor::TReadings& tGroundReads = m_pcGround->GetReadings();
+    /*
+    * The robot can identify a target by checking the ground sensor
+    * placed close to the wheel motors. It returns a value between 0 and 1.
+    * It is 1 when the robot is on a white area, it is 0 when the robot
+    * is on a black area and it is around 0.5 when the robot is on a gray
+    * area. 
+    * The foot-bot has 4 sensors like this, two in the front
+    * (corresponding to readings 0 and 1) and two in the back
+    * (corresponding to reading 2 and 3).  Here we want the front sensors
+    * (readings 1 and 4) to tell us whether we are (partly) on black:
+    * if so, the robot has found a target.
+    */
+   bool bTargetFound = (tGroundReads[1].Value < 0.25f && tGroundReads[4].Value < 0.25f);
+   UpdateStateFromExploration(bTargetFound);
+}
+
+void CFootBotIndividualLevyWalk::UpdateStateFromExploration(bool b_target_found) {
+   m_sStateData.TargetFound = b_target_found;
 }
 
 /****************************************/

@@ -23,6 +23,7 @@
       </actuators>
       <sensors>
         <footbot_proximity implementation="default" show_rays="false" />
+        <footbot_motor_ground implementation="rot_z_only" />
         <range_and_bearing implementation="medium" medium="rab" />
       </sensors>
       <params>
@@ -38,7 +39,7 @@
                               no_turn_angle_threshold="10"                  />
         <communication        communication_range="135"                     />
         <collective_levy_walk short_long_step_threshold="90"                />
-        <adaptation           to_decrease_exponent_ticks="50"
+        <adaptation           adaptation_interval_ticks="50"
                               erfc_transition_interval="2.0"                />
       </params>
     </footbot_acrw_controller>
@@ -54,6 +55,10 @@
   <!-- * Arena configuration * -->
   <!-- *********************** -->
   <arena size="5, 5, 2" center="0,0,1">
+
+    <floor id="floor"
+           source="loop_functions"
+           pixels_per_meter="50" />
 
     <box id="wall_north" size="4,0.1,0.5" movable="false">
       <body position="0,2,0" orientation="0,0,0" />

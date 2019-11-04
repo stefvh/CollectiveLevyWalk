@@ -4,24 +4,24 @@
 /****************************************/
 
 CFootBotAdaptiveCollectiveRandomWalk::SAdaptationStateData::SAdaptationStateData() :
-   DecreasedLevyAlphaExponentSimulationTicks(0) {}
+   NoTargetFoundConsecutivelySimulationTicks(0) {}
 
 void CFootBotAdaptiveCollectiveRandomWalk::SAdaptationStateData::Reset() {
-   DecreasedLevyAlphaExponentSimulationTicks = 0;
+   NoTargetFoundConsecutivelySimulationTicks = 0;
 }
 
 /****************************************/
 /****************************************/
 
 CFootBotAdaptiveCollectiveRandomWalk::SAdaptationParams::SAdaptationParams() : 
-   ToDecreaseLevyAlphaExponentSimulationTicks(50),
+   AdaptationIntervalSimulationTicks(50),
    ErfcTransitionInterval(2) {
        InitCalculatedParams();
    }
 
 void CFootBotAdaptiveCollectiveRandomWalk::SAdaptationParams::Init(TConfigurationNode& t_node) {
    try {
-      GetNodeAttribute(t_node, "to_decrease_exponent_ticks", ToDecreaseLevyAlphaExponentSimulationTicks);
+      GetNodeAttribute(t_node, "adaptation_interval_ticks", AdaptationIntervalSimulationTicks);
       GetNodeAttribute(t_node, "erfc_transition_interval", ErfcTransitionInterval);
    }
    catch(CARGoSException& ex) {
@@ -32,7 +32,7 @@ void CFootBotAdaptiveCollectiveRandomWalk::SAdaptationParams::Init(TConfiguratio
 }
 
 void CFootBotAdaptiveCollectiveRandomWalk::SAdaptationParams::InitCalculatedParams() {
-    ErfcTransitionFactor = ErfcTransitionInterval / (Real)ToDecreaseLevyAlphaExponentSimulationTicks;
+    ErfcTransitionFactor = ErfcTransitionInterval / (Real)AdaptationIntervalSimulationTicks;
 }
 
 /****************************************/
@@ -53,6 +53,21 @@ void CFootBotAdaptiveCollectiveRandomWalk::InitParams(TConfigurationNode& t_node
 
 void CFootBotAdaptiveCollectiveRandomWalk::Reset() {
     CFootBotCollectiveLevyWalk::Reset();
+}
+
+/****************************************/
+/****************************************/
+
+void CFootBotAdaptiveCollectiveRandomWalk::UpdateStateFromExploration(bool b_target_found) {
+    CFootBotIndividualLevyWalk::UpdateStateFromExploration(b_target_found);
+    if (b_target_found) {
+        // Switch to Brownian walk by Gaussian distributed step lengths
+        m_sStateData.LevyAlphaExponent = 2.0;
+    } else {
+        // Switch to Levy walk by decreasing Levy alpha exponent to a minimal value: 1
+        m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks++;
+        m_sStateData.LevyAlphaExponent = Max(1.0,erfc(m_sAdaptationParams.ErfcTransitionFactor*(m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks - m_sAdaptationParams.AdaptationIntervalSimulationTicks)));
+    }
 }
 
 /****************************************/

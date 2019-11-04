@@ -10,7 +10,6 @@
 
 #include "../footbot_clw/footbot_clw.h"
 
-
 using namespace argos;
 
 class CFootBotAdaptiveCollectiveRandomWalk : public CFootBotCollectiveLevyWalk 
@@ -18,14 +17,14 @@ class CFootBotAdaptiveCollectiveRandomWalk : public CFootBotCollectiveLevyWalk
 public:
   struct SAdaptationStateData 
   {
-    int DecreasedLevyAlphaExponentSimulationTicks;
+    int NoTargetFoundConsecutivelySimulationTicks;
 
     SAdaptationStateData();
     void Reset();
   };
   struct SAdaptationParams 
   {
-    int ToDecreaseLevyAlphaExponentSimulationTicks;
+    int AdaptationIntervalSimulationTicks;
     Real ErfcTransitionInterval;
     Real ErfcTransitionFactor;
 
@@ -46,6 +45,8 @@ protected:
 
 protected:
   virtual void InitParams(TConfigurationNode &t_node);
+
+  virtual void UpdateStateFromExploration(bool b_target_found);
 };
 
 #endif
