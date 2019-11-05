@@ -28,7 +28,7 @@
         <wheel_velocity walk_velocity="17.0"
                         max_velocity="20.0"                           />
         <stochastic     normalization_factor_n="100"
-                        max_random_levy_alpha_distributed_value="59"  />
+                        max_step_length="59"                          />
         <diffusion      go_straight_angle_range="-5:5"
                         delta="0.1"                                   />
         <wheel_turning  hard_turn_angle_threshold="90"

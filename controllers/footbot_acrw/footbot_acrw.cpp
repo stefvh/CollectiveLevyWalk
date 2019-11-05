@@ -78,7 +78,7 @@ void CFootBotAdaptiveCollectiveRandomWalk::UpdateStateFromExploration(bool b_tar
             m_sAdaptationStateData.LevyAlphaExponent = 1.0;
         } else {
             m_sStateData.RandomWalk = SStateData::ALPHA_LEVY_WALK;
-            m_sAdaptationStateData.LevyAlphaExponent = Max(1.0, Min(erfc(fX), 2.0));
+            m_sAdaptationStateData.LevyAlphaExponent = Max(1.0, erfc(fX));
         }
     }
 }

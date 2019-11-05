@@ -1,7 +1,7 @@
 /*
  * AUTHOR: Stef Van Havermaet <stefvanhavermaet@gmail.com>
  *
- * Adaptive Collective Random Walk (CLW) controller for the foot-bot.
+ * Adaptive Collective Random Walk (ACRW) controller for the foot-bot.
  *
  */
 

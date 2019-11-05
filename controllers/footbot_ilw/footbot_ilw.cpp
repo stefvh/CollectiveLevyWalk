@@ -66,7 +66,7 @@ void CFootBotIndividualLevyWalk::SStochasticParams::Init(TConfigurationNode& t_n
 {
    try {
       GetNodeAttribute(t_node, "normalization_factor_n", NormalizationFactorN);
-      GetNodeAttribute(t_node, "max_random_levy_alpha_distributed_value", MaxRandomLevyAlphaDistributedValue);
+      GetNodeAttribute(t_node, "max_step_length", MaxStepLength);
    }
    catch(CARGoSException& ex) {
       THROW_ARGOSEXCEPTION_NESTED("Error initializing controller stochastic parameters.", ex);
@@ -287,12 +287,12 @@ int CFootBotIndividualLevyWalk::GenerateToWalkSimulationTicks()
 
 Real CFootBotIndividualLevyWalk::GenerateRandomTimeVariable()
 {
-   Real L;
+   Real X;
    do {
-      L = GenerateRandomStepLengthVariable();
-   } while (Abs(L) > m_sStochasticParams.MaxRandomLevyAlphaDistributedValue);
+      X = GenerateRandomStepLengthVariable();
+   } while (Abs(X) > m_sStochasticParams.MaxStepLength);
 
-   Real T = ((Real) m_sExperimentParams.TicksPerSecond) * (1.0 + Abs(L));
+   Real T = ((Real) m_sExperimentParams.TicksPerSecond) * (1.0 + Abs(X));
    return T;
 }
 

@@ -73,7 +73,7 @@ public:
   struct SStochasticParams 
   {
     int NormalizationFactorN;
-    int MaxRandomLevyAlphaDistributedValue;
+    int MaxStepLength;
 
     CRange<CRadians> RotationAngleUniformRange;
 
