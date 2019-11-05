@@ -25,7 +25,6 @@
         <footbot_motor_ground implementation="rot_z_only" />
       </sensors>
       <params>
-        <state          levy_alpha_exponent="1.0"                     />
         <wheel_velocity walk_velocity="17.0"
                         max_velocity="20.0"                           />
         <stochastic     normalization_factor_n="100"

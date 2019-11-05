@@ -31,7 +31,12 @@ public:
       STATE_COLLISIONAVOIDANCE
     } State;
 
-    float LevyAlphaExponent;
+    enum ERandomWalk
+    {
+      PURE_LEVY_WALK = 0,
+      ALPHA_LEVY_WALK,
+      BROWNIAN_WALK
+    } RandomWalk;
 
     int ToWalkSimulationTicks;
     int WalkedSimulationTicks;
@@ -43,7 +48,6 @@ public:
     bool TargetFound;
 
     SStateData();
-    void Init(TConfigurationNode &t_node);
     void Reset();
   };
   struct SExperimentParams 
@@ -68,11 +72,10 @@ public:
   };
   struct SStochasticParams 
   {
-    std::map<float,float> MapAlphaExponentToStdDevOfRandomVariableX;
     int NormalizationFactorN;
     int MaxRandomLevyAlphaDistributedValue;
 
-    CRange<CRadians> RotationAngleProbRange;
+    CRange<CRadians> RotationAngleUniformRange;
 
     SStochasticParams();
     void Init(TConfigurationNode &t_node);
@@ -108,6 +111,7 @@ public:
 
   virtual void Init(TConfigurationNode &t_node);
   virtual void ControlStep();
+  virtual void Reset();
 
 protected:
   UInt32 m_uint32Id;
@@ -143,16 +147,21 @@ protected:
   void InitRotateStateFromAngle(CRadians c_angle);
   void InitCollisionAvoidanceState();
 
-  virtual void DoWalk();
   void DetectTargets();
   virtual void UpdateStateFromExploration(bool b_target_found);
 
+  virtual void DoWalk();
   void DoCollisionAvoidance(const CVector2& c_diffusion);
+
+  int GenerateToWalkSimulationTicks();
+  Real GenerateRandomTimeVariable();
+  virtual Real GenerateRandomStepLengthVariable();
+  Real GenerateRandomLevyAlphaDistributedVariable(Real f_levy_alpha_exponent);
+  Real GetStdDevGaussianVariableX(Real f_levy_alpha_exponent);
+
+private:
   CVector2 DiffusionVector(bool& b_collision);
   void SetWheelSpeedsFromVector(const CVector2& c_heading);
-
-  Real GenerateRandomLevyAlphaDistributedVariable();
-  Real GenerateRandomTimeLevyAlphaDistributedVariable();
 };
 
 #endif

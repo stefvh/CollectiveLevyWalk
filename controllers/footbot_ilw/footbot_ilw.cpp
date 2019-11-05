@@ -9,20 +9,21 @@
 
 CFootBotIndividualLevyWalk::SStateData::SStateData() :
    State(STATE_INITIALIZE),
+   RandomWalk(PURE_LEVY_WALK),
    ToWalkSimulationTicks(0),
    WalkedSimulationTicks(0),
    ToRotateSimulationTicks(0),
    RotatedSimulationTicks(0),
    TargetFound(false) {}
 
-void CFootBotIndividualLevyWalk::SStateData::Init(TConfigurationNode& t_node) 
-{
-   try {
-      GetNodeAttribute(t_node, "levy_alpha_exponent", LevyAlphaExponent);
-   }
-   catch(CARGoSException& ex) {
-      THROW_ARGOSEXCEPTION_NESTED("Error initializing controller state parameters.", ex);
-   }
+void CFootBotIndividualLevyWalk::SStateData::Reset() {
+   State = STATE_INITIALIZE;
+   RandomWalk = PURE_LEVY_WALK;
+   ToWalkSimulationTicks = 0;
+   WalkedSimulationTicks = 0;
+   ToRotateSimulationTicks = 0;
+   RotatedSimulationTicks = 0;
+   TargetFound = false;
 }
 
 /****************************************/
@@ -58,20 +59,7 @@ void CFootBotIndividualLevyWalk::SWheelVelocityParams::Init(TConfigurationNode& 
 
 CFootBotIndividualLevyWalk::SStochasticParams::SStochasticParams()
 {
-   MapAlphaExponentToStdDevOfRandomVariableX[1.0f] = 1.0f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.1f] = 0.938291f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.2f] = 0.878829f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.3f] = 0.819837f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.4f] = 0.759679f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.5f] = 0.696575f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.6f] = 0.628231f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.7f] = 0.55116f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.8f] = 0.458638f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.9f] = 0.333819f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.95f] = 0.241176f;
-   MapAlphaExponentToStdDevOfRandomVariableX[1.99f] = 0.110693f;
-
-   RotationAngleProbRange.Set(-CRadians::PI, CRadians::PI);
+   RotationAngleUniformRange.Set(-CRadians::PI, CRadians::PI);
 }
 
 void CFootBotIndividualLevyWalk::SStochasticParams::Init(TConfigurationNode& t_node) 
@@ -174,7 +162,6 @@ void CFootBotIndividualLevyWalk::InitSensors()
 
 void CFootBotIndividualLevyWalk::InitParams(TConfigurationNode &t_node) 
 {
-   m_sStateData.Init(GetNode(t_node, "state"));
    m_sWheelVelocityParams.Init(GetNode(t_node, "wheel_velocity"));
    m_sStochasticParams.Init(GetNode(t_node, "stochastic"));
    m_sDiffusionParams.Init(GetNode(t_node, "diffusion"));
@@ -216,6 +203,13 @@ void CFootBotIndividualLevyWalk::ControlStep() {
 /****************************************/
 /****************************************/
 
+void CFootBotIndividualLevyWalk::Reset() {
+   m_sStateData.Reset();
+}
+
+/****************************************/
+/****************************************/
+
 void CFootBotIndividualLevyWalk::Initialize() {
    // State transition
    InitWalkState();
@@ -233,6 +227,7 @@ void CFootBotIndividualLevyWalk::Walk() {
       InitCollisionAvoidanceState();
       DoCollisionAvoidance(cDiffusion);
    } else {
+      DetectTargets();
       DoWalk();
    }
 }
@@ -279,29 +274,39 @@ void CFootBotIndividualLevyWalk::UpdateStateFromExploration(bool b_target_found)
 
 void CFootBotIndividualLevyWalk::InitWalkState() 
 {
-   m_sStateData.ToWalkSimulationTicks = Round(GenerateRandomTimeLevyAlphaDistributedVariable());
+   m_sStateData.ToWalkSimulationTicks = GenerateToWalkSimulationTicks();
    m_sStateData.WalkedSimulationTicks = 0;
 
    m_sStateData.State = SStateData::STATE_WALK;
 }
 
-Real CFootBotIndividualLevyWalk::GenerateRandomTimeLevyAlphaDistributedVariable()
+int CFootBotIndividualLevyWalk::GenerateToWalkSimulationTicks() 
+{
+   return Round(GenerateRandomTimeVariable());
+}
+
+Real CFootBotIndividualLevyWalk::GenerateRandomTimeVariable()
 {
    Real L;
    do {
-      L = GenerateRandomLevyAlphaDistributedVariable();
+      L = GenerateRandomStepLengthVariable();
    } while (Abs(L) > m_sStochasticParams.MaxRandomLevyAlphaDistributedValue);
 
    Real T = ((Real) m_sExperimentParams.TicksPerSecond) * (1.0 + Abs(L));
    return T;
 }
 
-Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable() 
+Real CFootBotIndividualLevyWalk::GenerateRandomStepLengthVariable() {
+   return GenerateRandomLevyAlphaDistributedVariable(1.0);
+}
+
+Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable(Real f_levy_alpha_exponent) 
 {
    Real L = 0.0;
-   Real fInverseLevyAlphaExponent = 1.0 / m_sStateData.LevyAlphaExponent;
+   Real fInverseLevyAlphaExponent = 1.0 / f_levy_alpha_exponent;
+   Real fStdDevGaussianVariableX = GetStdDevGaussianVariableX(f_levy_alpha_exponent);
    for(size_t i = 0; i < m_sStochasticParams.NormalizationFactorN; ++i) {
-      Real X = m_pcRNG->Gaussian(1.0, 0.0); // TODO: change stddev based on alpha
+      Real X = m_pcRNG->Gaussian(fStdDevGaussianVariableX, 0.0);
       Real Y = m_pcRNG->Gaussian(1.0, 0.0);
 
       Real V = X / std::pow(Abs(Y), fInverseLevyAlphaExponent);
@@ -311,6 +316,76 @@ Real CFootBotIndividualLevyWalk::GenerateRandomLevyAlphaDistributedVariable()
    L /= std::pow(m_sStochasticParams.NormalizationFactorN, fInverseLevyAlphaExponent);
 
    return L;
+}
+
+Real CFootBotIndividualLevyWalk::GetStdDevGaussianVariableX(Real f_levy_alpha_exponent) 
+{
+   Real fStdDevX = 1.0;
+
+   // Avoid computational overhead in switch below (as this is most common case)
+   if(m_sStateData.RandomWalk == SStateData::PURE_LEVY_WALK) {
+      return fStdDevX;
+   }
+
+   // Cfr. "Fast, accureate algorithm for numerical simulation of Levy stable stochastic processes"
+   switch(Round(10 * f_levy_alpha_exponent)) {
+      case 10: {
+         fStdDevX = 1.0;
+         break;
+      }
+      case 11: {
+         fStdDevX = 0.938291;
+         break;
+      }
+      case 12: {
+         fStdDevX = 0.878829;
+         break;
+      }
+      case 13: {
+         fStdDevX = 0.819837;
+         break;
+      }
+      case 14: {
+         fStdDevX = 0.759679;
+         break;
+      }
+      case 15: {
+         fStdDevX = 0.696575;
+         break;
+      }
+      case 16: {
+         fStdDevX = 0.628231;
+         break;
+      }
+      case 17: {
+         fStdDevX = 0.55116;
+         break;
+      }
+      case 18: {
+         fStdDevX = 0.458638;
+         break;
+      }
+      case 19: {
+         if (f_levy_alpha_exponent < 1.925) {
+            fStdDevX = 0.333819;
+         } else {
+            fStdDevX = 0.241176;
+         }
+         break;
+      }
+      case 20: {
+         if (f_levy_alpha_exponent < 1.975) {
+            fStdDevX = 0.241176;
+         } else {
+            fStdDevX = 0.110693f;
+         }
+         break;
+      }
+      default: {
+         LOGERR << "Invalid levy alpha exponent value" << std::endl;
+      }
+   }
+   return fStdDevX;
 }
 
 /****************************************/
@@ -335,7 +410,7 @@ void CFootBotIndividualLevyWalk::Rotate() {
 
 void CFootBotIndividualLevyWalk::InitRotateStateAsUniform() 
 {
-   CRadians fAngle = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleProbRange);
+   CRadians fAngle = m_pcRNG->Uniform(m_sStochasticParams.RotationAngleUniformRange);
    InitRotateStateFromAngle(fAngle);
 }
 

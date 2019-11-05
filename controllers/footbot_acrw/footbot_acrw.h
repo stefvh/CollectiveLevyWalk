@@ -17,6 +17,7 @@ class CFootBotAdaptiveCollectiveRandomWalk : public CFootBotCollectiveLevyWalk
 public:
   struct SAdaptationStateData 
   {
+    Real LevyAlphaExponent;
     int NoTargetFoundConsecutivelySimulationTicks;
 
     SAdaptationStateData();
@@ -47,6 +48,8 @@ protected:
   virtual void InitParams(TConfigurationNode &t_node);
 
   virtual void UpdateStateFromExploration(bool b_target_found);
+
+  virtual Real GenerateRandomStepLengthVariable();
 };
 
 #endif

@@ -1,12 +1,16 @@
 #include "footbot_acrw.h"
 
+#include <limits>
+
 /****************************************/
 /****************************************/
 
 CFootBotAdaptiveCollectiveRandomWalk::SAdaptationStateData::SAdaptationStateData() :
+   LevyAlphaExponent(1.0),
    NoTargetFoundConsecutivelySimulationTicks(0) {}
 
 void CFootBotAdaptiveCollectiveRandomWalk::SAdaptationStateData::Reset() {
+   LevyAlphaExponent = 1.0;
    NoTargetFoundConsecutivelySimulationTicks = 0;
 }
 
@@ -62,11 +66,31 @@ void CFootBotAdaptiveCollectiveRandomWalk::UpdateStateFromExploration(bool b_tar
     CFootBotIndividualLevyWalk::UpdateStateFromExploration(b_target_found);
     if (b_target_found) {
         // Switch to Brownian walk by Gaussian distributed step lengths
-        m_sStateData.LevyAlphaExponent = 2.0;
+        m_sStateData.RandomWalk = SStateData::BROWNIAN_WALK;
+        m_sAdaptationStateData.LevyAlphaExponent = 2.0;
     } else {
         // Switch to Levy walk by decreasing Levy alpha exponent to a minimal value: 1
         m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks++;
-        m_sStateData.LevyAlphaExponent = Max(1.0,erfc(m_sAdaptationParams.ErfcTransitionFactor*(m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks - m_sAdaptationParams.AdaptationIntervalSimulationTicks)));
+
+        Real fX = m_sAdaptationParams.ErfcTransitionFactor*(m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks - m_sAdaptationParams.AdaptationIntervalSimulationTicks);
+        if (fX <= std::numeric_limits<Real>::epsilon()) {
+            m_sStateData.RandomWalk = SStateData::PURE_LEVY_WALK;
+            m_sAdaptationStateData.LevyAlphaExponent = 1.0;
+        } else {
+            m_sStateData.RandomWalk = SStateData::ALPHA_LEVY_WALK;
+            m_sAdaptationStateData.LevyAlphaExponent = Max(1.0, Min(erfc(fX), 2.0));
+        }
+    }
+}
+
+/****************************************/
+/****************************************/
+
+Real CFootBotAdaptiveCollectiveRandomWalk::GenerateRandomStepLengthVariable() {
+    if (m_sStateData.RandomWalk == SStateData::BROWNIAN_WALK) {
+        return m_pcRNG->Gaussian(1.0, 0.0);
+    } else {
+        return GenerateRandomLevyAlphaDistributedVariable(m_sAdaptationStateData.LevyAlphaExponent);
     }
 }
 
