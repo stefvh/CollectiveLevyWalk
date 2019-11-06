@@ -33,12 +33,18 @@ public:
    };
    struct SOutputParams {
        std::string FileName;
+       bool SaveTrajectory;
 
        void Init(TConfigurationNode& t_node);
    };
    struct SArenaParams {
        Real ArenaUnit;
-       CRange<CVector3> DistributionAreaRange;
+       CRange<Real> UnboundedBufferRangeX;
+       CRange<Real> UnboundedBufferRangeY;
+       CRange<Real> RepositionRangeX;
+       CRange<Real> RepositionRangeY;
+       CRange<Real> ContextRangeX;
+       CRange<Real> ContextRangeY;
        CRange<Real> DistributionAreaRangeX;
        CRange<Real> DistributionAreaRangeY;
 
@@ -119,11 +125,12 @@ private:
    void InitUtilities();
 
    void InitSwarm();
-   SRobotData InitRobot(UInt32 id);
    void InitArenaParams();
    void DistributeSwarmInArena();
 
    void UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos);
+
+   void UpdateUnboundedArena(SRobotData* s_robot_data);
 };
 
 

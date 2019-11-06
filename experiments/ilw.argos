@@ -50,7 +50,8 @@
               nest_area_buffer_factor="0.3" />
     <foraging target_positions_file="sparse.txt"
               target_radius="0.1" />
-    <output   file="test.txt" />
+    <output   file="test.txt"
+              save_trajectory="true" />
   </loop_functions>
 
   <!-- *********************** -->

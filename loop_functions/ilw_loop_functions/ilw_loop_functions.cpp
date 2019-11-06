@@ -51,6 +51,7 @@ void CIndividualLevyWalkLoopFunctions::SForagingParams::InitFileInputParams() {
 void CIndividualLevyWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "file", FileName);
+        GetNodeAttribute(t_node, "save_trajectory", SaveTrajectory);
     }
     catch(CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing loop functions output parameters!", ex);
@@ -105,7 +106,13 @@ void CIndividualLevyWalkLoopFunctions::InitUtilities() {
 
 void CIndividualLevyWalkLoopFunctions::InitSwarm() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; i++) {
-        m_sSwarmData.Robots.push_back(InitRobot(i));
+        std::string sStringId = std::to_string(i);
+        CFootBotEntity* cFootBotEntity = new CFootBotEntity(sStringId, m_sSwarmParams.RobotControllerId);
+        CFootBotIndividualLevyWalk* cFootBotController = &dynamic_cast<CFootBotIndividualLevyWalk&>(cFootBotEntity->GetControllableEntity().GetController());
+
+        AddEntity(*cFootBotEntity);
+
+        m_sSwarmData.Robots.push_back(SRobotData(cFootBotEntity, cFootBotController));
     }
 
     if (m_sSwarmParams.Size > 0) {
@@ -114,18 +121,36 @@ void CIndividualLevyWalkLoopFunctions::InitSwarm() {
     }
 }
 
-CIndividualLevyWalkLoopFunctions::SRobotData CIndividualLevyWalkLoopFunctions::InitRobot(UInt32 id) {
-    std::string sStringId = std::to_string(id);
-    CFootBotEntity* cFootBotEntity = new CFootBotEntity(sStringId, m_sSwarmParams.RobotControllerId);
-    CFootBotIndividualLevyWalk* cFootBotController = &dynamic_cast<CFootBotIndividualLevyWalk&>(cFootBotEntity->GetControllableEntity().GetController());
-
-    AddEntity(*cFootBotEntity);
-
-    return SRobotData(cFootBotEntity, cFootBotController);
-}
-
 void CIndividualLevyWalkLoopFunctions::InitArenaParams() {
     m_sArenaParams.ArenaUnit = (Real)m_sSwarmData.Robots[0].FootBotController->GetFootbotParams().BodyDiameter / 100.0;
+
+    Real fUnboundedBuffer = 1.5 * m_sArenaParams.ArenaUnit;
+    m_sArenaParams.UnboundedBufferRangeX.Set(
+        GetSpace().GetArenaLimits().GetMax().GetX() - fUnboundedBuffer,
+        GetSpace().GetArenaLimits().GetMax().GetX()
+    );
+    m_sArenaParams.UnboundedBufferRangeY.Set(
+        GetSpace().GetArenaLimits().GetMax().GetY() - fUnboundedBuffer,
+        GetSpace().GetArenaLimits().GetMax().GetY()
+    );
+
+    m_sArenaParams.RepositionRangeX.Set(
+        m_sArenaParams.UnboundedBufferRangeX.GetMin() - fUnboundedBuffer,
+        m_sArenaParams.UnboundedBufferRangeX.GetMin()
+    );
+    m_sArenaParams.RepositionRangeY.Set(
+        m_sArenaParams.UnboundedBufferRangeY.GetMin() - fUnboundedBuffer,
+        m_sArenaParams.UnboundedBufferRangeY.GetMin()
+    );
+
+    m_sArenaParams.ContextRangeX.Set(
+        -m_sArenaParams.UnboundedBufferRangeX.GetMin(),
+        m_sArenaParams.UnboundedBufferRangeX.GetMin()
+    );
+    m_sArenaParams.ContextRangeY.Set(
+        -m_sArenaParams.UnboundedBufferRangeY.GetMin(),
+        m_sArenaParams.UnboundedBufferRangeY.GetMin()
+    );
 
     CRange<CVector3> cDistributionAreaRange;
     if(m_sSwarmParams.Nested) {
@@ -140,7 +165,8 @@ void CIndividualLevyWalkLoopFunctions::InitArenaParams() {
         CVector3 cBuffer(fBuffer, fBuffer, 0.0);
         cDistributionAreaRange.Set(
             GetSpace().GetArenaLimits().GetMin() + cBuffer,
-            GetSpace().GetArenaLimits().GetMax() - cBuffer);
+            GetSpace().GetArenaLimits().GetMax() - cBuffer
+        );
     }
 
     m_sArenaParams.DistributionAreaRangeX.Set(
@@ -202,9 +228,8 @@ void CIndividualLevyWalkLoopFunctions::Destroy() {}
 /****************************************/
 
 void CIndividualLevyWalkLoopFunctions::PreStep() {
-    SRobotData* sRobot;
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
-        sRobot = &m_sSwarmData.Robots[i];
+        SRobotData* sRobot = &m_sSwarmData.Robots[i];
         if (sRobot->FootBotController->IsWalking()) {
             ++sRobot->TicksInWalkState;
             if (!sRobot->WasWalkingPreviousTick) {
@@ -239,7 +264,9 @@ void CIndividualLevyWalkLoopFunctions::PreStep() {
 }
 
 void CIndividualLevyWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos) {
-    m_sSwarmData.WalkDistances.push_back((c_end_pos - c_start_pos).Length());
+    if (m_sOutputParams.SaveTrajectory) {
+        m_sSwarmData.WalkDistances.push_back((c_end_pos - c_start_pos).Length());
+    }
 }
 
 /****************************************/
@@ -247,10 +274,11 @@ void CIndividualLevyWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, C
 
 void CIndividualLevyWalkLoopFunctions::PostStep() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
-        if(m_sSwarmData.Robots[i].FootBotController->GetStateData().TargetFound) {
+        SRobotData* sRobot = &m_sSwarmData.Robots[i];
+        if(sRobot->FootBotController->GetStateData().TargetFound) {
             CVector2 cRobotPosition(
-                m_sSwarmData.Robots[i].FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetX(),
-                m_sSwarmData.Robots[i].FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetY()
+                sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetX(),
+                sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetY()
             );
             bool bTargetIdentified = false;
             for(UInt32 j = 0; j < m_sForagingParams.TargetPositions.size() && !bTargetIdentified; ++j) {
@@ -262,7 +290,59 @@ void CIndividualLevyWalkLoopFunctions::PostStep() {
                 }
             }
         }
+        UpdateUnboundedArena(sRobot);
     }
+}
+
+void CIndividualLevyWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_data) {
+    CVector3 cRobotPosition(s_robot_data->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position);
+    if (m_sArenaParams.UnboundedBufferRangeX.WithinMinBoundExcludedMaxBoundIncluded(Abs(cRobotPosition.GetX()))) {
+        UInt32 iTrials = 0;
+        CVector3 cNewPosition;
+        do {
+            if (iTrials < 1) {
+                cNewPosition.Set(
+                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeX), 
+                    cRobotPosition.GetY(), 
+                    cRobotPosition.GetZ()
+                );
+            } else {
+                cNewPosition.Set(
+                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeX), 
+                    m_pcRNG->Uniform(m_sArenaParams.ContextRangeY), 
+                    cRobotPosition.GetZ()
+                );
+            }
+        } while (
+            !MoveEntity(
+                s_robot_data->FootBotEntity->GetEmbodiedEntity(),
+                cNewPosition,
+                s_robot_data->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Orientation
+            ) && ++iTrials < 100);
+    } else if (m_sArenaParams.UnboundedBufferRangeY.WithinMinBoundExcludedMaxBoundIncluded(Abs(cRobotPosition.GetY()))) {
+        UInt32 iTrials = 0;
+        CVector3 cNewPosition;
+        do {
+            if (iTrials < 1) {
+                cNewPosition.Set(
+                    cRobotPosition.GetX(), 
+                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeY), 
+                    cRobotPosition.GetZ()
+                );
+            } else {
+                cNewPosition.Set(
+                    m_pcRNG->Uniform(m_sArenaParams.ContextRangeX), 
+                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeY), 
+                    cRobotPosition.GetZ()
+                );
+            }
+        } while (
+            !MoveEntity(
+                s_robot_data->FootBotEntity->GetEmbodiedEntity(),
+                cNewPosition,
+                s_robot_data->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Orientation
+            ) && ++iTrials < 100);
+    } else {}
 }
 
 /****************************************/
