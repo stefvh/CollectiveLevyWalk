@@ -203,22 +203,13 @@ void CIndividualLevyWalkLoopFunctions::Destroy() {}
 
 void CIndividualLevyWalkLoopFunctions::PreStep() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
-        switch(m_sSwarmData.Robots[i].FootBotController->GetStateData().State) {
-            case CFootBotIndividualLevyWalk::SStateData::STATE_WALK: {
-                ++m_sSwarmData.Robots[i].TicksInWalkState;
-                break;
-            }
-            case CFootBotIndividualLevyWalk::SStateData::STATE_ROTATE: {
-                ++m_sSwarmData.Robots[i].TicksInRotateState;
-                break;
-            }
-            case CFootBotIndividualLevyWalk::SStateData::STATE_COLLISIONAVOIDANCE: {
-                ++m_sSwarmData.Robots[i].TicksInCollisionAvoidanceState;
-                break;
-            }
-            default: {
-            }
-        }
+        if (m_sSwarmData.Robots[i].FootBotController->IsWalking()) {
+            ++m_sSwarmData.Robots[i].TicksInWalkState;
+        } else if (m_sSwarmData.Robots[i].FootBotController->IsRotating()) {
+            ++m_sSwarmData.Robots[i].TicksInRotateState;
+        } else if (m_sSwarmData.Robots[i].FootBotController->IsAvoidingCollision()) {
+            ++m_sSwarmData.Robots[i].TicksInCollisionAvoidanceState;
+        } else {}
     }
 }
 

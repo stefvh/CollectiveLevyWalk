@@ -114,10 +114,14 @@ public:
   virtual void ControlStep();
   virtual void Reset();
 
+  inline bool IsWalking() { return m_sStateData.State == SStateData::STATE_WALK; }
+  inline bool IsRotating() { return m_sStateData.State == SStateData::STATE_ROTATE; }
+  inline bool IsAvoidingCollision() { return m_sStateData.State == SStateData::STATE_COLLISIONAVOIDANCE; }
+
   inline SStateData GetStateData() { return m_sStateData; }
 
   inline SFootbotParams GetFootbotParams() { return m_sFootbotParams; }
-  
+
 protected:
   UInt32 m_uint32Id;
 
