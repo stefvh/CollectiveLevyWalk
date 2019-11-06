@@ -24,3 +24,13 @@
 /home/stef/Documents/CollectiveLevyWalk/build/loop_functions/foraging_loop_functions/CMakeFiles/rebuild_cache.dir
 /home/stef/Documents/CollectiveLevyWalk/build/loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions.dir
 /home/stef/Documents/CollectiveLevyWalk/build/loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir
+/home/stef/Documents/CollectiveLevyWalk/build/loop_functions/rw_loop_functions/CMakeFiles/edit_cache.dir
+/home/stef/Documents/CollectiveLevyWalk/build/loop_functions/rw_loop_functions/CMakeFiles/rebuild_cache.dir
+/home/stef/Documents/CollectiveLevyWalk/build/loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir
+/home/stef/Documents/CollectiveLevyWalk/build/loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/CMakeFiles/rebuild_cache.dir
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/CMakeFiles/seeds.dir
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/CMakeFiles/edit_cache.dir
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/CMakeFiles/main.dir
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/CMakeFiles/seeds_automoc.dir
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/CMakeFiles/main_automoc.dir

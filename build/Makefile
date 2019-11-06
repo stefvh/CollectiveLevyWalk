@@ -240,6 +240,84 @@ foraging_loop_functions_automoc/fast:
 	$(MAKE) -f loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/build.make loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/build
 .PHONY : foraging_loop_functions_automoc/fast
 
+#=============================================================================
+# Target rules for targets named rw_loop_functions
+
+# Build rule for target.
+rw_loop_functions: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rw_loop_functions
+.PHONY : rw_loop_functions
+
+# fast build rule for target.
+rw_loop_functions/fast:
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/build
+.PHONY : rw_loop_functions/fast
+
+#=============================================================================
+# Target rules for targets named rw_loop_functions_automoc
+
+# Build rule for target.
+rw_loop_functions_automoc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rw_loop_functions_automoc
+.PHONY : rw_loop_functions_automoc
+
+# fast build rule for target.
+rw_loop_functions_automoc/fast:
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/build
+.PHONY : rw_loop_functions_automoc/fast
+
+#=============================================================================
+# Target rules for targets named seeds
+
+# Build rule for target.
+seeds: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 seeds
+.PHONY : seeds
+
+# fast build rule for target.
+seeds/fast:
+	$(MAKE) -f embedding/CMakeFiles/seeds.dir/build.make embedding/CMakeFiles/seeds.dir/build
+.PHONY : seeds/fast
+
+#=============================================================================
+# Target rules for targets named main
+
+# Build rule for target.
+main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main
+.PHONY : main
+
+# fast build rule for target.
+main/fast:
+	$(MAKE) -f embedding/CMakeFiles/main.dir/build.make embedding/CMakeFiles/main.dir/build
+.PHONY : main/fast
+
+#=============================================================================
+# Target rules for targets named seeds_automoc
+
+# Build rule for target.
+seeds_automoc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 seeds_automoc
+.PHONY : seeds_automoc
+
+# fast build rule for target.
+seeds_automoc/fast:
+	$(MAKE) -f embedding/CMakeFiles/seeds_automoc.dir/build.make embedding/CMakeFiles/seeds_automoc.dir/build
+.PHONY : seeds_automoc/fast
+
+#=============================================================================
+# Target rules for targets named main_automoc
+
+# Build rule for target.
+main_automoc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main_automoc
+.PHONY : main_automoc
+
+# fast build rule for target.
+main_automoc/fast:
+	$(MAKE) -f embedding/CMakeFiles/main_automoc.dir/build.make embedding/CMakeFiles/main_automoc.dir/build
+.PHONY : main_automoc/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -258,6 +336,12 @@ help:
 	@echo "... footbot_acrw_automoc"
 	@echo "... foraging_loop_functions"
 	@echo "... foraging_loop_functions_automoc"
+	@echo "... rw_loop_functions"
+	@echo "... rw_loop_functions_automoc"
+	@echo "... seeds"
+	@echo "... main"
+	@echo "... seeds_automoc"
+	@echo "... main_automoc"
 .PHONY : help
 
 

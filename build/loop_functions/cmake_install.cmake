@@ -35,6 +35,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/stef/Documents/CollectiveLevyWalk/build/loop_functions/foraging_loop_functions/cmake_install.cmake")
+  include("/home/stef/Documents/CollectiveLevyWalk/build/loop_functions/rw_loop_functions/cmake_install.cmake")
 
 endif()
 

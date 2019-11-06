@@ -1,9 +1,9 @@
-#include "ilw_loop_functions.h"
+#include "rw_loop_functions.h"
 
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::SSwarmParams::Init(TConfigurationNode& t_node) {
+void CRandomWalkLoopFunctions::SSwarmParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "robot_controller", RobotControllerId);
         GetNodeAttribute(t_node, "size", Size);
@@ -17,7 +17,7 @@ void CIndividualLevyWalkLoopFunctions::SSwarmParams::Init(TConfigurationNode& t_
     InitCalculatedParams();
 }
 
-void CIndividualLevyWalkLoopFunctions::SSwarmParams::InitCalculatedParams() {
+void CRandomWalkLoopFunctions::SSwarmParams::InitCalculatedParams() {
     NestAreaBufferFactor += 1.0;
     NestAreaBufferSqrtFactor = Sqrt(NestAreaBufferFactor);
 }
@@ -25,7 +25,7 @@ void CIndividualLevyWalkLoopFunctions::SSwarmParams::InitCalculatedParams() {
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::SForagingParams::Init(TConfigurationNode& t_node) {
+void CRandomWalkLoopFunctions::SForagingParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "target_positions_file", TargetPositionsFileName);
         GetNodeAttribute(t_node, "target_radius", TargetRadius);
@@ -37,18 +37,18 @@ void CIndividualLevyWalkLoopFunctions::SForagingParams::Init(TConfigurationNode&
     InitCalculatedParams();
 }
 
-void CIndividualLevyWalkLoopFunctions::SForagingParams::InitCalculatedParams() {
+void CRandomWalkLoopFunctions::SForagingParams::InitCalculatedParams() {
     TargetSquareRadius = TargetRadius * TargetRadius;
 }
 
-void CIndividualLevyWalkLoopFunctions::SForagingParams::InitFileInputParams() {
+void CRandomWalkLoopFunctions::SForagingParams::InitFileInputParams() {
     //TODO read TargetPositions from file (if filename not empty/null!)
 }
 
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t_node) {
+void CRandomWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "file", FileName);
         GetNodeAttribute(t_node, "save_trajectory", SaveTrajectory);
@@ -61,14 +61,23 @@ void CIndividualLevyWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t
 /****************************************/
 /****************************************/
 
-CIndividualLevyWalkLoopFunctions::CIndividualLevyWalkLoopFunctions() :
+void CRandomWalkLoopFunctions::SSwarmData::Reset() {
+    Robots.clear();
+    TargetFindings.clear();
+    WalkDistances.clear();
+}
+
+/****************************************/
+/****************************************/
+
+CRandomWalkLoopFunctions::CRandomWalkLoopFunctions() :
    m_pcFloor(NULL),
    m_pcRNG(NULL) {}
 
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::Init(TConfigurationNode& t_node) {
+void CRandomWalkLoopFunctions::Init(TConfigurationNode& t_node) {
     try {
         InitParams(t_node);
         InitUtilities();
@@ -80,7 +89,7 @@ void CIndividualLevyWalkLoopFunctions::Init(TConfigurationNode& t_node) {
    }
 }
 
-void CIndividualLevyWalkLoopFunctions::InitParams(TConfigurationNode& t_node) {
+void CRandomWalkLoopFunctions::InitParams(TConfigurationNode& t_node) {
     try {
         m_sSwarmParams.Init(GetNode(t_node, "swarm"));
         m_sForagingParams.Init(GetNode(t_node, "foraging"));
@@ -91,7 +100,7 @@ void CIndividualLevyWalkLoopFunctions::InitParams(TConfigurationNode& t_node) {
     }
 }
 
-void CIndividualLevyWalkLoopFunctions::InitUtilities() {
+void CRandomWalkLoopFunctions::InitUtilities() {
     try {
         m_pcFloor = &GetSpace().GetFloorEntity();
         m_pcRNG = CRandom::CreateRNG("argos");
@@ -104,7 +113,7 @@ void CIndividualLevyWalkLoopFunctions::InitUtilities() {
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::InitSwarm() {
+void CRandomWalkLoopFunctions::InitSwarm() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; i++) {
         std::string sStringId = std::to_string(i);
         CFootBotEntity* cFootBotEntity = new CFootBotEntity(sStringId, m_sSwarmParams.RobotControllerId);
@@ -121,7 +130,7 @@ void CIndividualLevyWalkLoopFunctions::InitSwarm() {
     }
 }
 
-void CIndividualLevyWalkLoopFunctions::InitArenaParams() {
+void CRandomWalkLoopFunctions::InitArenaParams() {
     m_sArenaParams.ArenaUnit = (Real)m_sSwarmData.Robots[0].FootBotController->GetFootbotParams().BodyDiameter / 100.0;
 
     Real fUnboundedBuffer = 1.5 * m_sArenaParams.ArenaUnit;
@@ -179,7 +188,7 @@ void CIndividualLevyWalkLoopFunctions::InitArenaParams() {
     );
 }
 
-void CIndividualLevyWalkLoopFunctions::DistributeSwarmInArena() {
+void CRandomWalkLoopFunctions::DistributeSwarmInArena() {
     CVector3 cPosition;
     CQuaternion cQuaternion;
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
@@ -203,31 +212,20 @@ void CIndividualLevyWalkLoopFunctions::DistributeSwarmInArena() {
 /****************************************/
 /****************************************/
 
-CColor CIndividualLevyWalkLoopFunctions::GetFloorColor(const CVector2& c_position_on_plane) {
-   for(UInt32 i = 0; i < m_sForagingParams.TargetPositions.size(); ++i) {
-      if((c_position_on_plane - m_sForagingParams.TargetPositions[i]).SquareLength() < m_sForagingParams.TargetSquareRadius) {
-         return CColor::BLACK;
-      }
-   }
-   return CColor::WHITE;
-}
-
-/****************************************/
-/****************************************/
-
-void CIndividualLevyWalkLoopFunctions::Reset() {
+void CRandomWalkLoopFunctions::Reset() {
+    m_sSwarmData.Reset();
     DistributeSwarmInArena();
 }
 
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::Destroy() {}
+void CRandomWalkLoopFunctions::Destroy() {}
 
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::PreStep() {
+void CRandomWalkLoopFunctions::PreStep() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
         SRobotData* sRobot = &m_sSwarmData.Robots[i];
         if (sRobot->FootBotController->IsWalking()) {
@@ -263,7 +261,7 @@ void CIndividualLevyWalkLoopFunctions::PreStep() {
     }
 }
 
-void CIndividualLevyWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos) {
+void CRandomWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos) {
     if (m_sOutputParams.SaveTrajectory) {
         m_sSwarmData.WalkDistances.push_back((c_end_pos - c_start_pos).Length());
     }
@@ -272,7 +270,7 @@ void CIndividualLevyWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, C
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::PostStep() {
+void CRandomWalkLoopFunctions::PostStep() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
         SRobotData* sRobot = &m_sSwarmData.Robots[i];
         if(sRobot->FootBotController->GetStateData().TargetFound) {
@@ -294,7 +292,7 @@ void CIndividualLevyWalkLoopFunctions::PostStep() {
     }
 }
 
-void CIndividualLevyWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_data) {
+void CRandomWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_data) {
     CVector3 cRobotPosition(s_robot_data->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position);
     if (m_sArenaParams.UnboundedBufferRangeX.WithinMinBoundExcludedMaxBoundIncluded(Abs(cRobotPosition.GetX()))) {
         UInt32 iTrials = 0;
@@ -348,4 +346,16 @@ void CIndividualLevyWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_
 /****************************************/
 /****************************************/
 
-REGISTER_LOOP_FUNCTIONS(CIndividualLevyWalkLoopFunctions, "ilw_loop_functions")
+CColor CRandomWalkLoopFunctions::GetFloorColor(const CVector2& c_position_on_plane) {
+   for(UInt32 i = 0; i < m_sForagingParams.TargetPositions.size(); ++i) {
+      if((c_position_on_plane - m_sForagingParams.TargetPositions[i]).SquareLength() < m_sForagingParams.TargetSquareRadius) {
+         return CColor::BLACK;
+      }
+   }
+   return CColor::WHITE;
+}
+
+/****************************************/
+/****************************************/
+
+REGISTER_LOOP_FUNCTIONS(CRandomWalkLoopFunctions, "rw_loop_functions")

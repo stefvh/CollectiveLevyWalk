@@ -446,16 +446,19 @@ clean: controllers/footbot_acrw/CMakeFiles/footbot_acrw_automoc.dir/clean
 
 # Convenience name for "all" pass in the directory.
 loop_functions/all: loop_functions/foraging_loop_functions/all
+loop_functions/all: loop_functions/rw_loop_functions/all
 
 .PHONY : loop_functions/all
 
 # Convenience name for "clean" pass in the directory.
 loop_functions/clean: loop_functions/foraging_loop_functions/clean
+loop_functions/clean: loop_functions/rw_loop_functions/clean
 
 .PHONY : loop_functions/clean
 
 # Convenience name for "preinstall" pass in the directory.
 loop_functions/preinstall: loop_functions/foraging_loop_functions/preinstall
+loop_functions/preinstall: loop_functions/rw_loop_functions/preinstall
 
 .PHONY : loop_functions/preinstall
 
@@ -545,6 +548,257 @@ loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automo
 
 # clean rule for target.
 clean: loop_functions/foraging_loop_functions/CMakeFiles/foraging_loop_functions_automoc.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory loop_functions/rw_loop_functions
+
+# Convenience name for "all" pass in the directory.
+loop_functions/rw_loop_functions/all: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all
+
+.PHONY : loop_functions/rw_loop_functions/all
+
+# Convenience name for "clean" pass in the directory.
+loop_functions/rw_loop_functions/clean: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/clean
+loop_functions/rw_loop_functions/clean: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/clean
+
+.PHONY : loop_functions/rw_loop_functions/clean
+
+# Convenience name for "preinstall" pass in the directory.
+loop_functions/rw_loop_functions/preinstall:
+
+.PHONY : loop_functions/rw_loop_functions/preinstall
+
+#=============================================================================
+# Target rules for target loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir
+
+# All Build rule for target.
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all: controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/all
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/all
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/depend
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=26,27,28 "Built target rw_loop_functions"
+.PHONY : loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all
+
+# Include target in all.
+all: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 8
+	$(MAKE) -f CMakeFiles/Makefile2 loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rule
+
+# Convenience name for target.
+rw_loop_functions: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rule
+
+.PHONY : rw_loop_functions
+
+# clean rule for target.
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/clean:
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/clean
+.PHONY : loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/clean
+
+# clean rule for target.
+clean: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir
+
+# All Build rule for target.
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/all:
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/depend
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=29 "Built target rw_loop_functions_automoc"
+.PHONY : loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/all
+
+# Build rule for subdir invocation for target.
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/rule
+
+# Convenience name for target.
+rw_loop_functions_automoc: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/rule
+
+.PHONY : rw_loop_functions_automoc
+
+# clean rule for target.
+loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/clean:
+	$(MAKE) -f loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/build.make loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/clean
+.PHONY : loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/clean
+
+# clean rule for target.
+clean: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory embedding
+
+# Convenience name for "all" pass in the directory.
+embedding/all: embedding/CMakeFiles/seeds.dir/all
+embedding/all: embedding/CMakeFiles/main.dir/all
+
+.PHONY : embedding/all
+
+# Convenience name for "clean" pass in the directory.
+embedding/clean: embedding/CMakeFiles/seeds.dir/clean
+embedding/clean: embedding/CMakeFiles/main.dir/clean
+embedding/clean: embedding/CMakeFiles/seeds_automoc.dir/clean
+embedding/clean: embedding/CMakeFiles/main_automoc.dir/clean
+
+.PHONY : embedding/clean
+
+# Convenience name for "preinstall" pass in the directory.
+embedding/preinstall:
+
+.PHONY : embedding/preinstall
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/seeds.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/seeds.dir/all: embedding/CMakeFiles/seeds_automoc.dir/all
+	$(MAKE) -f embedding/CMakeFiles/seeds.dir/build.make embedding/CMakeFiles/seeds.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/seeds.dir/build.make embedding/CMakeFiles/seeds.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=30,31,32 "Built target seeds"
+.PHONY : embedding/CMakeFiles/seeds.dir/all
+
+# Include target in all.
+all: embedding/CMakeFiles/seeds.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/seeds.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/seeds.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/seeds.dir/rule
+
+# Convenience name for target.
+seeds: embedding/CMakeFiles/seeds.dir/rule
+
+.PHONY : seeds
+
+# clean rule for target.
+embedding/CMakeFiles/seeds.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/seeds.dir/build.make embedding/CMakeFiles/seeds.dir/clean
+.PHONY : embedding/CMakeFiles/seeds.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/seeds.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/main.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/main.dir/all: controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/all
+embedding/CMakeFiles/main.dir/all: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/all
+embedding/CMakeFiles/main.dir/all: embedding/CMakeFiles/main_automoc.dir/all
+	$(MAKE) -f embedding/CMakeFiles/main.dir/build.make embedding/CMakeFiles/main.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/main.dir/build.make embedding/CMakeFiles/main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=22,23,24 "Built target main"
+.PHONY : embedding/CMakeFiles/main.dir/all
+
+# Include target in all.
+all: embedding/CMakeFiles/main.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 12
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/main.dir/rule
+
+# Convenience name for target.
+main: embedding/CMakeFiles/main.dir/rule
+
+.PHONY : main
+
+# clean rule for target.
+embedding/CMakeFiles/main.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/main.dir/build.make embedding/CMakeFiles/main.dir/clean
+.PHONY : embedding/CMakeFiles/main.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/main.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/seeds_automoc.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/seeds_automoc.dir/all:
+	$(MAKE) -f embedding/CMakeFiles/seeds_automoc.dir/build.make embedding/CMakeFiles/seeds_automoc.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/seeds_automoc.dir/build.make embedding/CMakeFiles/seeds_automoc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=33 "Built target seeds_automoc"
+.PHONY : embedding/CMakeFiles/seeds_automoc.dir/all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/seeds_automoc.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/seeds_automoc.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/seeds_automoc.dir/rule
+
+# Convenience name for target.
+seeds_automoc: embedding/CMakeFiles/seeds_automoc.dir/rule
+
+.PHONY : seeds_automoc
+
+# clean rule for target.
+embedding/CMakeFiles/seeds_automoc.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/seeds_automoc.dir/build.make embedding/CMakeFiles/seeds_automoc.dir/clean
+.PHONY : embedding/CMakeFiles/seeds_automoc.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/seeds_automoc.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/main_automoc.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/main_automoc.dir/all:
+	$(MAKE) -f embedding/CMakeFiles/main_automoc.dir/build.make embedding/CMakeFiles/main_automoc.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/main_automoc.dir/build.make embedding/CMakeFiles/main_automoc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=25 "Built target main_automoc"
+.PHONY : embedding/CMakeFiles/main_automoc.dir/all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/main_automoc.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/main_automoc.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/main_automoc.dir/rule
+
+# Convenience name for target.
+main_automoc: embedding/CMakeFiles/main_automoc.dir/rule
+
+.PHONY : main_automoc
+
+# clean rule for target.
+embedding/CMakeFiles/main_automoc.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/main_automoc.dir/build.make embedding/CMakeFiles/main_automoc.dir/clean
+.PHONY : embedding/CMakeFiles/main_automoc.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/main_automoc.dir/clean
 
 .PHONY : clean
 

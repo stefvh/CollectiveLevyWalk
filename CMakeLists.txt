@@ -50,3 +50,5 @@ add_subdirectory(controllers)
 # Descend into the loop_functions directory
 add_subdirectory(loop_functions)
 
+# Descend into the embedding directory
+add_subdirectory(embedding)

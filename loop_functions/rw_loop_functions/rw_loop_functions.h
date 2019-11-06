@@ -1,14 +1,21 @@
+/*
+ * AUTHOR: Stef Van Havermaet <stefvanhavermaet@gmail.com>
+ *
+ * Random Walk loop functions for the ILW, CLW and ACRW controllers.
+ *
+ */
+
 #ifndef ILW_LOOP_FUNCTIONS_H
 #define ILW_LOOP_FUNCTIONS_H
 
-#include <controllers/footbot_ilw/footbot_ilw.h>
+#include "../../controllers/footbot_ilw/footbot_ilw.h"
 
 #include <argos3/core/simulator/loop_functions.h>
 #include <argos3/plugins/robots/foot-bot/simulator/footbot_entity.h>
 
 using namespace argos;
 
-class CIndividualLevyWalkLoopFunctions : public CLoopFunctions {
+class CRandomWalkLoopFunctions : public CLoopFunctions {
 
 public:
    struct SSwarmParams {
@@ -96,10 +103,12 @@ public:
        std::vector<SRobotData> Robots;
        std::vector<STargetFindingData> TargetFindings;
        std::vector<Real> WalkDistances;
+
+       void Reset();
    };
 public:
-   CIndividualLevyWalkLoopFunctions();
-   virtual ~CIndividualLevyWalkLoopFunctions() {}
+   CRandomWalkLoopFunctions();
+   virtual ~CRandomWalkLoopFunctions() {}
 
    virtual void Init(TConfigurationNode& t_node);
    virtual void Reset();
