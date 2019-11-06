@@ -3,13 +3,10 @@ file(REMOVE_RECURSE
   "main_automoc.cpp"
   "targets_patchy_automoc.cpp"
   "targets_sparse_automoc.cpp"
-  "CMakeFiles/seeds.dir/seeds.cpp.o"
-  "CMakeFiles/seeds.dir/seeds_automoc.cpp.o"
-  "seeds.pdb"
-  "seeds"
+  "CMakeFiles/targets_sparse_automoc"
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang CXX)
-  include(CMakeFiles/seeds.dir/cmake_clean_${lang}.cmake OPTIONAL)
+foreach(lang )
+  include(CMakeFiles/targets_sparse_automoc.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()

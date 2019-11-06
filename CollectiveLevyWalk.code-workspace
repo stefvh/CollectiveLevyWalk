@@ -48,7 +48,10 @@
 			"cinttypes": "cpp",
 			"utility": "cpp",
 			"typeinfo": "cpp",
-			"filesystem": "cpp"
+			"filesystem": "cpp",
+			"chrono": "cpp",
+			"codecvt": "cpp",
+			"ratio": "cpp"
 		}
 	}
 }

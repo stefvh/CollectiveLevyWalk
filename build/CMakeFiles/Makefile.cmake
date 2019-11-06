@@ -97,6 +97,10 @@ set(CMAKE_DEPEND_INFO_FILES
   "loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir/DependInfo.cmake"
   "embedding/CMakeFiles/seeds.dir/DependInfo.cmake"
   "embedding/CMakeFiles/main.dir/DependInfo.cmake"
+  "embedding/CMakeFiles/targets_patchy.dir/DependInfo.cmake"
+  "embedding/CMakeFiles/targets_sparse.dir/DependInfo.cmake"
   "embedding/CMakeFiles/seeds_automoc.dir/DependInfo.cmake"
   "embedding/CMakeFiles/main_automoc.dir/DependInfo.cmake"
+  "embedding/CMakeFiles/targets_patchy_automoc.dir/DependInfo.cmake"
+  "embedding/CMakeFiles/targets_sparse_automoc.dir/DependInfo.cmake"
   )

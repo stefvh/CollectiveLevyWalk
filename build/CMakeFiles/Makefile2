@@ -646,14 +646,20 @@ clean: loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions_automoc.dir
 # Convenience name for "all" pass in the directory.
 embedding/all: embedding/CMakeFiles/seeds.dir/all
 embedding/all: embedding/CMakeFiles/main.dir/all
+embedding/all: embedding/CMakeFiles/targets_patchy.dir/all
+embedding/all: embedding/CMakeFiles/targets_sparse.dir/all
 
 .PHONY : embedding/all
 
 # Convenience name for "clean" pass in the directory.
 embedding/clean: embedding/CMakeFiles/seeds.dir/clean
 embedding/clean: embedding/CMakeFiles/main.dir/clean
+embedding/clean: embedding/CMakeFiles/targets_patchy.dir/clean
+embedding/clean: embedding/CMakeFiles/targets_sparse.dir/clean
 embedding/clean: embedding/CMakeFiles/seeds_automoc.dir/clean
 embedding/clean: embedding/CMakeFiles/main_automoc.dir/clean
+embedding/clean: embedding/CMakeFiles/targets_patchy_automoc.dir/clean
+embedding/clean: embedding/CMakeFiles/targets_sparse_automoc.dir/clean
 
 .PHONY : embedding/clean
 
@@ -739,6 +745,80 @@ clean: embedding/CMakeFiles/main.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target embedding/CMakeFiles/targets_patchy.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/targets_patchy.dir/all: embedding/CMakeFiles/targets_patchy_automoc.dir/all
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=34,35,36 "Built target targets_patchy"
+.PHONY : embedding/CMakeFiles/targets_patchy.dir/all
+
+# Include target in all.
+all: embedding/CMakeFiles/targets_patchy.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/targets_patchy.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_patchy.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/targets_patchy.dir/rule
+
+# Convenience name for target.
+targets_patchy: embedding/CMakeFiles/targets_patchy.dir/rule
+
+.PHONY : targets_patchy
+
+# clean rule for target.
+embedding/CMakeFiles/targets_patchy.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/clean
+.PHONY : embedding/CMakeFiles/targets_patchy.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/targets_patchy.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/targets_sparse.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/targets_sparse.dir/all: embedding/CMakeFiles/targets_sparse_automoc.dir/all
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=38,39,40 "Built target targets_sparse"
+.PHONY : embedding/CMakeFiles/targets_sparse.dir/all
+
+# Include target in all.
+all: embedding/CMakeFiles/targets_sparse.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/targets_sparse.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_sparse.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/targets_sparse.dir/rule
+
+# Convenience name for target.
+targets_sparse: embedding/CMakeFiles/targets_sparse.dir/rule
+
+.PHONY : targets_sparse
+
+# clean rule for target.
+embedding/CMakeFiles/targets_sparse.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/clean
+.PHONY : embedding/CMakeFiles/targets_sparse.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/targets_sparse.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target embedding/CMakeFiles/seeds_automoc.dir
 
 # All Build rule for target.
@@ -799,6 +879,70 @@ embedding/CMakeFiles/main_automoc.dir/clean:
 
 # clean rule for target.
 clean: embedding/CMakeFiles/main_automoc.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/targets_patchy_automoc.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/targets_patchy_automoc.dir/all:
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy_automoc.dir/build.make embedding/CMakeFiles/targets_patchy_automoc.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy_automoc.dir/build.make embedding/CMakeFiles/targets_patchy_automoc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=37 "Built target targets_patchy_automoc"
+.PHONY : embedding/CMakeFiles/targets_patchy_automoc.dir/all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/targets_patchy_automoc.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_patchy_automoc.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/targets_patchy_automoc.dir/rule
+
+# Convenience name for target.
+targets_patchy_automoc: embedding/CMakeFiles/targets_patchy_automoc.dir/rule
+
+.PHONY : targets_patchy_automoc
+
+# clean rule for target.
+embedding/CMakeFiles/targets_patchy_automoc.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy_automoc.dir/build.make embedding/CMakeFiles/targets_patchy_automoc.dir/clean
+.PHONY : embedding/CMakeFiles/targets_patchy_automoc.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/targets_patchy_automoc.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target embedding/CMakeFiles/targets_sparse_automoc.dir
+
+# All Build rule for target.
+embedding/CMakeFiles/targets_sparse_automoc.dir/all:
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse_automoc.dir/build.make embedding/CMakeFiles/targets_sparse_automoc.dir/depend
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse_automoc.dir/build.make embedding/CMakeFiles/targets_sparse_automoc.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles --progress-num=41 "Built target targets_sparse_automoc"
+.PHONY : embedding/CMakeFiles/targets_sparse_automoc.dir/all
+
+# Build rule for subdir invocation for target.
+embedding/CMakeFiles/targets_sparse_automoc.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_sparse_automoc.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/stef/Documents/CollectiveLevyWalk/build/CMakeFiles 0
+.PHONY : embedding/CMakeFiles/targets_sparse_automoc.dir/rule
+
+# Convenience name for target.
+targets_sparse_automoc: embedding/CMakeFiles/targets_sparse_automoc.dir/rule
+
+.PHONY : targets_sparse_automoc
+
+# clean rule for target.
+embedding/CMakeFiles/targets_sparse_automoc.dir/clean:
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse_automoc.dir/build.make embedding/CMakeFiles/targets_sparse_automoc.dir/clean
+.PHONY : embedding/CMakeFiles/targets_sparse_automoc.dir/clean
+
+# clean rule for target.
+clean: embedding/CMakeFiles/targets_sparse_automoc.dir/clean
 
 .PHONY : clean
 

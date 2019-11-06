@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/stef/Documents/CollectiveLevyWalk/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -141,6 +141,36 @@ main/fast:
 .PHONY : main/fast
 
 # Convenience name for target.
+embedding/CMakeFiles/targets_patchy.dir/rule:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_patchy.dir/rule
+.PHONY : embedding/CMakeFiles/targets_patchy.dir/rule
+
+# Convenience name for target.
+targets_patchy: embedding/CMakeFiles/targets_patchy.dir/rule
+
+.PHONY : targets_patchy
+
+# fast build rule for target.
+targets_patchy/fast:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/build
+.PHONY : targets_patchy/fast
+
+# Convenience name for target.
+embedding/CMakeFiles/targets_sparse.dir/rule:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_sparse.dir/rule
+.PHONY : embedding/CMakeFiles/targets_sparse.dir/rule
+
+# Convenience name for target.
+targets_sparse: embedding/CMakeFiles/targets_sparse.dir/rule
+
+.PHONY : targets_sparse
+
+# fast build rule for target.
+targets_sparse/fast:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/build
+.PHONY : targets_sparse/fast
+
+# Convenience name for target.
 embedding/CMakeFiles/seeds_automoc.dir/rule:
 	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/seeds_automoc.dir/rule
 .PHONY : embedding/CMakeFiles/seeds_automoc.dir/rule
@@ -169,6 +199,36 @@ main_automoc: embedding/CMakeFiles/main_automoc.dir/rule
 main_automoc/fast:
 	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/main_automoc.dir/build.make embedding/CMakeFiles/main_automoc.dir/build
 .PHONY : main_automoc/fast
+
+# Convenience name for target.
+embedding/CMakeFiles/targets_patchy_automoc.dir/rule:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_patchy_automoc.dir/rule
+.PHONY : embedding/CMakeFiles/targets_patchy_automoc.dir/rule
+
+# Convenience name for target.
+targets_patchy_automoc: embedding/CMakeFiles/targets_patchy_automoc.dir/rule
+
+.PHONY : targets_patchy_automoc
+
+# fast build rule for target.
+targets_patchy_automoc/fast:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy_automoc.dir/build.make embedding/CMakeFiles/targets_patchy_automoc.dir/build
+.PHONY : targets_patchy_automoc/fast
+
+# Convenience name for target.
+embedding/CMakeFiles/targets_sparse_automoc.dir/rule:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f CMakeFiles/Makefile2 embedding/CMakeFiles/targets_sparse_automoc.dir/rule
+.PHONY : embedding/CMakeFiles/targets_sparse_automoc.dir/rule
+
+# Convenience name for target.
+targets_sparse_automoc: embedding/CMakeFiles/targets_sparse_automoc.dir/rule
+
+.PHONY : targets_sparse_automoc
+
+# fast build rule for target.
+targets_sparse_automoc/fast:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse_automoc.dir/build.make embedding/CMakeFiles/targets_sparse_automoc.dir/build
+.PHONY : targets_sparse_automoc/fast
 
 main.o: main.cpp.o
 
@@ -278,18 +338,130 @@ seeds_automoc.cpp.s:
 	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/seeds.dir/build.make embedding/CMakeFiles/seeds.dir/seeds_automoc.cpp.s
 .PHONY : seeds_automoc.cpp.s
 
+targets_patchy.o: targets_patchy.cpp.o
+
+.PHONY : targets_patchy.o
+
+# target to build an object file
+targets_patchy.cpp.o:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/targets_patchy.cpp.o
+.PHONY : targets_patchy.cpp.o
+
+targets_patchy.i: targets_patchy.cpp.i
+
+.PHONY : targets_patchy.i
+
+# target to preprocess a source file
+targets_patchy.cpp.i:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/targets_patchy.cpp.i
+.PHONY : targets_patchy.cpp.i
+
+targets_patchy.s: targets_patchy.cpp.s
+
+.PHONY : targets_patchy.s
+
+# target to generate assembly for a file
+targets_patchy.cpp.s:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/targets_patchy.cpp.s
+.PHONY : targets_patchy.cpp.s
+
+targets_patchy_automoc.o: targets_patchy_automoc.cpp.o
+
+.PHONY : targets_patchy_automoc.o
+
+# target to build an object file
+targets_patchy_automoc.cpp.o:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/targets_patchy_automoc.cpp.o
+.PHONY : targets_patchy_automoc.cpp.o
+
+targets_patchy_automoc.i: targets_patchy_automoc.cpp.i
+
+.PHONY : targets_patchy_automoc.i
+
+# target to preprocess a source file
+targets_patchy_automoc.cpp.i:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/targets_patchy_automoc.cpp.i
+.PHONY : targets_patchy_automoc.cpp.i
+
+targets_patchy_automoc.s: targets_patchy_automoc.cpp.s
+
+.PHONY : targets_patchy_automoc.s
+
+# target to generate assembly for a file
+targets_patchy_automoc.cpp.s:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/targets_patchy_automoc.cpp.s
+.PHONY : targets_patchy_automoc.cpp.s
+
+targets_sparse.o: targets_sparse.cpp.o
+
+.PHONY : targets_sparse.o
+
+# target to build an object file
+targets_sparse.cpp.o:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/targets_sparse.cpp.o
+.PHONY : targets_sparse.cpp.o
+
+targets_sparse.i: targets_sparse.cpp.i
+
+.PHONY : targets_sparse.i
+
+# target to preprocess a source file
+targets_sparse.cpp.i:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/targets_sparse.cpp.i
+.PHONY : targets_sparse.cpp.i
+
+targets_sparse.s: targets_sparse.cpp.s
+
+.PHONY : targets_sparse.s
+
+# target to generate assembly for a file
+targets_sparse.cpp.s:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/targets_sparse.cpp.s
+.PHONY : targets_sparse.cpp.s
+
+targets_sparse_automoc.o: targets_sparse_automoc.cpp.o
+
+.PHONY : targets_sparse_automoc.o
+
+# target to build an object file
+targets_sparse_automoc.cpp.o:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/targets_sparse_automoc.cpp.o
+.PHONY : targets_sparse_automoc.cpp.o
+
+targets_sparse_automoc.i: targets_sparse_automoc.cpp.i
+
+.PHONY : targets_sparse_automoc.i
+
+# target to preprocess a source file
+targets_sparse_automoc.cpp.i:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/targets_sparse_automoc.cpp.i
+.PHONY : targets_sparse_automoc.cpp.i
+
+targets_sparse_automoc.s: targets_sparse_automoc.cpp.s
+
+.PHONY : targets_sparse_automoc.s
+
+# target to generate assembly for a file
+targets_sparse_automoc.cpp.s:
+	cd /home/stef/Documents/CollectiveLevyWalk/build && $(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/targets_sparse_automoc.cpp.s
+.PHONY : targets_sparse_automoc.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... seeds"
-	@echo "... edit_cache"
 	@echo "... main"
+	@echo "... targets_patchy"
+	@echo "... targets_sparse"
 	@echo "... seeds_automoc"
 	@echo "... main_automoc"
+	@echo "... targets_patchy_automoc"
+	@echo "... targets_sparse_automoc"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
@@ -302,6 +474,18 @@ help:
 	@echo "... seeds_automoc.o"
 	@echo "... seeds_automoc.i"
 	@echo "... seeds_automoc.s"
+	@echo "... targets_patchy.o"
+	@echo "... targets_patchy.i"
+	@echo "... targets_patchy.s"
+	@echo "... targets_patchy_automoc.o"
+	@echo "... targets_patchy_automoc.i"
+	@echo "... targets_patchy_automoc.s"
+	@echo "... targets_sparse.o"
+	@echo "... targets_sparse.i"
+	@echo "... targets_sparse.s"
+	@echo "... targets_sparse_automoc.o"
+	@echo "... targets_sparse_automoc.i"
+	@echo "... targets_sparse_automoc.s"
 .PHONY : help
 
 

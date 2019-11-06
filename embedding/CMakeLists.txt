@@ -6,3 +6,7 @@ target_link_libraries(main
     argos3core_simulator)
 
 add_executable(seeds seeds.cpp)
+
+add_executable(targets_sparse targets_sparse.cpp)
+
+add_executable(targets_patchy targets_patchy.cpp)

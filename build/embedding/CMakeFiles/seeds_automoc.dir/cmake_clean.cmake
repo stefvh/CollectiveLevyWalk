@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "seeds_automoc.cpp"
   "main_automoc.cpp"
+  "targets_patchy_automoc.cpp"
+  "targets_sparse_automoc.cpp"
   "CMakeFiles/seeds_automoc"
 )
 

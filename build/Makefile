@@ -293,6 +293,32 @@ main/fast:
 .PHONY : main/fast
 
 #=============================================================================
+# Target rules for targets named targets_patchy
+
+# Build rule for target.
+targets_patchy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 targets_patchy
+.PHONY : targets_patchy
+
+# fast build rule for target.
+targets_patchy/fast:
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy.dir/build.make embedding/CMakeFiles/targets_patchy.dir/build
+.PHONY : targets_patchy/fast
+
+#=============================================================================
+# Target rules for targets named targets_sparse
+
+# Build rule for target.
+targets_sparse: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 targets_sparse
+.PHONY : targets_sparse
+
+# fast build rule for target.
+targets_sparse/fast:
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse.dir/build.make embedding/CMakeFiles/targets_sparse.dir/build
+.PHONY : targets_sparse/fast
+
+#=============================================================================
 # Target rules for targets named seeds_automoc
 
 # Build rule for target.
@@ -318,6 +344,32 @@ main_automoc/fast:
 	$(MAKE) -f embedding/CMakeFiles/main_automoc.dir/build.make embedding/CMakeFiles/main_automoc.dir/build
 .PHONY : main_automoc/fast
 
+#=============================================================================
+# Target rules for targets named targets_patchy_automoc
+
+# Build rule for target.
+targets_patchy_automoc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 targets_patchy_automoc
+.PHONY : targets_patchy_automoc
+
+# fast build rule for target.
+targets_patchy_automoc/fast:
+	$(MAKE) -f embedding/CMakeFiles/targets_patchy_automoc.dir/build.make embedding/CMakeFiles/targets_patchy_automoc.dir/build
+.PHONY : targets_patchy_automoc/fast
+
+#=============================================================================
+# Target rules for targets named targets_sparse_automoc
+
+# Build rule for target.
+targets_sparse_automoc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 targets_sparse_automoc
+.PHONY : targets_sparse_automoc
+
+# fast build rule for target.
+targets_sparse_automoc/fast:
+	$(MAKE) -f embedding/CMakeFiles/targets_sparse_automoc.dir/build.make embedding/CMakeFiles/targets_sparse_automoc.dir/build
+.PHONY : targets_sparse_automoc/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -340,8 +392,12 @@ help:
 	@echo "... rw_loop_functions_automoc"
 	@echo "... seeds"
 	@echo "... main"
+	@echo "... targets_patchy"
+	@echo "... targets_sparse"
 	@echo "... seeds_automoc"
 	@echo "... main_automoc"
+	@echo "... targets_patchy_automoc"
+	@echo "... targets_sparse_automoc"
 .PHONY : help
 
 

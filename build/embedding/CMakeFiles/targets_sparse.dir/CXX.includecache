@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/stef/Documents/CollectiveLevyWalk/build/embedding/targets_sparse_automoc.cpp
+
+/home/stef/Documents/CollectiveLevyWalk/embedding/targets_sparse.cpp
+iostream
+-
+fstream
+-
+unistd.h
+-
+string
+-
+random
+-
+argos3/core/utility/datatypes/datatypes.h
+-
+argos3/core/utility/math/general.h
+-
+
