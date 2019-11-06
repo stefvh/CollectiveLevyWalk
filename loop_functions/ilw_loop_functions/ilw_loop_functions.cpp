@@ -105,7 +105,7 @@ void CIndividualLevyWalkLoopFunctions::InitUtilities() {
 
 void CIndividualLevyWalkLoopFunctions::InitSwarm() {
     for(UInt32 i = 0; i < m_sSwarmParams.Size; i++) {
-        m_tSwarmData.push_back(InitRobot(i));
+        m_sSwarmData.Robots.push_back(InitRobot(i));
     }
 
     if (m_sSwarmParams.Size > 0) {
@@ -125,7 +125,7 @@ CIndividualLevyWalkLoopFunctions::SRobotData CIndividualLevyWalkLoopFunctions::I
 }
 
 void CIndividualLevyWalkLoopFunctions::InitArenaParams() {
-    m_sArenaParams.ArenaUnit = (Real)m_tSwarmData[0].FootBotController->GetFootbotParams().BodyDiameter / 100.0;
+    m_sArenaParams.ArenaUnit = (Real)m_sSwarmData.Robots[0].FootBotController->GetFootbotParams().BodyDiameter / 100.0;
 
     CRange<CVector3> cDistributionAreaRange;
     if(m_sSwarmParams.Nested) {
@@ -156,7 +156,7 @@ void CIndividualLevyWalkLoopFunctions::InitArenaParams() {
 void CIndividualLevyWalkLoopFunctions::DistributeSwarmInArena() {
     CVector3 cPosition;
     CQuaternion cQuaternion;
-    for(UInt32 i = 0; i < m_sSwarmParams.Size; i++) {
+    for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
         do {
             cPosition.Set(
                 m_pcRNG->Uniform(m_sArenaParams.DistributionAreaRangeX),
@@ -168,7 +168,7 @@ void CIndividualLevyWalkLoopFunctions::DistributeSwarmInArena() {
                 CRadians::ZERO
             );
         } while (!MoveEntity(
-            m_tSwarmData[i].FootBotEntity->GetEmbodiedEntity(),
+            m_sSwarmData.Robots[i].FootBotEntity->GetEmbodiedEntity(),
             cPosition,
             cQuaternion));
     }
@@ -201,15 +201,46 @@ void CIndividualLevyWalkLoopFunctions::Destroy() {}
 /****************************************/
 /****************************************/
 
-void CIndividualLevyWalkLoopFunctions::PreStep() {}
+void CIndividualLevyWalkLoopFunctions::PreStep() {
+    for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
+        switch(m_sSwarmData.Robots[i].FootBotController->GetStateData().State) {
+            case CFootBotIndividualLevyWalk::SStateData::STATE_WALK: {
+                ++m_sSwarmData.Robots[i].TicksInWalkState;
+                break;
+            }
+            case CFootBotIndividualLevyWalk::SStateData::STATE_ROTATE: {
+                ++m_sSwarmData.Robots[i].TicksInRotateState;
+                break;
+            }
+            case CFootBotIndividualLevyWalk::SStateData::STATE_COLLISIONAVOIDANCE: {
+                ++m_sSwarmData.Robots[i].TicksInCollisionAvoidanceState;
+                break;
+            }
+            default: {
+            }
+        }
+    }
+}
 
 /****************************************/
 /****************************************/
 
 void CIndividualLevyWalkLoopFunctions::PostStep() {
-    for(UInt32 i = 0; i < m_sSwarmParams.Size; i++) {
-        if(m_tSwarmData[i].FootBotController->GetStateData().TargetFound) {
-            //TODO
+    for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
+        if(m_sSwarmData.Robots[i].FootBotController->GetStateData().TargetFound) {
+            CVector2 cRobotPosition(
+                m_sSwarmData.Robots[i].FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetX(),
+                m_sSwarmData.Robots[i].FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetY()
+            );
+            bool bTargetIdentified = false;
+            for(UInt32 j = 0; j < m_sForagingParams.TargetPositions.size() && !bTargetIdentified; ++j) {
+                if((cRobotPosition - m_sForagingParams.TargetPositions[j]).SquareLength() < m_sForagingParams.TargetSquareRadius) {
+                    m_sSwarmData.TargetFindings.push_back(
+                        STargetFindingData(GetSpace().GetSimulationClock(),i,j)
+                    );
+                    bTargetIdentified = true;
+                }
+            }
         }
     }
 }

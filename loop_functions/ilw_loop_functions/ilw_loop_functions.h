@@ -47,30 +47,43 @@ public:
    };
    struct STargetFindingData {
        UInt32 SimulationTick;
+       UInt32 RobotId;
        UInt32 TargetId;
 
-       explicit STargetFindingData(UInt32 i_simulation_tick,
+       explicit STargetFindingData( UInt32 i_simulation_tick,
+                                    UInt32 i_robot_id,
                                     UInt32 i_target_id) :
             SimulationTick(i_simulation_tick),
+            RobotId(i_robot_id),
             TargetId(i_target_id) {}
    };
-   typedef std::vector<STargetFindingData> TTargetFindingsData;
    struct SRobotData {
        CFootBotEntity* FootBotEntity;
        CFootBotIndividualLevyWalk* FootBotController;
 
-       TTargetFindingsData TargetFindings;
+       UInt32 TicksInWalkState;
+       UInt32 TicksInRotateState;
+       UInt32 TicksInCollisionAvoidanceState;
 
        explicit SRobotData() :
           FootBotEntity(NULL),
-          FootBotController(NULL) {}
+          FootBotController(NULL),
+          TicksInWalkState(0),
+          TicksInRotateState(0),
+          TicksInCollisionAvoidanceState(0) {}
     
        explicit SRobotData(CFootBotEntity* c_foot_bot_entity,
                            CFootBotIndividualLevyWalk* c_foot_bot_controller):
           FootBotEntity(c_foot_bot_entity),
-          FootBotController(c_foot_bot_controller) {}
+          FootBotController(c_foot_bot_controller),
+          TicksInWalkState(0),
+          TicksInRotateState(0),
+          TicksInCollisionAvoidanceState(0) {}
    };
-   typedef std::vector<SRobotData> TSwarmData;
+   struct SSwarmData {
+       std::vector<STargetFindingData> TargetFindings;
+       std::vector<SRobotData> Robots;
+   };
 public:
    CIndividualLevyWalkLoopFunctions();
    virtual ~CIndividualLevyWalkLoopFunctions() {}
@@ -84,12 +97,12 @@ public:
    virtual CColor GetFloorColor(const CVector2& c_position_on_plane);
 
 private:
+   SSwarmData m_sSwarmData;
+
    SSwarmParams m_sSwarmParams;
    SForagingParams m_sForagingParams;
    SOutputParams m_sOutputParams;
    SArenaParams m_sArenaParams;
-
-   TSwarmData m_tSwarmData;
 
    CFloorEntity* m_pcFloor;
    CRandom::CRNG* m_pcRNG;
