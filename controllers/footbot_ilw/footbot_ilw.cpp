@@ -36,7 +36,8 @@ CFootBotIndividualLevyWalk::SExperimentParams::SExperimentParams() :
 /****************************************/
 
 CFootBotIndividualLevyWalk::SFootbotParams::SFootbotParams() :
-   InterwheelDistance(14) {}
+   InterwheelDistance(14),
+   BodyDiameter(17) {}
 
 /****************************************/
 /****************************************/

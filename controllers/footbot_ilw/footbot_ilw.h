@@ -59,6 +59,7 @@ public:
   struct SFootbotParams 
   {
     int InterwheelDistance;
+    int BodyDiameter;
 
     SFootbotParams();
   };
@@ -113,6 +114,10 @@ public:
   virtual void ControlStep();
   virtual void Reset();
 
+  inline SStateData GetStateData() { return m_sStateData; }
+
+  inline SFootbotParams GetFootbotParams() { return m_sFootbotParams; }
+  
 protected:
   UInt32 m_uint32Id;
 
@@ -121,6 +126,7 @@ protected:
   CCI_FootBotMotorGroundSensor* m_pcGround;
 
   SStateData m_sStateData;
+
   SExperimentParams m_sExperimentParams;
   SFootbotParams m_sFootbotParams;
   SWheelVelocityParams m_sWheelVelocityParams;

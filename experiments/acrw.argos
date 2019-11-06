@@ -59,21 +59,8 @@
            source="loop_functions"
            pixels_per_meter="50" />
 
-    <box id="wall_north" size="4,0.1,0.5" movable="false">
-      <body position="0,2,0" orientation="0,0,0" />
-    </box>
-    <box id="wall_south" size="4,0.1,0.5" movable="false">
-      <body position="0,-2,0" orientation="0,0,0" />
-    </box>
-    <box id="wall_east" size="0.1,4,0.5" movable="false">
-      <body position="2,0,0" orientation="0,0,0" />
-    </box>
-    <box id="wall_west" size="0.1,4,0.5" movable="false">
-      <body position="-2,0,0" orientation="0,0,0" />
-    </box>
-
     <distribute>
-      <position method="uniform" min="-2,-2,0" max="-1,2,0" />
+      <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="3" max_trials="100">
         <foot-bot id="" rab_data_size="4" rab_range="1.35">
