@@ -65,12 +65,17 @@ public:
        UInt32 TicksInRotateState;
        UInt32 TicksInCollisionAvoidanceState;
 
+       bool WasWalkingPreviousTick;
+       CVector2 MostRecentWalkStartPosition;
+       CVector2 MostRecentWalkEndPosition;
+
        explicit SRobotData() :
           FootBotEntity(NULL),
           FootBotController(NULL),
           TicksInWalkState(0),
           TicksInRotateState(0),
-          TicksInCollisionAvoidanceState(0) {}
+          TicksInCollisionAvoidanceState(0),
+          WasWalkingPreviousTick(false) {}
     
        explicit SRobotData(CFootBotEntity* c_foot_bot_entity,
                            CFootBotIndividualLevyWalk* c_foot_bot_controller):
@@ -78,11 +83,13 @@ public:
           FootBotController(c_foot_bot_controller),
           TicksInWalkState(0),
           TicksInRotateState(0),
-          TicksInCollisionAvoidanceState(0) {}
+          TicksInCollisionAvoidanceState(0),
+          WasWalkingPreviousTick(false) {}
    };
    struct SSwarmData {
-       std::vector<STargetFindingData> TargetFindings;
        std::vector<SRobotData> Robots;
+       std::vector<STargetFindingData> TargetFindings;
+       std::vector<Real> WalkDistances;
    };
 public:
    CIndividualLevyWalkLoopFunctions();
@@ -115,6 +122,8 @@ private:
    SRobotData InitRobot(UInt32 id);
    void InitArenaParams();
    void DistributeSwarmInArena();
+
+   void UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos);
 };
 
 

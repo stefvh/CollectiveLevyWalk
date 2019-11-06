@@ -202,15 +202,44 @@ void CIndividualLevyWalkLoopFunctions::Destroy() {}
 /****************************************/
 
 void CIndividualLevyWalkLoopFunctions::PreStep() {
+    SRobotData* sRobot;
     for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
-        if (m_sSwarmData.Robots[i].FootBotController->IsWalking()) {
-            ++m_sSwarmData.Robots[i].TicksInWalkState;
-        } else if (m_sSwarmData.Robots[i].FootBotController->IsRotating()) {
-            ++m_sSwarmData.Robots[i].TicksInRotateState;
-        } else if (m_sSwarmData.Robots[i].FootBotController->IsAvoidingCollision()) {
-            ++m_sSwarmData.Robots[i].TicksInCollisionAvoidanceState;
+        sRobot = &m_sSwarmData.Robots[i];
+        if (sRobot->FootBotController->IsWalking()) {
+            ++sRobot->TicksInWalkState;
+            if (!sRobot->WasWalkingPreviousTick) {
+                sRobot->MostRecentWalkStartPosition.Set(
+                    sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetX(),
+                    sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetY()
+                ); 
+                sRobot->WasWalkingPreviousTick = true;
+            }
+            sRobot->MostRecentWalkEndPosition.Set(
+                    sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetX(),
+                    sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetY()
+            ); 
+        } else if (sRobot->FootBotController->IsRotating()) {
+            ++sRobot->TicksInRotateState;
+            if (sRobot->WasWalkingPreviousTick) {
+                sRobot->MostRecentWalkEndPosition.Set(
+                    sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetX(),
+                    sRobot->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Position.GetY()
+                ); 
+                sRobot->WasWalkingPreviousTick = false;
+                UpdateWalkDistances(sRobot->MostRecentWalkEndPosition, sRobot->MostRecentWalkStartPosition);
+            }
+        } else if (sRobot->FootBotController->IsAvoidingCollision()) {
+            ++sRobot->TicksInCollisionAvoidanceState;
+            if (sRobot->WasWalkingPreviousTick) {
+                sRobot->WasWalkingPreviousTick = false;
+                UpdateWalkDistances(sRobot->MostRecentWalkEndPosition, sRobot->MostRecentWalkStartPosition);
+            }
         } else {}
     }
+}
+
+void CIndividualLevyWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos) {
+    m_sSwarmData.WalkDistances.push_back((c_end_pos - c_start_pos).Length());
 }
 
 /****************************************/
