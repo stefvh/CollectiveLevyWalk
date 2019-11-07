@@ -16,6 +16,13 @@ sudo locale-gen en_US.UTF-8;
 ./creaty_heavy_tailedness_experiment_files.sh $N $DELTA_N $seeds
 robotControllers=(ilw clw)
 
+# Distribute the codes over the available nodes
+SHARED_DIR="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/"
+LOCAL_DIR="/users/jnauta/collective_levy/"
+while IFS= read -r dest; do 
+    scp -q -r $SHARED_DIR "$dest:$LOCAL_DIR"
+done <nodes.txt
+
 # Parallelize only over the swarm size and seeds
 for CONTROLLER in robotControllers=[@]}; do    
     # --controlmaster -S ensures that the paralellization happens across all specified nodes
