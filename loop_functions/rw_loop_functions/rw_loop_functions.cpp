@@ -71,7 +71,7 @@ void CRandomWalkLoopFunctions::SForagingParams::InitFileInputParams() {
 void CRandomWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "output_file", OutputFileName);
-        GetNodeAttribute(t_node, "save_trajectory", SaveStepLengths);
+        GetNodeAttribute(t_node, "save_step_lengths", SaveStepLengths);
     }
     catch(CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing loop functions output parameters!", ex);
@@ -375,7 +375,7 @@ void CRandomWalkLoopFunctions::PostExperiment() {
         cStepLengthsOSS << m_sOutputParams.OutputFileName
                         << "_step_lengths.txt";
         std::ofstream cStepLengthsOFS(cStepLengthsOSS.str().c_str());
-        cStepLengthsOFS << "#StepLength(double)" << std::endl;
+        cStepLengthsOFS << "#StepLength(meter)" << std::endl;
         for(size_t j = 0; j < m_sSwarmData.WalkDistances.size(); ++j) {
             cStepLengthsOFS << m_sSwarmData.WalkDistances[j] << std::endl;
         }
@@ -392,9 +392,10 @@ void CRandomWalkLoopFunctions::PostExperiment() {
         cStateCountersOSS   << m_sOutputParams.OutputFileName
                             << "_state_counters.txt";
         std::ofstream cStateCounterOFS(cStateCountersOSS.str().c_str());
-        cStateCounterOFS << "#WalkTicks(UInt32)\tRotateTicks(UInt32)\tCollisionAvoidanceTicks(UInt32)" << std::endl;
+        cStateCounterOFS << "#RobotId(UInt32)\tWalkTicks(UInt32)\tRotateTicks(UInt32)\tCollisionAvoidanceTicks(UInt32)" << std::endl;
         for(size_t j = 0; j < m_sSwarmData.Robots.size(); ++j) {
-            cStateCounterOFS << m_sSwarmData.Robots[j].TicksInWalkState << "\t"
+            cStateCounterOFS << j << "\t"
+                            << m_sSwarmData.Robots[j].TicksInWalkState << "\t"
                             << m_sSwarmData.Robots[j].TicksInRotateState << "\t"
                             << m_sSwarmData.Robots[j].TicksInCollisionAvoidanceState
                             << std::endl;
