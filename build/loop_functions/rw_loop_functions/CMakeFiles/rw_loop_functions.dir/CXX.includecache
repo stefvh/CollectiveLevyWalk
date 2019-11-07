@@ -25,6 +25,12 @@ argos3/core/utility/math/vector2.h
 /home/stef/Documents/CollectiveLevyWalk/loop_functions/rw_loop_functions/rw_loop_functions.cpp
 rw_loop_functions.h
 /home/stef/Documents/CollectiveLevyWalk/loop_functions/rw_loop_functions/rw_loop_functions.h
+fstream
+-
+sstream
+-
+string
+-
 
 /home/stef/Documents/CollectiveLevyWalk/loop_functions/rw_loop_functions/rw_loop_functions.h
 ../../controllers/footbot_ilw/footbot_ilw.h

@@ -1,12 +1,16 @@
 #include "rw_loop_functions.h"
 
+#include <fstream>
+#include <sstream>
+#include <string>
+
 /****************************************/
 /****************************************/
 
 void CRandomWalkLoopFunctions::SSwarmParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "robot_controller", RobotControllerId);
-        GetNodeAttribute(t_node, "size", Size);
+        GetNodeAttribute(t_node, "swarm_size", SwarmSize);
         GetNodeAttribute(t_node, "nested", Nested);
         GetNodeAttribute(t_node, "nest_area_buffer_factor", NestAreaBufferFactor);
     }
@@ -35,6 +39,7 @@ void CRandomWalkLoopFunctions::SForagingParams::Init(TConfigurationNode& t_node)
     }
 
     InitCalculatedParams();
+    InitFileInputParams();
 }
 
 void CRandomWalkLoopFunctions::SForagingParams::InitCalculatedParams() {
@@ -42,7 +47,22 @@ void CRandomWalkLoopFunctions::SForagingParams::InitCalculatedParams() {
 }
 
 void CRandomWalkLoopFunctions::SForagingParams::InitFileInputParams() {
-    //TODO read TargetPositions from file (if filename not empty/null!)
+    if (!TargetPositionsFileName.empty()) {
+        std::ifstream cTargetPositionsIFS(TargetPositionsFileName.c_str());
+        std::string line;
+        // Skip two header lines
+        getline(cTargetPositionsIFS, line);
+        getline(cTargetPositionsIFS, line);
+        // Read X and Y position of one target on each line
+        while (getline(cTargetPositionsIFS, line))
+        {
+            std::istringstream iss(line);
+            Real fX, fY;
+            if (!(iss >> fX >> fY)) { break; }
+
+            TargetPositions.push_back(CVector2(fX, fY));
+        }
+    }
 }
 
 /****************************************/
@@ -50,7 +70,10 @@ void CRandomWalkLoopFunctions::SForagingParams::InitFileInputParams() {
 
 void CRandomWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t_node) {
     try {
-        GetNodeAttribute(t_node, "file", FileName);
+        GetNodeAttribute(t_node, "output_file", OutputFileName);
+        GetNodeAttribute(t_node, "output_step_lengths_folder", OutputStepLengthsFolderName);
+        GetNodeAttribute(t_node, "output_state_counters_folder", OutputStateCountersFolderName);
+        GetNodeAttribute(t_node, "output_target_findings_folder", OutputTargetFindingsFolderName);
         GetNodeAttribute(t_node, "save_trajectory", SaveTrajectory);
     }
     catch(CARGoSException& ex) {
@@ -114,7 +137,7 @@ void CRandomWalkLoopFunctions::InitUtilities() {
 /****************************************/
 
 void CRandomWalkLoopFunctions::InitSwarm() {
-    for(UInt32 i = 0; i < m_sSwarmParams.Size; i++) {
+    for(UInt32 i = 0; i < m_sSwarmParams.SwarmSize; i++) {
         std::string sStringId = std::to_string(i);
         CFootBotEntity* cFootBotEntity = new CFootBotEntity(sStringId, m_sSwarmParams.RobotControllerId);
         CFootBotIndividualLevyWalk* cFootBotController = &dynamic_cast<CFootBotIndividualLevyWalk&>(cFootBotEntity->GetControllableEntity().GetController());
@@ -124,7 +147,7 @@ void CRandomWalkLoopFunctions::InitSwarm() {
         m_sSwarmData.Robots.push_back(SRobotData(cFootBotEntity, cFootBotController));
     }
 
-    if (m_sSwarmParams.Size > 0) {
+    if (m_sSwarmParams.SwarmSize > 0) {
         InitArenaParams();
         DistributeSwarmInArena();
     }
@@ -163,7 +186,7 @@ void CRandomWalkLoopFunctions::InitArenaParams() {
 
     CRange<CVector3> cDistributionAreaRange;
     if(m_sSwarmParams.Nested) {
-        Real fNestSize = m_sSwarmParams.NestAreaBufferSqrtFactor * m_sArenaParams.ArenaUnit * Sqrt((Real)m_sSwarmParams.Size);
+        Real fNestSize = m_sSwarmParams.NestAreaBufferSqrtFactor * m_sArenaParams.ArenaUnit * Sqrt((Real)m_sSwarmParams.SwarmSize);
         Real fNestHalveSize = fNestSize / 2.0;
         cDistributionAreaRange.Set(
             CVector3(-fNestHalveSize, -fNestHalveSize, 0.0),
@@ -191,7 +214,7 @@ void CRandomWalkLoopFunctions::InitArenaParams() {
 void CRandomWalkLoopFunctions::DistributeSwarmInArena() {
     CVector3 cPosition;
     CQuaternion cQuaternion;
-    for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
+    for(UInt32 i = 0; i < m_sSwarmParams.SwarmSize; ++i) {
         do {
             cPosition.Set(
                 m_pcRNG->Uniform(m_sArenaParams.DistributionAreaRangeX),
@@ -226,7 +249,7 @@ void CRandomWalkLoopFunctions::Destroy() {}
 /****************************************/
 
 void CRandomWalkLoopFunctions::PreStep() {
-    for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
+    for(UInt32 i = 0; i < m_sSwarmParams.SwarmSize; ++i) {
         SRobotData* sRobot = &m_sSwarmData.Robots[i];
         if (sRobot->FootBotController->IsWalking()) {
             ++sRobot->TicksInWalkState;
@@ -271,7 +294,7 @@ void CRandomWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, CVector2 
 /****************************************/
 
 void CRandomWalkLoopFunctions::PostStep() {
-    for(UInt32 i = 0; i < m_sSwarmParams.Size; ++i) {
+    for(UInt32 i = 0; i < m_sSwarmParams.SwarmSize; ++i) {
         SRobotData* sRobot = &m_sSwarmData.Robots[i];
         if(sRobot->FootBotController->GetStateData().TargetFound) {
             CVector2 cRobotPosition(

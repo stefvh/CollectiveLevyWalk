@@ -20,7 +20,7 @@ class CRandomWalkLoopFunctions : public CLoopFunctions {
 public:
    struct SSwarmParams {
        std::string RobotControllerId;
-       UInt32 Size;
+       UInt32 SwarmSize;
        bool Nested;
        Real NestAreaBufferFactor;
        Real NestAreaBufferSqrtFactor;
@@ -39,7 +39,10 @@ public:
        void InitFileInputParams();
    };
    struct SOutputParams {
-       std::string FileName;
+       std::string OutputFileName;
+       std::string OutputStepLengthsFolderName;
+       std::string OutputStateCountersFolderName;
+       std::string OutputTargetFindingsFolderName;
        bool SaveTrajectory;
 
        void Init(TConfigurationNode& t_node);
@@ -117,6 +120,10 @@ public:
    virtual void PostStep();
 
    virtual CColor GetFloorColor(const CVector2& c_position_on_plane);
+
+   inline const SSwarmData* GetData() { return &m_sSwarmData; }
+
+   inline const SOutputParams* GetOutputParams() { return &m_sOutputParams; }
 
 private:
    SSwarmData m_sSwarmData;

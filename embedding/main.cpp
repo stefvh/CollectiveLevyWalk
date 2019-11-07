@@ -1,7 +1,7 @@
 /*
  * AUTHOR: Stef Van Havermaet <stefvanhavermaet@gmail.com>
  *
- * Initiate one experiment for multiple runs.
+ * Initiate one experiment configuration for multiple runs.
  *
  */
 
@@ -73,14 +73,54 @@ int main(int argc, char** argv) {
      * Run the experiment Ns (number of seeds) times
      * Save data in corresponding folder and files.
      */
-    system(("mkdir " + strExperimentFileName).c_str());
     for (UInt32 i = 0; i < vSeeds.size(); ++i) {
-        argos::LOG << vSeeds[i] << std::endl;
-        //cSimulator.Reset(vSeeds[i]);
-        //cSimulator.Execute();
-        //TODO: get data from loop functions for i-th run
-        //TODO: get output filename 
-        //TODO: write to files the data for i-th run (adding "_" + i)
+        // Reset loop functions and controllers
+        cSimulator.Reset(vSeeds[i]);
+        // Run i-th iteration of experiment
+        cSimulator.Execute();
+        // Gather data
+        // Write step lengths
+        if(!cLoopFunctions.GetData()->WalkDistances.empty()) {
+            std::ostringstream cStepLengthsOSS;
+            cStepLengthsOSS << cLoopFunctions.GetOutputParams()->OutputStepLengthsFolderName 
+                            << cLoopFunctions.GetOutputParams()->OutputFileName
+                            << "_" << i << ".txt";
+            std::ofstream cStepLengthsOFS(cStepLengthsOSS.str().c_str());
+            cStepLengthsOFS << "#StepLength(double)" << std::endl;
+            for(size_t j = 0; j < cLoopFunctions.GetData()->WalkDistances.size(); ++j) {
+                cStepLengthsOFS << cLoopFunctions.GetData()->WalkDistances[j] << std::endl;
+            }
+        }
+        // Write state counters
+        if(!cLoopFunctions.GetData()->Robots.empty()) {
+            std::ostringstream cStateCountersOSS;
+            cStateCountersOSS << cLoopFunctions.GetOutputParams()->OutputStateCountersFolderName 
+                            << cLoopFunctions.GetOutputParams()->OutputFileName
+                            << "_" << i << ".txt";
+            std::ofstream cStateCounterOFS(cStateCountersOSS.str().c_str());
+            cStateCounterOFS << "#WalkTicks(UInt32)\tRotateTicks(UInt32)\tCollisionAvoidanceTicks(UInt32)" << std::endl;
+            for(size_t j = 0; j < cLoopFunctions.GetData()->Robots.size(); ++j) {
+                cStateCounterOFS << cLoopFunctions.GetData()->Robots[j].TicksInWalkState << "\t"
+                                << cLoopFunctions.GetData()->Robots[j].TicksInRotateState << "\t"
+                                << cLoopFunctions.GetData()->Robots[j].TicksInCollisionAvoidanceState
+                                << std::endl;
+            }
+        }
+        // Write target findings
+        if(!cLoopFunctions.GetData()->TargetFindings.empty()) {
+            std::ostringstream cTargetFindingsOSS;
+            cTargetFindingsOSS << cLoopFunctions.GetOutputParams()->OutputTargetFindingsFolderName 
+                            << cLoopFunctions.GetOutputParams()->OutputFileName
+                            << "_" << i << ".txt";
+            std::ofstream cTargetFindingsOFS(cTargetFindingsOSS.str().c_str());
+            cTargetFindingsOFS << "#Tick(UInt32)\tRobotId(UInt32)\tTargetId(UInt32)" << std::endl;
+            for(size_t j = 0; j < cLoopFunctions.GetData()->TargetFindings.size(); ++j) {
+                cTargetFindingsOFS << cLoopFunctions.GetData()->TargetFindings[j].SimulationTick << "\t"
+                                << cLoopFunctions.GetData()->TargetFindings[j].RobotId << "\t"
+                                << cLoopFunctions.GetData()->TargetFindings[j].TargetId
+                                << std::endl;
+            }
+        }
     }
 
     cSimulator.Destroy();
