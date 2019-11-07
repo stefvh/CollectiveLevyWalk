@@ -1,1 +1,0 @@
-/usr/bin/c++   -g   CMakeFiles/configurations.dir/configurations.cpp.o CMakeFiles/configurations.dir/configurations_automoc.cpp.o  -o configurations  -L/usr/lib/argos3 -rdynamic 

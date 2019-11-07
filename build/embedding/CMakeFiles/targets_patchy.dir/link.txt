@@ -1,1 +1,0 @@
-/usr/bin/c++   -g   CMakeFiles/targets_patchy.dir/targets_patchy.cpp.o CMakeFiles/targets_patchy.dir/targets_patchy_automoc.cpp.o  -o targets_patchy  -L/usr/lib/argos3 -rdynamic 
