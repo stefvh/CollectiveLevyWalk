@@ -71,10 +71,7 @@ void CRandomWalkLoopFunctions::SForagingParams::InitFileInputParams() {
 void CRandomWalkLoopFunctions::SOutputParams::Init(TConfigurationNode& t_node) {
     try {
         GetNodeAttribute(t_node, "output_file", OutputFileName);
-        GetNodeAttribute(t_node, "output_step_lengths_folder", OutputStepLengthsFolderName);
-        GetNodeAttribute(t_node, "output_state_counters_folder", OutputStateCountersFolderName);
-        GetNodeAttribute(t_node, "output_target_findings_folder", OutputTargetFindingsFolderName);
-        GetNodeAttribute(t_node, "save_trajectory", SaveTrajectory);
+        GetNodeAttribute(t_node, "save_trajectory", SaveStepLengths);
     }
     catch(CARGoSException& ex) {
         THROW_ARGOSEXCEPTION_NESTED("Error parsing loop functions output parameters!", ex);
@@ -139,7 +136,9 @@ void CRandomWalkLoopFunctions::InitUtilities() {
 void CRandomWalkLoopFunctions::InitSwarm() {
     for(UInt32 i = 0; i < m_sSwarmParams.SwarmSize; i++) {
         std::string sStringId = std::to_string(i);
-        CFootBotEntity* cFootBotEntity = new CFootBotEntity(sStringId, m_sSwarmParams.RobotControllerId);
+        CFootBotEntity* cFootBotEntity = new CFootBotEntity(
+            sStringId, m_sSwarmParams.RobotControllerId, CVector3(), CQuaternion(), 1.35f, 4
+        );
         CFootBotIndividualLevyWalk* cFootBotController = &dynamic_cast<CFootBotIndividualLevyWalk&>(cFootBotEntity->GetControllableEntity().GetController());
 
         AddEntity(*cFootBotEntity);
@@ -285,7 +284,7 @@ void CRandomWalkLoopFunctions::PreStep() {
 }
 
 void CRandomWalkLoopFunctions::UpdateWalkDistances(CVector2 c_end_pos, CVector2 c_start_pos) {
-    if (m_sOutputParams.SaveTrajectory) {
+    if (m_sOutputParams.SaveStepLengths) {
         m_sSwarmData.WalkDistances.push_back((c_end_pos - c_start_pos).Length());
     }
 }
@@ -364,6 +363,67 @@ void CRandomWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_data) {
                 s_robot_data->FootBotEntity->GetEmbodiedEntity().GetOriginAnchor().Orientation
             ) && ++iTrials < 100);
     } else {}
+}
+
+/****************************************/
+/****************************************/
+
+void CRandomWalkLoopFunctions::PostExperiment() {
+    // Write step lengths
+    if (!m_sSwarmData.WalkDistances.empty()) {
+        std::ostringstream cStepLengthsOSS;
+        cStepLengthsOSS << m_sOutputParams.OutputFileName
+                        << "_step_lengths.txt";
+        std::ofstream cStepLengthsOFS(cStepLengthsOSS.str().c_str());
+        cStepLengthsOFS << "#StepLength(double)" << std::endl;
+        for(size_t j = 0; j < m_sSwarmData.WalkDistances.size(); ++j) {
+            cStepLengthsOFS << m_sSwarmData.WalkDistances[j] << std::endl;
+        }
+    } else {
+        if (m_sOutputParams.SaveStepLengths) {
+            LOGERR  << "Error: experiment <" << m_sOutputParams.OutputFileName << "> "
+                    << "the loop functions were not able to collect data of step lengths (unknown reason)."
+                    << std::endl;
+        }
+    }
+    // Write state counters
+    if (!m_sSwarmData.Robots.empty()) {
+        std::ostringstream cStateCountersOSS;
+        cStateCountersOSS   << m_sOutputParams.OutputFileName
+                            << "_state_counters.txt";
+        std::ofstream cStateCounterOFS(cStateCountersOSS.str().c_str());
+        cStateCounterOFS << "#WalkTicks(UInt32)\tRotateTicks(UInt32)\tCollisionAvoidanceTicks(UInt32)" << std::endl;
+        for(size_t j = 0; j < m_sSwarmData.Robots.size(); ++j) {
+            cStateCounterOFS << m_sSwarmData.Robots[j].TicksInWalkState << "\t"
+                            << m_sSwarmData.Robots[j].TicksInRotateState << "\t"
+                            << m_sSwarmData.Robots[j].TicksInCollisionAvoidanceState
+                            << std::endl;
+        }
+    } else {
+        LOGERR  << "Error: experiment <" << m_sOutputParams.OutputFileName << "> "
+                << "the loop functions were not able to collect data of state counters (unknown reason)."
+                << std::endl;
+    }
+    // Write target findings
+    if(!m_sSwarmData.TargetFindings.empty()) {
+        std::ostringstream cTargetFindingsOSS;
+        cTargetFindingsOSS  << m_sOutputParams.OutputFileName
+                            << "_target_findings.txt";
+        std::ofstream cTargetFindingsOFS(cTargetFindingsOSS.str().c_str());
+        cTargetFindingsOFS << "#Tick(UInt32)\tRobotId(UInt32)\tTargetId(UInt32)" << std::endl;
+        for(size_t j = 0; j < m_sSwarmData.TargetFindings.size(); ++j) {
+            cTargetFindingsOFS  << m_sSwarmData.TargetFindings[j].SimulationTick << "\t"
+                                << m_sSwarmData.TargetFindings[j].RobotId << "\t"
+                                << m_sSwarmData.TargetFindings[j].TargetId
+                                << std::endl;
+        }
+    } else {
+        if (!m_sForagingParams.TargetPositionsFileName.empty()) {
+            LOGERR  << "Error: experiment <" << m_sOutputParams.OutputFileName << "> "
+                    << "the loop functions were not able to collect data of target findings (unknown reason)."
+                    << std::endl;
+        }
+    }
 }
 
 /****************************************/

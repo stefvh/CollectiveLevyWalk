@@ -40,10 +40,7 @@ public:
    };
    struct SOutputParams {
        std::string OutputFileName;
-       std::string OutputStepLengthsFolderName;
-       std::string OutputStateCountersFolderName;
-       std::string OutputTargetFindingsFolderName;
-       bool SaveTrajectory;
+       bool SaveStepLengths;
 
        void Init(TConfigurationNode& t_node);
    };
@@ -118,12 +115,9 @@ public:
    virtual void Destroy();
    virtual void PreStep();
    virtual void PostStep();
+   virtual void PostExperiment();
 
    virtual CColor GetFloorColor(const CVector2& c_position_on_plane);
-
-   inline const SSwarmData* GetData() { return &m_sSwarmData; }
-
-   inline const SOutputParams* GetOutputParams() { return &m_sOutputParams; }
 
 private:
    SSwarmData m_sSwarmData;
