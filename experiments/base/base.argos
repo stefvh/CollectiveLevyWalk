@@ -103,10 +103,7 @@
     <foraging target_positions_file="sparse.txt"
               target_radius="0.17" />
     <output   output_file="test.txt"
-              output_step_lengths_folder=""
-              output_state_counters_folder=""
-              output_target_findings_folder=""
-              save_trajectory="true" />
+              save_step_lengths="true" />
   </loop_functions>
 
   <!-- *********************** -->
