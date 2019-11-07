@@ -6,7 +6,7 @@
 # Params from args:
 N=$1      # Maximum swarmsize to be investigated
 Ni=$2     # Increments in sequence of swarmsize up to N
-seeds=$3  # Sequence of seeds to re-run single experiment
+seeds=($(seq 1 1 $3))  # Sequence of seeds to re-run single experiment
 
 # Params default (file-related):
 experiment_upper_folder="experiments"
@@ -38,6 +38,7 @@ do
       experiment_file="${experiment_upper_folder}/${folder}/${experiment_title}.argos"
       cp "${base_experiment_file}" "${experiment_file}"
 
+      sed -i "s/\(random_seed=\"\)[^\"]*\"/\1${seed}\"/" "${experiment_file}"
       sed -i "s/\(robot_controller=\"\)[^\"]*\"/\1${robot_controller}\"/" "${experiment_file}"
       sed -i "s/\(swarm_size=\"\)[^\"]*\"/\1${swarm_size}\"/" "${experiment_file}"
       sed -i "s/\(nested=\"\)[^\"]*\"/\1${nested}\"/" "${experiment_file}"
