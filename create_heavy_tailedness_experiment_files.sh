@@ -42,7 +42,7 @@ for robot_controller in "${robot_controllers[@]}"; do
       xmlstarlet ed --pf --inplace -u 'argos-configuration//framework/experiment/@length' -v "${T}" "${experiment_file}"
       xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@swarm_size' -v "${swarm_size}" "${experiment_file}"
       xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@nested' -v "${nested}" "${experiment_file}"
-      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@output_file' -v "${results_upper_folder}\/${folder_escaped}\/${experiment_title}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@output_file' -v "${results_upper_folder}\/${folder}\/${experiment_title}" "${experiment_file}"
       xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@save_step_lenghts' -v "${save_step_lenghts}" "${experiment_file}"
 
       # sed -i "s/\(robot_controller=\"\)[^\"]*\"/\1${robot_controller}\"/" "${experiment_file}"

@@ -8,8 +8,8 @@ N=$(seq $DELTA_N $DELTA_N $MAX_N)
 seeds=$(seq 1 1 $nseeds)
 
 # Variables
-COPY="false"
-BUILD="false"
+COPY="true"
+BUILD="true"
 RUN="true"
 
 # GNU parallel magic

@@ -100,7 +100,7 @@
               swarm_size="10"
               nested="true"
               nest_area_buffer_factor="0.3" />
-    <foraging target_positions_file="sparse.txt"
+    <foraging target_positions_file=""
               target_radius="0.17" />
     <output   output_file="test.txt"
               save_step_lengths="true" />
