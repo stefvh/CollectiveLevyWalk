@@ -96,8 +96,11 @@ void CFootBotCollectiveLevyWalk::DoWalk() {
         TSources tSources;
         for(size_t i = 0; i < tPackets.size(); ++i) {
             CCI_RangeAndBearingSensor::SPacket tPacket = tPackets[i];
-            tMessages.push_back(tPacket.Data.PopFront<UInt32>());
-            tSources.push_back(SMessageSource(tPacket.Range, tPacket.HorizontalBearing));
+            UInt32 uiMessage = tPacket.Data.PopFront<UInt32>();
+            if (std::find(tMessages.begin(), tMessages.end(), uiMessage) == tMessages.end()) {
+                tMessages.push_back(uiMessage);
+                tSources.push_back(SMessageSource(tPacket.Range, tPacket.HorizontalBearing));
+            }
         }
 
         std::sort(tMessages.begin(), tMessages.end());

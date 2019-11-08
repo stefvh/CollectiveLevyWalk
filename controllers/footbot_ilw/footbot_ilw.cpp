@@ -258,11 +258,11 @@ void CFootBotIndividualLevyWalk::DetectTargets() {
     * area. 
     * The foot-bot has 4 sensors like this, two in the front
     * (corresponding to readings 0 and 1) and two in the back
-    * (corresponding to reading 2 and 3).  Here we want the front sensors
-    * (readings 1 and 4) to tell us whether we are (partly) on black:
-    * if so, the robot has found a target.
+    * (corresponding to readings 2 and 3).  Here we want the front sensors
+    * (readings 0 and 1) to tell us whether we are (partly) on black:
+    * If so, the robot has found a target.
     */
-   bool bTargetFound = (tGroundReads[1].Value < 0.25f && tGroundReads[4].Value < 0.25f);
+   bool bTargetFound = (tGroundReads[0].Value < 0.25f && tGroundReads[1].Value < 0.25f);
    UpdateStateFromExploration(bTargetFound);
 }
 
@@ -329,7 +329,7 @@ Real CFootBotIndividualLevyWalk::GetStdDevGaussianVariableX(Real f_levy_alpha_ex
    }
 
    // Cfr. "Fast, accureate algorithm for numerical simulation of Levy stable stochastic processes"
-   switch(Round(10 * f_levy_alpha_exponent)) {
+   switch(Round(10.0 * f_levy_alpha_exponent)) {
       case 10: {
          fStdDevX = 1.0;
          break;

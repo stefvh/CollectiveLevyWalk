@@ -13,6 +13,8 @@
 #include <argos3/plugins/robots/generic/control_interface/ci_range_and_bearing_actuator.h>
 #include <argos3/plugins/robots/generic/control_interface/ci_range_and_bearing_sensor.h>
 
+#include <set>
+
 using namespace argos;
 
 class CFootBotCollectiveLevyWalk : public CFootBotIndividualLevyWalk 
