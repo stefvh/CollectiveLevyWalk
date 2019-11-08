@@ -8,9 +8,9 @@ N=$(seq $DELTA_N $DELTA_N $MAX_N)
 seeds=$(seq 1 1 $nseeds)
 
 # Variables
-COPY="true"
-BUILD="true"
-RUN="false"
+COPY="false"
+BUILD="false"
+RUN="true"
 
 # GNU parallel magic
 sudo localedef -i en_US -f UTF-8 en_US.UTF-8;
@@ -58,8 +58,10 @@ if [ "$RUN" == "true" ]; then
         CONTROLLER={1};
         SWARMSIZE={2};
         SEED={3};
-        ARGOSDIR=experiments/heavy_tailedness/$CONTROLLER/${SWARMSIZE}N/$SEED;
-        ARGOSFILE=$ARGOSDIR/heavy_tailedness_$CONTROLLER_${SWARMSIZE}N_$SEED.argos;
+        ARGOSDIR=experiments/heavy_tailedness/${CONTROLLER}/${SWARMSIZE}N/${SEED};
+        ARGOSFILE=$ARGOSDIR/heavy_tailedness_${CONTROLLER}_${SWARMSIZE}N_${SEED}.argos;
+        echo $ARGOSFILE;
+        exit;
         cd /users/jnauta/CollectiveLevyWalk/;
         argos3 -l $ARGOSDIR/log -e $ARGOSDIR/logerr -c $ARGOSFILE;
         ' ::: $CONTROLLER ::: ${N[@]} ::: ${seeds[@]}
