@@ -1,0 +1,168 @@
+Generating locales (this might take a while)...
+  en_US.UTF-8... done
+Generation complete.
+Copying/distributing code across nodes...
+jnauta@node0
+jnauta@node1
+jnauta@node2
+jnauta@node3
+jnauta@node4
+Building on all nodes...
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Checking for module 'argos3_simulator'
+--   Found argos3_simulator, version 3.0.0-beta49
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libGL.so  
+-- Found GLUT: /usr/lib/x86_64-linux-gnu/libglut.so  
+-- Found Lua52: /usr/lib/x86_64-linux-gnu/liblua5.2.so;/usr/lib/x86_64-linux-gnu/libm.so  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /users/jnauta/CollectiveLevyWalk/build
+Scanning dependencies of target footbot_ilw_automoc
+[  3%] Automatic moc for target footbot_ilw
+[  3%] Built target footbot_ilw_automoc
+Scanning dependencies of target footbot_ilw
+[  7%] Building CXX object controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/footbot_ilw.cpp.o
+[ 10%] Building CXX object controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/footbot_ilw_automoc.cpp.o
+[ 14%] Linking CXX shared library libfootbot_ilw.so
+[ 14%] Built target footbot_ilw
+Scanning dependencies of target footbot_clw_automoc
+[ 17%] Automatic moc for target footbot_clw
+[ 17%] Built target footbot_clw_automoc
+Scanning dependencies of target footbot_clw
+[ 21%] Building CXX object controllers/footbot_clw/CMakeFiles/footbot_clw.dir/footbot_clw.cpp.o
+[ 25%] Building CXX object controllers/footbot_clw/CMakeFiles/footbot_clw.dir/footbot_clw_automoc.cpp.o
+[ 28%] Linking CXX shared library libfootbot_clw.so
+[ 28%] Built target footbot_clw
+Scanning dependencies of target footbot_acrw_automoc
+[ 32%] Automatic moc for target footbot_acrw
+[ 32%] Built target footbot_acrw_automoc
+Scanning dependencies of target footbot_acrw
+[ 35%] Building CXX object controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/footbot_acrw.cpp.o
+[ 39%] Building CXX object controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/footbot_acrw_automoc.cpp.o
+[ 42%] Linking CXX shared library libfootbot_acrw.so
+[ 42%] Built target footbot_acrw
+Scanning dependencies of target rw_loop_functions_automoc
+[ 46%] Automatic moc for target rw_loop_functions
+[ 46%] Built target rw_loop_functions_automoc
+Scanning dependencies of target rw_loop_functions
+[ 50%] Building CXX object loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rw_loop_functions.cpp.o
+[ 53%] Building CXX object loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rw_loop_functions_automoc.cpp.o
+[ 57%] Linking CXX shared library librw_loop_functions.so
+[ 57%] Built target rw_loop_functions
+Scanning dependencies of target create_seeds_automoc
+[ 60%] Automatic moc for target create_seeds
+[ 60%] Built target create_seeds_automoc
+Scanning dependencies of target create_seeds
+[ 64%] Building CXX object embedding/CMakeFiles/create_seeds.dir/create_seeds.cpp.o
+[ 67%] Building CXX object embedding/CMakeFiles/create_seeds.dir/create_seeds_automoc.cpp.o
+[ 71%] Linking CXX executable create_seeds
+[ 71%] Built target create_seeds
+Scanning dependencies of target create_sparse_targets_automoc
+[ 75%] Automatic moc for target create_sparse_targets
+[ 75%] Built target create_sparse_targets_automoc
+Scanning dependencies of target create_sparse_targets
+[ 78%] Building CXX object embedding/CMakeFiles/create_sparse_targets.dir/create_sparse_targets.cpp.o
+[ 82%] Building CXX object embedding/CMakeFiles/create_sparse_targets.dir/create_sparse_targets_automoc.cpp.o
+[ 85%] Linking CXX executable create_sparse_targets
+[ 85%] Built target create_sparse_targets
+Scanning dependencies of target create_patchy_targets_automoc
+[ 89%] Automatic moc for target create_patchy_targets
+[ 89%] Built target create_patchy_targets_automoc
+Scanning dependencies of target create_patchy_targets
+[ 92%] Building CXX object embedding/CMakeFiles/create_patchy_targets.dir/create_patchy_targets.cpp.o
+[ 96%] Building CXX object embedding/CMakeFiles/create_patchy_targets.dir/create_patchy_targets_automoc.cpp.o
+[100%] Linking CXX executable create_patchy_targets
+[100%] Built target create_patchy_targets
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Checking for module 'argos3_simulator'
+--   Found argos3_simulator, version 3.0.0-beta49
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libGL.so  
+-- Found GLUT: /usr/lib/x86_64-linux-gnu/libglut.so  
+-- Found Lua52: /usr/lib/x86_64-linux-gnu/liblua5.2.so;/usr/lib/x86_64-linux-gnu/libm.so  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /users/jnauta/CollectiveLevyWalk/build
+Scanning dependencies of target footbot_ilw_automoc
+[  3%] Automatic moc for target footbot_ilw
+[  3%] Built target footbot_ilw_automoc
+Scanning dependencies of target footbot_ilw
+[  7%] Building CXX object controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/footbot_ilw.cpp.o
+[ 10%] Building CXX object controllers/footbot_ilw/CMakeFiles/footbot_ilw.dir/footbot_ilw_automoc.cpp.o
+[ 14%] Linking CXX shared library libfootbot_ilw.so
+[ 14%] Built target footbot_ilw
+Scanning dependencies of target footbot_clw_automoc
+[ 17%] Automatic moc for target footbot_clw
+[ 17%] Built target footbot_clw_automoc
+Scanning dependencies of target footbot_clw
+[ 21%] Building CXX object controllers/footbot_clw/CMakeFiles/footbot_clw.dir/footbot_clw.cpp.o
+[ 25%] Building CXX object controllers/footbot_clw/CMakeFiles/footbot_clw.dir/footbot_clw_automoc.cpp.o
+[ 28%] Linking CXX shared library libfootbot_clw.so
+[ 28%] Built target footbot_clw
+Scanning dependencies of target footbot_acrw_automoc
+[ 32%] Automatic moc for target footbot_acrw
+[ 32%] Built target footbot_acrw_automoc
+Scanning dependencies of target footbot_acrw
+[ 35%] Building CXX object controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/footbot_acrw.cpp.o
+[ 39%] Building CXX object controllers/footbot_acrw/CMakeFiles/footbot_acrw.dir/footbot_acrw_automoc.cpp.o
+[ 42%] Linking CXX shared library libfootbot_acrw.so
+[ 42%] Built target footbot_acrw
+Scanning dependencies of target rw_loop_functions_automoc
+[ 46%] Automatic moc for target rw_loop_functions
+[ 46%] Built target rw_loop_functions_automoc
+Scanning dependencies of target rw_loop_functions
+[ 50%] Building CXX object loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rw_loop_functions.cpp.o
+[ 53%] Building CXX object loop_functions/rw_loop_functions/CMakeFiles/rw_loop_functions.dir/rw_loop_functions_automoc.cpp.o
+[ 57%] Linking CXX shared library librw_loop_functions.so
+[ 57%] Built target rw_loop_functions
+Scanning dependencies of target create_seeds_automoc
+[ 60%] Automatic moc for target create_seeds
+[ 60%] Built target create_seeds_automoc
+Scanning dependencies of target create_seeds
+[ 64%] Building CXX object embedding/CMakeFiles/create_seeds.dir/create_seeds.cpp.o
+[ 67%] Building CXX object embedding/CMakeFiles/create_seeds.dir/create_seeds_automoc.cpp.o
+[ 71%] Linking CXX executable create_seeds
+[ 71%] Built target create_seeds
+Scanning dependencies of target create_sparse_targets_automoc
+[ 75%] Automatic moc for target create_sparse_targets
+[ 75%] Built target create_sparse_targets_automoc
+Scanning dependencies of target create_sparse_targets
+[ 78%] Building CXX object embedding/CMakeFiles/create_sparse_targets.dir/create_sparse_targets.cpp.o
+[ 82%] Building CXX object embedding/CMakeFiles/create_sparse_targets.dir/create_sparse_targets_automoc.cpp.o
+[ 85%] Linking CXX executable create_sparse_targets
+[ 85%] Built target create_sparse_targets
+Scanning dependencies of target create_patchy_targets_automoc
+[ 89%] Automatic moc for target create_patchy_targets
+[ 89%] Built target create_patchy_targets_automoc
+Scanning dependencies of target create_patchy_targets
+[ 92%] Building CXX object embedding/CMakeFiles/create_patchy_targets.dir/create_patchy_targets.cpp.o
+[ 96%] Building CXX object embedding/CMakeFiles/create_patchy_targets.dir/create_patchy_targets_automoc.cpp.o
+[100%] Linking CXX executable create_patchy_targets
+[100%] Built target create_patchy_targets

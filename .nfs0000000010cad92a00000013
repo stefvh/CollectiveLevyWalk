@@ -43,7 +43,7 @@ fi
 if [ "$BUILD" == "true" ]; then 
     echo "Building on all nodes..."
     # Build the project on each node
-    parallel --nonall -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 'rm -rf CollectiveLevyWalk; tar -xzf CollectiveLevyWalk.tar.gz; cd CollectiveLevyWalk; if [[ ! -e build ]]; then mkdir build; fi; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; make'
+    parallel --nonall -S jnauta@node0 'rm -rf CollectiveLevyWalk; tar -xzf CollectiveLevyWalk.tar.gz; cd CollectiveLevyWalk; if [[ ! -e build ]]; then mkdir build; fi; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; make'
 fi
 
 # MAIN PARALLEL SCRIPT
@@ -58,7 +58,7 @@ if [ "$RUN" == "true" ]; then
         # The -l and -e flags when calling argos3 result in that the logs and errors
         # get written into non-existent files, which conveniently gets rid of them
         cd $SHARED_DIR/$DIR/
-        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.1 --delay 0.05 '
+        parallel -S jnauta@node0 --sshdelay 0.1 --delay 0.05 '
         CONTROLLER={1};
         SWARMSIZE={2};
         SEED={3};
