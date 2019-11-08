@@ -54,16 +54,14 @@ if [ "$RUN" == "true" ]; then
         # Within the .argos file, xmlstarlet changes the seed to the chosen value
         # The -l and -e flags when calling argos3 result in that the logs and errors
         # get written into non-existent files, which conveniently gets rid of them
-        parallel --controlmaster -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.05 --delay 0.1 '
+        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.1 --delay 0.05 '
         CONTROLLER={1};
         SWARMSIZE={2};
         SEED={3};
         ARGOSDIR=experiments/heavy_tailedness/${CONTROLLER}/${SWARMSIZE}N/${SEED};
         ARGOSFILE=$ARGOSDIR/heavy_tailedness_${CONTROLLER}_${SWARMSIZE}N_${SEED}.argos;
-        echo $ARGOSFILE;
-        exit;
         cd /users/jnauta/CollectiveLevyWalk/;
-        argos3 -l $ARGOSDIR/log -e $ARGOSDIR/logerr -c $ARGOSFILE;
+        argos3 -c $ARGOSFILE;
         ' ::: $CONTROLLER ::: ${N[@]} ::: ${seeds[@]}
     done
 fi 
