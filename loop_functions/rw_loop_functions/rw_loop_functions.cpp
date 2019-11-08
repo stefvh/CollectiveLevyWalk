@@ -322,13 +322,13 @@ void CRandomWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_data) {
         do {
             if (iTrials < 1) {
                 cNewPosition.Set(
-                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeX), 
+                    -Sign(cRobotPosition.GetX()) * m_pcRNG->Uniform(m_sArenaParams.RepositionRangeX), 
                     cRobotPosition.GetY(), 
                     cRobotPosition.GetZ()
                 );
             } else {
                 cNewPosition.Set(
-                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeX), 
+                    -Sign(cRobotPosition.GetX()) * m_pcRNG->Uniform(m_sArenaParams.RepositionRangeX), 
                     m_pcRNG->Uniform(m_sArenaParams.ContextRangeY), 
                     cRobotPosition.GetZ()
                 );
@@ -346,13 +346,13 @@ void CRandomWalkLoopFunctions::UpdateUnboundedArena(SRobotData* s_robot_data) {
             if (iTrials < 1) {
                 cNewPosition.Set(
                     cRobotPosition.GetX(), 
-                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeY), 
+                    -Sign(cRobotPosition.GetY()) * m_pcRNG->Uniform(m_sArenaParams.RepositionRangeY), 
                     cRobotPosition.GetZ()
                 );
             } else {
                 cNewPosition.Set(
                     m_pcRNG->Uniform(m_sArenaParams.ContextRangeX), 
-                    -m_pcRNG->Uniform(m_sArenaParams.RepositionRangeY), 
+                    -Sign(cRobotPosition.GetY()) * m_pcRNG->Uniform(m_sArenaParams.RepositionRangeY), 
                     cRobotPosition.GetZ()
                 );
             }
