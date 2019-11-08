@@ -1,9 +1,9 @@
 #!/bin/bash
 # Script for running the desired experiment in parallel
-T=200      # Number of seconds
-MAX_N=500  # Maximum swarm size
-DELTA_N=50 # Delta swarm size
-nseeds=5   # Number of seeds
+T=5000      # Number of seconds
+MAX_N=1000  # Maximum swarm size
+DELTA_N=100 # Delta swarm size
+nseeds=30   # Number of seeds
 N=$(seq $MAX_N -$DELTA_N $DELTA_N)
 seeds=$(seq 1 1 $nseeds)
 
@@ -47,6 +47,7 @@ if [ "$BUILD" == "true" ]; then
 fi
 
 # MAIN PARALLEL SCRIPT
+start=$SECONDS
 if [ "$RUN" == "true" ]; then 
     # o todo: Test this script
     robotControllers=(ilw clw)
@@ -66,8 +67,11 @@ if [ "$RUN" == "true" ]; then
         ARGOSFILE=$ARGOSDIR/heavy_tailedness.argos;
         cd /users/jnauta/CollectiveLevyWalk/;
         argos3 -l $ARGOSDIR/log -e $ARGOSDIR/logerr -c $ARGOSFILE;
+        echo Experiment done for $CONTROLLER $SWARMSIZE N and seed $SEED;
         ' ::: $CONTROLLER ::: ${seeds[@]} ::: ${N[@]} 
         cd $SHARED_DIR/$DIR/
     done
 fi 
-echo "Done!"
+
+duration=$(( SECONDS - start ))
+echo "Simulation finished after approximately $duration s."
