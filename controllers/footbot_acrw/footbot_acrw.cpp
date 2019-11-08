@@ -68,6 +68,7 @@ void CFootBotAdaptiveCollectiveRandomWalk::UpdateStateFromExploration(bool b_tar
         // Switch to Brownian walk by Gaussian distributed step lengths
         m_sStateData.RandomWalk = SStateData::BROWNIAN_WALK;
         m_sAdaptationStateData.LevyAlphaExponent = 2.0;
+        m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks = 0;
     } else {
         // Switch to Levy walk by decreasing Levy alpha exponent to a minimal value: 1
         m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks++;
