@@ -6,3 +6,4 @@ experiments/*
 results/
 
 *.code-workspace
+nohup.out

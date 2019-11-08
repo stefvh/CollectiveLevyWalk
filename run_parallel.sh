@@ -1,10 +1,10 @@
 #!/bin/bash
 # Script for running the desired experiment in parallel
-T=5000      # Number of seconds
-MAX_N=1000  # Maximum swarm size
-DELTA_N=200 # Delta swarm size
-nseeds=30   # Number of seeds
-N=$(seq $DELTA_N $DELTA_N $MAX_N)
+T=200      # Number of seconds
+MAX_N=500  # Maximum swarm size
+DELTA_N=50 # Delta swarm size
+nseeds=5   # Number of seeds
+N=$(seq $MAX_N -$DELTA_N $DELTA_N)
 seeds=$(seq 1 1 $nseeds)
 
 # Specify paths
@@ -60,13 +60,13 @@ if [ "$RUN" == "true" ]; then
         cd $SHARED_DIR/$DIR/
         parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.1 --delay 0.05 '
         CONTROLLER={1};
-        SWARMSIZE={2};
-        SEED={3};
+        SEED={2};
+        SWARMSIZE={3};
         ARGOSDIR=experiments/heavy_tailedness/${CONTROLLER}/${SWARMSIZE}N/${SEED};
         ARGOSFILE=$ARGOSDIR/heavy_tailedness.argos;
         cd /users/jnauta/CollectiveLevyWalk/;
         argos3 -l $ARGOSDIR/log -e $ARGOSDIR/logerr -c $ARGOSFILE;
-        ' ::: $CONTROLLER ::: ${N[@]} ::: ${seeds[@]}
+        ' ::: $CONTROLLER ::: ${seeds[@]} ::: ${N[@]} 
         cd $SHARED_DIR/$DIR/
     done
 fi 
