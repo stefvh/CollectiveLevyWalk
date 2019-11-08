@@ -1,4 +1,8 @@
 .vscode/
 build/
+!experiments/
+experiments/*
+!experiments/base/
+results/
 
 *.code-workspace
