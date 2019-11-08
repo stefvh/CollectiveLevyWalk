@@ -4,9 +4,9 @@
 # executed by a swarm existing of either ilw or clw robots
 
 # Params from args:
-N=$1      # Maximum swarmsize to be investigated
-Ni=$2     # Increments in sequence of swarmsize up to N
-seeds=($(seq 1 1 $3))  # Sequence of seeds to re-run single experiment
+T=$1      # Time length of experiment
+N=$2      # Sequence of swarm sizes
+seeds=$3  # Sequence of seeds to re-run single experiment
 
 # Params default (file-related):
 experiment_upper_folder="experiments"
@@ -23,12 +23,9 @@ target_positions_file=""
 save_step_lengths="true"
 
 # Execute:
-for robot_controller in "${robot_controllers[@]}"
-do
-  for swarm_size in $(seq $Ni $Ni $N)
-  do
-    for seed in "${seeds[@]}"
-    do
+for robot_controller in "${robot_controllers[@]}"; do
+  for swarm_size in $N; do
+    for seed in $seeds; do
       folder="${title}/${robot_controller}/${swarm_size}N/${seed}"
       folder_escaped="${title}\/${robot_controller}\/${swarm_size}N\/${seed}"
       mkdir -p "${experiment_upper_folder}/${folder}"
@@ -36,15 +33,24 @@ do
 
       experiment_title="${title}_${robot_controller}_${swarm_size}N_${seed}"
       experiment_file="${experiment_upper_folder}/${folder}/${experiment_title}.argos"
+      # Copy the base .argos file
       cp "${base_experiment_file}" "${experiment_file}"
 
-      sed -i "s/\(random_seed=\"\)[^\"]*\"/\1${seed}\"/" "${experiment_file}"
-      sed -i "s/\(robot_controller=\"\)[^\"]*\"/\1${robot_controller}\"/" "${experiment_file}"
-      sed -i "s/\(swarm_size=\"\)[^\"]*\"/\1${swarm_size}\"/" "${experiment_file}"
-      sed -i "s/\(nested=\"\)[^\"]*\"/\1${nested}\"/" "${experiment_file}"
-      sed -i "s/\(target_positions_file=\"\)[^\"]*\"/\1${target_positions_file}\"/" "${experiment_file}"
-      sed -i "s/\(output_file=\"\)[^\"]*\"/\1${results_upper_folder}\/${folder_escaped}\/${experiment_title}\"/" "${experiment_file}"
-      sed -i "s/\(save_step_lengths=\"\)[^\"]*\"/\1${save_step_lengths}\"/" "${experiment_file}"
+      # Adapt variables
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//framework/experiment/@random_seed' -v "${seed}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@robot_controller' -v "${robot_controller}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//framework/experiment/@length' -v "${T}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@swarm_size' -v "${swarm_size}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@nested' -v "${nested}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@output_file' -v "${results_upper_folder}\/${folder_escaped}\/${experiment_title}" "${experiment_file}"
+      xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@save_step_lenghts' -v "${save_step_lenghts}" "${experiment_file}"
+
+      # sed -i "s/\(robot_controller=\"\)[^\"]*\"/\1${robot_controller}\"/" "${experiment_file}"
+      # sed -i "s/\(swarm_size=\"\)[^\"]*\"/\1${swarm_size}\"/" "${experiment_file}"
+      # sed -i "s/\(nested=\"\)[^\"]*\"/\1${nested}\"/" "${experiment_file}"
+      # sed -i "s/\(target_positions_file=\"\)[^\"]*\"/\1${target_positions_file}\"/" "${experiment_file}"
+      # sed -i "s/\(output_file=\"\)[^\"]*\"/\1${results_upper_folder}\/${folder_escaped}\/${experiment_title}\"/" "${experiment_file}"
+      # sed -i "s/\(save_step_lengths=\"\)[^\"]*\"/\1${save_step_lengths}\"/" "${experiment_file}"
     done
   done 
 done

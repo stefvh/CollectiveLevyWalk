@@ -1,8 +1,9 @@
 #!/bin/bash
 # Script for running the desired experiment in parallel
-MAX_N=1000  # Maximum swarm size
-DELTA_N=200  # Delta swarm size
-nseeds=30   # Number of seeds
+T=50      # Number of seconds
+MAX_N=100  # Maximum swarm size
+DELTA_N=50 # Delta swarm size
+nseeds=5   # Number of seeds
 N=$(seq $DELTA_N $DELTA_N $MAX_N)
 seeds=$(seq 1 1 $nseeds)
 # GNU parallel magic
@@ -15,13 +16,29 @@ sudo locale-gen en_US.UTF-8;
 COPY=$1
 if [ "$COPY" == "copy" ]; then 
     # Generate output directories for data to be stored
-    ./create_heavy_tailedness_experiment_files.sh $MAX_N $DELTA_N "${seeds[@]}"
+    ./create_heavy_tailedness_experiment_files.sh $T "${N[@]}" "${seeds[@]}"
+    exit 1
     # Distribute the codes over the available nodes
-    SHARED_DIR="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/"
-    LOCAL_DIR="/users/jnauta/CollectiveLevyWalk/"
+    DIR="CollectiveLevyWalk"
+    SHARED_DIR="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/$DIR"
+    ARCHIVE="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/$DIR.tar.gz"
+    LOCAL_DIR="/users/jnauta/$DIR"
     echo "Distributing code across nodes..."
+    # Archive the files necessary
+    tar -czf $ARCHIVE $SHARED_DIR
+    exit
     while IFS= read -r dest; do 
-        scp -q -r [!.]* $SHARED_DIR $dest:$LOCAL_DIR
+        # Copy the archive
+        scp -q -r [!.]* $ARCHIVE $dest:$LOCAL_DIR
+        # Go to the directory and build 
+        ssh -t $dest:$LOCAL_DIR '
+            cd $LOCAL_DIR;
+            tar -xzf CollectiveLevyWalk.tar.gz'
+        # Unpack the archive
+        if [[ ! -e build ]]; then mkdir build fi; cd build;
+        cmake -DCMAKE_BUILD_TYPE=Release .. >/dev/null
+        make >/dev/null
+        exit
     done <nodes.txt
 fi 
 
