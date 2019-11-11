@@ -59,7 +59,7 @@ if [ "$RUN" == "true" ]; then
         # The -l and -e flags when calling argos3 result in that the logs and errors
         # get written into non-existent files, which conveniently gets rid of them
         cd $SHARED_DIR/$DIR/
-        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.1 --delay 0.05 '
+        parallel -S 12/jnauta@node0,12/jnauta@node1,12/jnauta@node2,12/jnauta@node3,12/jnauta@node4 --sshdelay 0.25 --delay 0.5 '
         CONTROLLER={1};
         SEED={2};
         SWARMSIZE={3};
@@ -72,6 +72,10 @@ if [ "$RUN" == "true" ]; then
         cd $SHARED_DIR/$DIR/
     done
 fi 
+
+# Copy the results to another directory
+RESULT_DIR="$SHARED_DIR/$DIR/"
+tar -C $RESULT_DIR -czf $SHARED_DIR/results.tar.gz "$RESULT_DIR/results/"
 
 duration=$(( SECONDS - start ))
 echo "Simulation finished after approximately $duration s."
