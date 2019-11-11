@@ -7,6 +7,7 @@
 T=$1      # Time length of experiment
 N=$2      # Sequence of swarm sizes
 seeds=$3  # Sequence of seeds to re-run single experiment
+
 # Directory parameters:
 experiment_upper_folder="experiments"
 results_upper_folder="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/results"

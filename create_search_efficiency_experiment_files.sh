@@ -16,14 +16,14 @@ base_experiment_file="${experiment_upper_folder}/base/base.argos"
 
 # Experiment parameters:
 robot_controllers=(ilw clw acrw)
-nested="true"
 target_types=(sparse patchy)
+nested="true"
 save_step_lengths="false"
 
 
 # Execute:
 for target_type in "${target_types[@]}"; do
-  target_positions_file="targets_${target_type}.txt"
+  target_positions_file="targets/targets_${target_type}.txt"
   for robot_controller in "${robot_controllers[@]}"; do
     for swarm_size in $N; do
         for seed in $seeds; do
@@ -45,7 +45,7 @@ for target_type in "${target_types[@]}"; do
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@nested' -v "${nested}" "${experiment_file}"
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/foraging/@target_positions_file' -v "${target_positions_file}" "${experiment_file}"
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@output_file' -v "${results_upper_folder}/${folder}/${experiment_title}" "${experiment_file}"
-        xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@save_step_lenghts' -v "${save_step_lenghts}" "${experiment_file}"
+        xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@save_step_lengths' -v "${save_step_lengths}" "${experiment_file}"
         done
     done
   done
