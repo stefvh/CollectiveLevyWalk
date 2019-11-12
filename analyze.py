@@ -1,50 +1,56 @@
 # Import necessary libraries
 import numpy as np 
 import powerlaw 
+import argparse 
 
 class Analyze():
-    def __init__(self, MAX_N=1000, DELTA_N=50, N_SEEDS=30):
-        # Generate lists
-        self.seeds = np.arange(1, N_SEEDS+1, 1, dtype=int)
-        self.swarm_size = np.arange(DELTA_N, MAX_N+1, DELTA_N)
-        self.controllers = ["clw", "ilw"]
+    def __init__(self):
+        # Directories
+        self.dir = "/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/"
 
-        self.N_SEEDS = N_SEEDS
-        self.N_SIZES = len(self.swarm_size)
-
-    def heavy_tailedness(self):
+    def heavy_tailedness(self, controller, N, s, L=170):
         """ Fit a powerlaw over the data to conclude if the
             distribution is heavy-tailed or not 
         """
-        xmin = 0.17 
-        xmax = 60*0.17 
-        rdir = "results/heavy_tailedness/"
-        sdir = "output/"
+        # xmin = 0.17 
+        # xmax = 60*0.17 
+        rdir = self.dir+"results/heavy_tailedness/"
+        sdir = self.dir+"output/heavy_tailedness/"
 
-        for c in self.controllers:
-            LLR = np.zeros((self.N_SIZES, self.N_SEEDS))
-            pvalue = np.zeros(LLR.shape)
-            i = 0
-            for n in self.swarm_size:
-                for s in self.seeds:
-                    dirname = rdir+"%s/%iN/%i/"%(c,n,s)
-                    step_lenghts = np.loadtxt(dirname+"heavy_tailedness_step_lengths.txt")
-                    fit = powerlaw.Fit(step_lenghts, xmin=xmin, xmax=xmax, verbose=False)
-                    R, p = fit.distribution_compare('truncated_power_law', 'exponential')
-                    LLR[i, s-1] = R 
-                    pvalue[i, s-1] = p
-                    print("Fitting powerlaw... %s,%i,%i,%f"%(c,n,s,p), end='\r')
-                i += 1
-            # Log-likelihood ratio
-            mean_LLR = np.mean(LLR, axis=1)
-            std_LLR = np.std(LLR, axis=1)
-            np.save(sdir+"mean_LLR_%s"%(c), mean_LLR)
-            np.save(sdir+"std_LLR_%s"%(c), std_LLR)
-            # p-value
-            mean_pvalue = np.mean(pvalue, axis=1)
-            std_pvalue = np.std(pvalue, axis=1)
-            np.save(sdir+"mean_pvalue_%s"%(c), mean_pvalue)
-            np.save(sdir+"std_pvalue_%s"%(c), std_pvalue)
+        dirname = rdir+"%s/%iN/%i/"%(controller,N,s)
+        step_lengths = np.loadtxt(dirname+"heavy_tailedness_step_lengths.txt")
+        fit = powerlaw.Fit(step_lengths, verbose=False)
+        R, p = fit.distribution_compare('power_law', 'exponential')
+        alpha = fit.alpha
+
+        # Store the data
+        np.savetxt(sdir+"results%i_%s_%iN_%i.txt"%(L,controller,N,s), [R, p, alpha])
+
+
+        # for c in self.controllers:
+        #     LLR = np.zeros((self.N_SIZES, self.N_SEEDS))
+        #     pvalue = np.zeros(LLR.shape)
+        #     i = 0
+        #     for n in self.swarm_size:
+        #         for s in self.seeds:
+        #             dirname = rdir+"%s/%iN/%i/"%(c,n,s)
+        #             step_lenghts = np.loadtxt(dirname+"heavy_tailedness_step_lengths.txt")
+        #             fit = powerlaw.Fit(step_lenghts, verbose=False)
+        #             R, p = fit.distribution_compare('truncated_power_law', 'exponential')
+        #             LLR[i, s-1] = R 
+        #             pvalue[i, s-1] = p
+        #             print("Fitting powerlaw... %s,%i,%i,%f"%(c,n,s,p), end='\r')
+        #         i += 1
+        #     # Log-likelihood ratio
+        #     mean_LLR = np.mean(LLR, axis=1)
+        #     std_LLR = np.std(LLR, axis=1)
+        #     np.save(sdir+"mean_LLR_%s_%i"%(c,L), mean_LLR)
+        #     np.save(sdir+"std_LLR_%s_%i"%(c,L), std_LLR)
+        #     # p-value
+        #     mean_pvalue = np.mean(pvalue, axis=1)
+        #     std_pvalue = np.std(pvalue, axis=1)
+        #     np.save(sdir+"mean_pvalue_%s_%i"%(c,L), mean_pvalue)
+        #     np.save(sdir+"std_pvalue_%s_%i"%(c,L), std_pvalue)
 
     def search_efficiency(self, controllers, env):
         """ Compute the search efficiency for each controller """        
@@ -108,7 +114,17 @@ class Analyze():
             if env == "patchy":
                 pass 
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--N', dest='swarm_size', type=int)
+    parser.add_argument('--s', dest='seed', type=int)
+    parser.add_argument('--c', dest='controller', type=str)
+    parser.add_argument('--L', dest='L', type=int)
+    args = parser.parse_args()
 
+    A = Analyze()
+    A.heavy_tailedness(args.controller, args.swarm_size, args.seed, args.L)
+    print("Analysis finished for %s, %iN, seed %i"%(args.controller,args.swarm_size,args.seed))
 
                             
 
