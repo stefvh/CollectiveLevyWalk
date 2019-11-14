@@ -6,4 +6,5 @@ experiments/*
 results/
 
 *.code-workspace
-nohup.out
+*.out
+__pycache__/
