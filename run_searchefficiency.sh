@@ -1,9 +1,10 @@
 #!/bin/bash
 # Script for running search efficiency experiments in parallel
 T=5000      # Number of seconds
-MAX_N=200  # Maximum swarm size
-DELTA_N=100 # Delta swarm size
-nseeds=2   # Number of seeds
+MAX_N=750   # Maximum swarm size
+DELTA_N=50  # Delta swarm size
+L=170       # Environment size
+nseeds=30   # Number of seeds
 N=$(seq $MAX_N -$DELTA_N $DELTA_N)
 seeds=$(seq 1 1 $nseeds)
 
@@ -11,20 +12,28 @@ seeds=$(seq 1 1 $nseeds)
 DIR="CollectiveLevyWalk"
 DIRNAME="search_efficiency"
 SHARED_DIR="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy"
+OUTPUT_DIR="$SHARED_DIR/$DIR/output"
 
 # Variables
 COPY=true
 BUILD=true
 RUN=true
 
+# GNU parallel magic
+sudo localedef -i en_US -f UTF-8 en_US.UTF-8;
+export LANGUAGE=en_US.UTF-8;
+export LANG=en_US.UTF-8;
+export LC_ALL=en_US.UTF-8;
+sudo locale-gen en_US.UTF-8;
+
 if [ "$COPY" = true ]; then 
     echo "Copying/distributing code across available nodes..."
     # Generate output directories
-    ./create_search_efficiency_experiment_files.sh $T "${N[@]}" "${seeds[@]}"
+    ./experiments/create_search_efficiency_experiment_files.sh $T $L "${N[@]}" "${seeds[@]}"
     ARCHIVE="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/$DIRNAME.tar.gz"
     LOCAL_DIR="/users/jnauta"
     # Archive the files
-    tar -C $SHARED_DIR --exclude='CollectiveLevyWalk/results' -czf $ARCHIVE $DIR
+    tar -C $SHARED_DIR --exclude='CollectiveLevyWalk/results' --exclude='CollectiveLevyWalk/build/CMakeCache.txt' -czf $ARCHIVE $DIR
     while IFS= read -r dest; do 
         # Copy the archive to each node
         echo $dest; scp -q $ARCHIVE $dest:$LOCAL_DIR
@@ -33,17 +42,17 @@ fi
 
 if [ "$BUILD" = true ]; then 
     echo "Building on all nodes..."
-    parallel --nonall -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 'rm -rf search_efficiency; tar -xzf search_efficiency.tar.gz; cd CollectiveLevyWalk; if [[ ! -e build ]]; then mkdir build; fi; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; make'
+    parallel --nonall -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 'tar -xzf search_efficiency.tar.gz; cd CollectiveLevyWalk; if [[ ! -e build ]]; then mkdir build; fi; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; make'
 fi
 
 ## MAIN PARALLEL SCRIPT
 start=$SECONDS 
 if [ "$RUN" = true ]; then 
-    controllers=(acrw)
-    distributions=(patchy)
+    controllers=(acrw clw ilw)
+    distributions=(sparse patchy)
     for CONTROLLER in "${controllers[@]}"; do 
         cd $SHARED_DIR/$DIR/
-        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.5 --delay 0.25 '
+        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 1 --delay 0.25 '
         CONTROLLER={1};
         TARGET={2};
         SEED={3};
@@ -55,6 +64,8 @@ if [ "$RUN" = true ]; then
         echo Experiment done for $CONTROLLER $SWARMSIZE N and seed $SEED within $TARGET environment;
         ' ::: $CONTROLLER ::: ${distributions[@]} ::: ${seeds[@]} ::: ${N[@]}
         cd $SHARED_DIR/$DIR/
+        duration=$((SECONDS - start ))
+        echo "Done executing $CONTROLLER, after $duration s"
     done 
 fi 
 
@@ -63,6 +74,6 @@ echo "Simulations finished after approximately $duration s, archiving results...
 
 # Archive the results
 RESULT_DIR="$SHARED_DIR/$DIR/results/"
-tar -C $RESULT_DIR -czf $SHARED_DIR/search_efficiency_results.tar.gz "$RESULT_DIR/search_efficiency/"
+tar -czf "$SHARED_DIR/search_efficiency_results_${L}.tar.gz" -C "$RESULT_DIR" "${DIRNAME}_${L}"
 echo "Done."
 
