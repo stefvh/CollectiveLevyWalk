@@ -262,7 +262,12 @@ void CFootBotIndividualLevyWalk::DetectTargets() {
     * (readings 0 and 1) to tell us whether we are (partly) on black:
     * If so, the robot has found a target.
     */
-   bool bTargetFound = (tGroundReads[0].Value < 0.25f && tGroundReads[1].Value < 0.25f);
+   bool bTargetFound = (
+      tGroundReads[0].Value < 0.25f ||
+      tGroundReads[1].Value < 0.25f ||
+      tGroundReads[2].Value < 0.25f ||
+      tGroundReads[3].Value < 0.25f
+   );
    UpdateStateFromExploration(bTargetFound);
 }
 
