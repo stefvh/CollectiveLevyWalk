@@ -42,7 +42,8 @@ int main(int argc, char** argv) {
      */
     std::string sOutputFileName = "targets_sparse.txt";
     int size = 100;
-    argos::Real fNestSideBuffer = 3.06 + 2.0;
+    // argos::Real fNestSideBuffer = 3.06 + 2.0;
+    argos::Real fNestSideBuffer = 10.0;
     
     int opt; 
     while((opt = getopt(argc, argv, ":f:n:")) != -1)  

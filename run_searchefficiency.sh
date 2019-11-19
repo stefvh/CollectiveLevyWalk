@@ -2,15 +2,15 @@
 # Script for running search efficiency experiments in parallel
 T=5000      # Number of seconds
 MIN_N=50
-MAX_N=300  # Maximum swarm size
+MAX_N=1000  # Maximum swarm size
 DELTA_N=50  # Delta swarm size
 L=170       # Environment size
 nseeds=30   # Number of seeds
 N=$(seq $MAX_N -$DELTA_N $MIN_N)
 seeds=$(seq 1 1 $nseeds)
 # seeds=$(seq 31 1 $((30+$nseeds)))
-controllers=(acrw clw ilw)
-distributions=(patchy)
+controllers=(clw)
+distributions=(sparse patchy)
 
 # Specify paths
 DIR="CollectiveLevyWalk"
@@ -62,7 +62,7 @@ if [ "$RUN" = true ]; then
         TARGET={3};
         SEED={4};
         SWARMSIZE={5};
-        DIR_STRUCT=search_efficiency_${L}_nestedtrue/${TARGET}/${CONTROLLER}/${SWARMSIZE}N/${SEED}
+        DIR_STRUCT=search_efficiency_${L}_nestedtrue_${CONTROLLER}/${TARGET}/${CONTROLLER}/${SWARMSIZE}N/${SEED}
         ARGOSDIR=experiments/$DIR_STRUCT;
         RESULTSDIR=results/$DIR_STRUCT
         ARGOSFILE=$ARGOSDIR/search_efficiency.argos;
