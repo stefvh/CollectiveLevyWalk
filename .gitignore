@@ -10,3 +10,4 @@ output/
 *.out
 __pycache__/
 *.tar.gz
+*.nfs
