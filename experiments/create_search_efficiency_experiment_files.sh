@@ -34,7 +34,7 @@ for target_type in "${target_types[@]}"; do
   for robot_controller in "${robot_controllers[@]}"; do
     for swarm_size in $N; do
         for seed in $seeds; do
-        folder="${dir_name}/${target_type}/${robot_controller}/${swarm_size}N/${seed}"
+        folder="${dir_name}_${robot_controller}/${target_type}/${robot_controller}/${swarm_size}N/${seed}"
         mkdir -p "${experiment_upper_folder}/${folder}"
         mkdir -p "${results_upper_folder}/${folder}"
         # Specify experiment and output files

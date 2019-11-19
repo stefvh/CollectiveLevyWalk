@@ -3,7 +3,8 @@
 T=5000      # Number of seconds
 MAX_N=1000  # Maximum swarm size
 DELTA_N=100 # Delta swarm size
-nseeds=30   # Number of seeds
+nseeds=16   # Number of seeds
+L=20        # Environment size
 N=$(seq $MAX_N -$DELTA_N $DELTA_N)
 seeds=$(seq 1 1 $nseeds)
 
@@ -28,11 +29,11 @@ sudo locale-gen en_US.UTF-8;
 if [ "$COPY" = true ]; then     
     echo "Copying/distributing code across nodes..."
     # Generate output directories for data to be stored
-    ./create_heavy_tailedness_experiment_files.sh $T "${N[@]}" "${seeds[@]}"
+    ./experiments/create_heavy_tailedness_experiment_files.sh $T $L "${N[@]}" "${seeds[@]}"
     ARCHIVE="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/$DIRNAME.tar.gz"
     LOCAL_DIR="/users/jnauta/"
     # Archive the files necessary
-    tar -C $SHARED_DIR -czf $ARCHIVE $DIR
+    tar -C $SHARED_DIR --exlucde='CollectiveLevyWalk/results' -czf $ARCHIVE $DIR
     while IFS= read -r dest; do 
         # Copy the archive
         echo $dest 
@@ -44,7 +45,7 @@ fi
 if [ "$BUILD" = true ]; then 
     echo "Building on all nodes..."
     # Build the project on each node
-    parallel --nonall -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 'rm -rf heavy_tailedness; tar -xzf heavy_tailedness.tar.gz; cd heavy_tailedness; if [[ ! -e build ]]; then mkdir build; fi; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; make'
+    parallel --nonall -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 'tar -xzf heavy_tailedness.tar.gz; cd CollectiveLevyWalk; if [[ ! -e build ]]; then mkdir build; fi; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; make'
 fi
 
 # MAIN PARALLEL SCRIPT
@@ -60,7 +61,7 @@ if [ "$RUN" = true ]; then
         # The -l and -e flags when calling argos3 result in that the logs and errors
         # get written into non-existent files, which conveniently gets rid of them
         cd $SHARED_DIR/$DIR/
-        parallel -S 12/jnauta@node0,12/jnauta@node1,12/jnauta@node2,12/jnauta@node3,12/jnauta@node4 --sshdelay 0.25 --delay 0.5 '
+        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 1 --delay 0.5 '
         CONTROLLER={1};
         SEED={2};
         SWARMSIZE={3};
@@ -82,5 +83,5 @@ echo "Simulations finished after approximately $duration s, archiving results...
 
 # Copy the results to another directory
 RESULT_DIR="$SHARED_DIR/$DIR/"
-tar -C $RESULT_DIR -czf $SHARED_DIR/results.tar.gz "$RESULT_DIR/results/"
+tar -C $RESULT_DIR -czf $SHARED_DIR/heavy_tailedness_results_$L.tar.gz "$RESULT_DIR/results/heavy_tailedness/"
 echo "Done."
