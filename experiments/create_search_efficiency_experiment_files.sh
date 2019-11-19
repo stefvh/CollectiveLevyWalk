@@ -5,20 +5,27 @@
 
 # Args:
 T=$1      # Time length of experiment
-N=$2      # Sequence of swarm sizes
-seeds=$3  # Sequence of seeds to re-run single experiment
-
-# Directory parameters:
-experiment_upper_folder="experiments"
-results_upper_folder="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/results"
-title="search_efficiency"
-base_experiment_file="${experiment_upper_folder}/base/base.argos"
+L=$2      # Environment size
+N=$3      # Sequence of swarm sizes
+seeds=$4  # Sequence of seeds to re-run single experiment
 
 # Experiment parameters:
 robot_controllers=(ilw clw acrw)
 target_types=(sparse patchy)
 nested="true"
 save_step_lengths="false"
+
+# Directory parameters:
+experiment_upper_folder="experiments"
+results_upper_folder="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/results"
+mkdir -p $results_upper_folder
+argos_name="search_efficiency"
+dir_name="search_efficiency_${L}_nested${nested}"
+mkdir -p $results_upper_folder/$dir_name
+base_experiment_file="${experiment_upper_folder}/base/base.argos"
+
+# Set the environment size
+xmlstarlet ed --pf --inplace -u 'argos-configuration//arena/@size' -v "$L, $L, 2" "${base_experiment_file}"
 
 
 # Execute:
@@ -27,12 +34,12 @@ for target_type in "${target_types[@]}"; do
   for robot_controller in "${robot_controllers[@]}"; do
     for swarm_size in $N; do
         for seed in $seeds; do
-        folder="${title}/${target_type}/${robot_controller}/${swarm_size}N/${seed}"
+        folder="${dir_name}/${target_type}/${robot_controller}/${swarm_size}N/${seed}"
         mkdir -p "${experiment_upper_folder}/${folder}"
         mkdir -p "${results_upper_folder}/${folder}"
-
-        experiment_title="${title}"
-        experiment_file="${experiment_upper_folder}/${folder}/${experiment_title}.argos"
+        # Specify experiment and output files
+        experiment_file="${experiment_upper_folder}/${folder}/${argos_name}.argos"
+        output_file="${results_upper_folder}/${folder}/${argos_name}"
 
         # Copy the base .argos file
         cp "${base_experiment_file}" "${experiment_file}"
@@ -44,7 +51,7 @@ for target_type in "${target_types[@]}"; do
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@swarm_size' -v "${swarm_size}" "${experiment_file}"
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/swarm/@nested' -v "${nested}" "${experiment_file}"
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/foraging/@target_positions_file' -v "${target_positions_file}" "${experiment_file}"
-        xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@output_file' -v "${results_upper_folder}/${folder}/${experiment_title}" "${experiment_file}"
+        xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@output_file' -v "${output_file}" "${experiment_file}"
         xmlstarlet ed --pf --inplace -u 'argos-configuration//loop_functions/output/@save_step_lengths' -v "${save_step_lengths}" "${experiment_file}"
         done
     done
