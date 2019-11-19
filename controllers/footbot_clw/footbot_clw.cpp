@@ -136,7 +136,7 @@ void CFootBotCollectiveLevyWalk::InitRotateStateAsRepulsiveForce(TSources t_sour
         CVector2 cPosition(sSource.Distance, sSource.Angle);
 
         Real fInverseLength = 1.0 / sSource.Distance;
-        Real fCommonFactor = (fInverseLength - fInverseCommunicationRange) / (fInverseLength * fInverseLength * fInverseLength);
+        Real fCommonFactor = (fInverseLength - fInverseCommunicationRange) * (fInverseLength * fInverseLength * fInverseLength);
 
         cAveragedRepulsiveForceVector += -cPosition * fCommonFactor;
     }
