@@ -43,7 +43,7 @@ if [ "$RUN" = true ]; then
     distributions=(patchy)
     for CONTROLLER in "${controllers[@]}"; do 
         cd $SHARED_DIR/$DIR/
-        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.5 --delay 0.25 '
+        parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 1 --delay 0.25 '
         CONTROLLER={1};
         TARGET={2};
         SEED={3};

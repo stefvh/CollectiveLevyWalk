@@ -16,9 +16,9 @@ class Analyze():
         xmin = 0.17
         xmax = 60*0.17 
         # xmin_candidates = [xmin*i for i in range(1,10+1)]
-        xmin_candidates = (xmin, 10*xmin)
+        xmin_candidates = (xmin, 20*xmin)
         rdir = self.dir+"results/heavy_tailedness_%i/"%(L)
-        sdir = self.dir+"output/heavy_tailedness_%i/"%(L)
+        sdir = self.dir+"output/heavy_tailedness_%i/%s/"%(L,controller)
         if not os.path.exists(sdir):
             os.makedirs(sdir)
         # Load data

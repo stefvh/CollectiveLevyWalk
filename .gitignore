@@ -4,7 +4,9 @@ build/
 experiments/*
 !experiments/base/
 results/
+output/
 
 *.code-workspace
 *.out
 __pycache__/
+.nfs*

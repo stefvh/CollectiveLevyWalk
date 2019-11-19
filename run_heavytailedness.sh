@@ -1,12 +1,12 @@
 #!/bin/bash
 # Script for running the desired experiment in parallel
-T=1000      # Number of seconds
+T=5000      # Number of seconds
 MAX_N=1000  # Maximum swarm size
-DELTA_N=100 # Delta swarm size
-nseeds=30   # Number of seeds
+DELTA_N=50 # Delta swarm size
+nseeds=20   # Number of seeds
 L=20        # Environment size
 N=$(seq $MAX_N -$DELTA_N $DELTA_N)
-seeds=$(seq 1 1 $nseeds)
+seeds=$(seq 31 1 $((30+$nseeds)))
 controllers=(clw ilw)
 
 # Specify paths
@@ -19,7 +19,7 @@ OUTPUT_DIR="$SHARED_DIR/$DIR/output"
 COPY=true
 BUILD=true 
 RUN=true
-ANALYZE=false
+ANALYZE=true
 
 # GNU parallel magic
 sudo localedef -i en_US -f UTF-8 en_US.UTF-8;
@@ -88,10 +88,10 @@ if [ "$ANALYZE" = true ]; then
     echo "Analyzing step length distributions..."
     FILE="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/analyze.py"
     start=$SECONDS 
-    parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 1 --delay 0.25 '
-        FILE={5};
-        python -W ignore {5} --c {1} --N {2} --s {3} --L {4};
-    ' ::: ${controllers[@]} ::: ${N[@]} ::: ${seeds[@]} ::: $L ::: $FILE 
+    parallel -S jnauta@node0,jnauta@node1,jnauta@node2,jnauta@node3,jnauta@node4 --sshdelay 0.05 --delay 0.05 '
+    FILE={5};
+    python -W ignore {5} --c {1} --N {2} --s {3} --L {4};
+    ' ::: ${controllers[@]} ::: ${N[@]} ::: ${seeds[@]} ::: $L ::: $FILE
     duration=$(( SECONDS - start ))
     echo "Analysis of heavy tailedness finished after approximately $duration s"
 fi 
