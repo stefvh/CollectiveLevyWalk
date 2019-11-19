@@ -4,8 +4,10 @@ build/
 experiments/*
 !experiments/base/
 results/
+output/
 
 *.code-workspace
 nohup.out
 __pycache__/
 output/*.npy
+*.tar.gz
