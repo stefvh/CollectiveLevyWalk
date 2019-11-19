@@ -47,13 +47,13 @@ class Analyze():
         n_patches = 10      
         M_i = 100           # Targets per patch
 
-        rdir = "results/search_efficiency_%i_nested%s/"%(L,nested)
+        rdir = "results/search_efficiency_%i_nested%s_%s/"%(L,nested, controller)
         sdir = "output/search_efficiency_%i_nested%s/%s/"%(L,nested,controller)
         if not os.path.exists(sdir):
             os.makedirs(sdir)
 
         dirname = rdir+"%s/%s/%iN/%i/"%(env,controller,N,s)
-        state_counters = np.loadtxt(dirname+"search_efficiency_state_counters.txt") 
+        state_counters = np.loadtxt(dirname+"search_efficiency_state_counters.txt")
         
         distances = dx * state_counters[:,1]    # Distance traversed by each individual
         tot_distance = np.sum(distances)        # Total distance traversed by the swarm

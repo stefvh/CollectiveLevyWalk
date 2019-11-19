@@ -17,7 +17,7 @@ class Plotter(object):
         self.seeds = np.arange(1, N_SEEDS+1, 1, dtype=int)
         self.swarm_size = np.arange(MIN_N, MAX_N+1, DELTA_N)
         self.powlaw_controllers = ["ilw", "clw"]
-        self.searcheff_controllers = ["acrw"]
+        self.searcheff_controllers = ["ilw", "clw"]
         self.target_distributions = ["sparse", "patchy"]
 
         self.N_SEEDS = N_SEEDS
@@ -142,8 +142,8 @@ class Plotter(object):
 
 
 if __name__ == "__main__":
-    MIN_N = 300
-    MAX_N = 500
+    MIN_N = 50
+    MAX_N = 1000
     DELTA_N = 50
     N_SEEDS=30
     L = 170

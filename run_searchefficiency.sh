@@ -9,7 +9,7 @@ nseeds=30   # Number of seeds
 N=$(seq $MAX_N -$DELTA_N $MIN_N)
 seeds=$(seq 1 1 $nseeds)
 # seeds=$(seq 31 1 $((30+$nseeds)))
-controllers=(clw)
+controllers=(acrw)
 distributions=(sparse patchy)
 
 # Specify paths

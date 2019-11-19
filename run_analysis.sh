@@ -1,13 +1,13 @@
 #!/bin/bash
 # Parallelize the analysis of the powerlaw fits
-MAX_N=500  # Maximum swarm size
-MIN_N=300
+MAX_N=1000  # Maximum swarm size
+MIN_N=50
 DELTA_N=50 # Delta swarm size
-nseeds=20   # Number of seeds
+nseeds=30   # Number of seeds
 L=170        # Environment size
 N=$(seq $MAX_N -$DELTA_N $MIN_N)
 seeds=$(seq 1 1 $nseeds)
-controllers=(acrw)
+controllers=(clw ilw)
 environments=(patchy sparse)
 
 DIR="/groups/wall2-ilabt-iminds-be/jnauta/exp/collective_levy/CollectiveLevyWalk/"
