@@ -2,7 +2,7 @@
 # Script for running search efficiency experiments in parallel
 T=5000      # Number of seconds
 MIN_N=50
-MAX_N=1000  # Maximum swarm size
+MAX_N=300  # Maximum swarm size
 DELTA_N=50  # Delta swarm size
 L=170       # Environment size
 nseeds=30   # Number of seeds
@@ -10,7 +10,7 @@ N=$(seq $MAX_N -$DELTA_N $MIN_N)
 seeds=$(seq 1 1 $nseeds)
 # seeds=$(seq 31 1 $((30+$nseeds)))
 controllers=(acrw clw ilw)
-distributions=(sparse patchy)
+distributions=(patchy)
 
 # Specify paths
 DIR="CollectiveLevyWalk"
