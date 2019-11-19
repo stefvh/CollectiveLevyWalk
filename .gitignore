@@ -8,3 +8,5 @@ output/
 
 *.code-workspace
 *.out
+__pycache__/
+*.tar.gz

@@ -7,11 +7,11 @@
 
 CFootBotAdaptiveCollectiveRandomWalk::SAdaptationStateData::SAdaptationStateData() :
    LevyAlphaExponent(1.0),
-   NoTargetFoundConsecutivelySimulationTicks(0) {}
+   NoTargetFoundConsecutivelySimulationTicks(50) {}
 
 void CFootBotAdaptiveCollectiveRandomWalk::SAdaptationStateData::Reset() {
    LevyAlphaExponent = 1.0;
-   NoTargetFoundConsecutivelySimulationTicks = 0;
+   NoTargetFoundConsecutivelySimulationTicks = 50;
 }
 
 /****************************************/
@@ -50,6 +50,7 @@ CFootBotAdaptiveCollectiveRandomWalk::CFootBotAdaptiveCollectiveRandomWalk(): CF
 void CFootBotAdaptiveCollectiveRandomWalk::InitParams(TConfigurationNode& t_node) {
     CFootBotCollectiveLevyWalk::InitParams(t_node);
     m_sAdaptationParams.Init(GetNode(t_node,"adaptation"));
+    m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks = m_sAdaptationParams.AdaptationIntervalSimulationTicks;
 }
 
 /****************************************/
@@ -70,16 +71,17 @@ void CFootBotAdaptiveCollectiveRandomWalk::UpdateStateFromExploration(bool b_tar
         m_sAdaptationStateData.LevyAlphaExponent = 2.0;
         m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks = 0;
     } else {
-        // Switch to Levy walk by decreasing Levy alpha exponent to a minimal value: 1
         m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks++;
-
-        Real fX = m_sAdaptationParams.ErfcTransitionFactor*(m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks - m_sAdaptationParams.AdaptationIntervalSimulationTicks);
-        if (fX <= std::numeric_limits<Real>::epsilon()) {
-            m_sStateData.RandomWalk = SStateData::PURE_LEVY_WALK;
-            m_sAdaptationStateData.LevyAlphaExponent = 1.0;
-        } else {
-            m_sStateData.RandomWalk = SStateData::ALPHA_LEVY_WALK;
-            m_sAdaptationStateData.LevyAlphaExponent = Max(1.0, erfc(fX));
+        if (m_sStateData.RandomWalk != SStateData::PURE_LEVY_WALK) {
+            // Switch to Levy walk by decreasing Levy alpha exponent to a minimal value: 1
+            Real fX = m_sAdaptationParams.ErfcTransitionFactor*(m_sAdaptationStateData.NoTargetFoundConsecutivelySimulationTicks - m_sAdaptationParams.AdaptationIntervalSimulationTicks);
+            if (fX >= std::numeric_limits<Real>::epsilon()) {
+                m_sStateData.RandomWalk = SStateData::PURE_LEVY_WALK;
+                m_sAdaptationStateData.LevyAlphaExponent = 1.0;
+            } else {
+                m_sStateData.RandomWalk = SStateData::ALPHA_LEVY_WALK;
+                m_sAdaptationStateData.LevyAlphaExponent = Max(1.0, erfc(fX));
+            }
         }
     }
 }
