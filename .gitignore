@@ -4,6 +4,7 @@ build/
 experiments/*
 !experiments/base/
 results/
+output/
 
 *.code-workspace
-nohup.out
+*.out

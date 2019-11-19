@@ -39,16 +39,16 @@ class Analyze():
             name = "xmin_list"
         np.savetxt(sdir+"results%i_%s_%iN_%i_%s.txt"%(L,controller,N,s,name), [R, p, fit.alpha, fit.xmin])
 
-    def search_efficiency(self, env, controller, N, s, L=170):
+    def search_efficiency(self, env, controller, N, s, nested="true", L=170):
         """ Compute the search efficiency for each controller """
-        deltat = 0.1        
+        deltat = 0.1            
         dx = 0.17 * deltat 
-        min_dticks = 1
-        n_patches = 10
-        M_i = 100
+        min_dticks = 10     # Time needed to travel one r_t
+        n_patches = 10      
+        M_i = 100           # Targets per patch
 
-        rdir = "results/search_efficiency_%i/"%(L)
-        sdir = "output/search_efficiency_%i/%s/"%(L,controller)
+        rdir = "results/search_efficiency_%i_nested%s/"%(L,nested)
+        sdir = "output/search_efficiency_%i_nested%s/%s/"%(L,nested,controller)
         if not os.path.exists(sdir):
             os.makedirs(sdir)
 
@@ -65,12 +65,14 @@ class Analyze():
             unique_n = np.zeros(N, dtype=int)
             prev_robotid = -1 
             prev_targetid = -1
+            consequetive_ticks = 0
             # Find the number of targets detected
             # using non-destructive foraging
             for i in range(1,target_findings.shape[0]):
                 robotid = target_findings[i,1]
                 targetid = target_findings[i,2]
-                dticks = target_findings[i,0]-target_findings[i-1,0]
+                # dticks = target_findings[i,0]-target_findings[i-1,0]
+                consequetive_ticks += 1 if target_findings[i-1,0] == target_findings[i,0] else 0
                 if robotid != prev_robotid:
                     n[robotid] += 1
                     unique_n[robotid] = 1
@@ -79,8 +81,9 @@ class Analyze():
                     if env == "patchy":
                         patch_id = targetid // M_i
                         m[patch_id] += 1
-                elif targetid == prev_targetid and dticks > min_dticks:
+                elif targetid == prev_targetid and consequetive_ticks > min_dticks:
                     n[robotid] += 1
+                    consequetive_ticks = 0
                 else:
                     pass
             # Find the patch coverage
@@ -128,10 +131,11 @@ if __name__ == "__main__":
     parser.add_argument('--c', dest='controller', type=str)
     parser.add_argument('--L', dest='L', type=int)
     parser.add_argument('--e', dest='env', type=str, default='sparse')
+    parser.add_argument('--nest', dest='nested', type=str, default='true')
     args = parser.parse_args()
 
     A = Analyze()
-    A.search_efficiency(args.env, args.controller, args.swarm_size, args.seed, args.L)
+    A.search_efficiency(args.env, args.controller, args.swarm_size, args.seed, args.nested, args.L)
     print("Search efficiencies computed for %s, %s, %iN, seed %i"\
         %(args.controller,args.env,args.swarm_size,args.seed))
 

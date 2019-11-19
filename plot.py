@@ -2,7 +2,7 @@
 # Import necessary libraries
 import numpy as np 
 import matplotlib.pyplot as plt 
-import sys 
+import sys, os
 
 import powerlaw 
 
@@ -12,12 +12,13 @@ import powerlaw
 
 class Plotter(object):
     """ Class that holds all plotting functions """
-    def __init__(self, MAX_N=1000, DELTA_N=50, N_SEEDS=30):
+    def __init__(self, MIN_N=50, MAX_N=1000, DELTA_N=50, N_SEEDS=30):
         # Generate lists
         self.seeds = np.arange(1, N_SEEDS+1, 1, dtype=int)
-        self.swarm_size = np.arange(DELTA_N, MAX_N+1, DELTA_N)
+        self.swarm_size = np.arange(MIN_N, MAX_N+1, DELTA_N)
         self.powlaw_controllers = ["ilw", "clw"]
-        self.searcheff_controllers = ["ilw", "clw", "acrw"]
+        self.searcheff_controllers = ["acrw"]
+        self.target_distributions = ["sparse", "patchy"]
 
         self.N_SEEDS = N_SEEDS
         self.DELTA_N = DELTA_N
@@ -76,29 +77,84 @@ class Plotter(object):
         # Labels, limits, etc
         ax.set_xlabel(r"N")
         ax.set_ylabel(r"$\eta$")
-
-
         return fig 
-                    
+    
+    def combine_searchefficiency_results(self, L=170):
+        for c in self.searcheff_controllers:
+            rdir = "output/search_efficiency_%i_nestedtrue/%s/"%(L,c)
+            sdir = "output/search_efficiency_%i_nestedtrue/"%(L)
+            for td in self.target_distributions:
+                eta = np.zeros((self.N_SIZES,self.N_SEEDS))
+                eps = np.zeros((self.N_SIZES,self.N_SEEDS))
+                nu = np.zeros((self.N_SIZES,self.N_SEEDS))
+                n = 0
+                for N in self.swarm_size:
+                    for s in self.seeds:
+                        # Get the results
+                        try:
+                            tempeta, tempeps, tempnu = np.loadtxt(rdir+"results%i_%s_%s_%iN_%i.txt"%(L,td,c,N,s))
+                        except:
+                            tempeta = 0
+                            tempeps = 0
+                            tempnu = 0
+                        eta[n,s-1] = tempeta 
+                        eps[n,s-1] = tempeps
+                        nu[n,s-1] = tempnu                
+                    n += 1
+                # Compute mean and variance
+                mean_eta = np.mean(eta, axis=1)
+                std_eta = np.std(eta, axis=1)
+                mean_eps = np.mean(eps, axis=1)
+                std_eps = np.std(eps, axis=1)
+                mean_nu = np.mean(nu, axis=1)
+                std_nu = np.std(nu, axis=1)
+
+                # Store mean and variance for plotting
+                data = np.array([
+                    mean_eta, std_eta, mean_eps, std_eps, mean_nu, std_nu
+                ]).T
+                header = "mean_eta std_eta mean_eps std_eps mean_nu std_nu"
+                np.savetxt(sdir+"search_efficiency_results_%s_%s_%i.txt"%(c,td,L), data, header=header)
+
+    def combine_searchhistogram_results(self, L=170):
+        sdir = "output/search_efficiency_%i/histograms/"%(L)
+        if not os.path.exists(sdir):
+            os.makedirs(sdir)
+
+        for c in self.searcheff_controllers:
+            rdir = "output/search_efficiency_%i/%s/"%(L,c)
+            for td in self.target_distributions:
+                n = 0
+                for N in self.swarm_size:
+                    histogram = np.zeros((9, self.N_SEEDS))
+                    for s in self.seeds:
+                        # Get the results
+                        hist = np.loadtxt(rdir+"results_hist%i_%s_%s_%iN_%i.txt"%(L,td,c,N,s)) 
+                        histogram[:,s-1] = hist
+                    mean_hist = np.mean(histogram, axis=1)
+                    std_hist = np.std(histogram, axis=1)
+                    HIST = np.array([mean_hist,std_hist]).T
+                    # Store the mean and standard deviation for plotting
+                    np.savetxt(sdir+"histogram_%s_%s_%i_%i.txt"%(c,td,L,N), HIST)
+
+                        
 
 
 
 if __name__ == "__main__":
-    MAX_N = 200
-    DELTA_N = 100
-    N_SEEDS=2
-    pjotr = Plotter(MAX_N=MAX_N, DELTA_N=DELTA_N, N_SEEDS=N_SEEDS)
+    MIN_N = 300
+    MAX_N = 500
+    DELTA_N = 50
+    N_SEEDS=30
+    L = 170
+    pjotr = Plotter(MIN_N=MIN_N, MAX_N=MAX_N, DELTA_N=DELTA_N, N_SEEDS=N_SEEDS)
 
-    if "analyze" in sys.argv:
-        print("Analyzing data...")
-        import analyze
-        A = analyze.Analyze(MAX_N=MAX_N, DELTA_N=DELTA_N, N_SEEDS=N_SEEDS)
-        # A.heavy_tailedness()
-        for env in ["sparse"]:
-            A.search_efficiency(pjotr.searcheff_controllers, env)
+    if "combine" in sys.argv:
+        # First combine the data into seperate arrays
+        pjotr.combine_searchefficiency_results(L=L)
+        # pjotr.combine_searchhistogram_results(L=L)
     
-    # fig = pjotr.plot_heavytailedness()
-    fig = pjotr.plot_search_efficiency()
+    # fig = pjotr.plot_search_efficiency()
 
     if "save" in sys.argv:
         pass 

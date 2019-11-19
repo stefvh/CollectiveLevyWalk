@@ -71,6 +71,9 @@ if [ "$RUN" = true ]; then
         echo Experiment done for $CONTROLLER $SWARMSIZE N and seed $SEED;
         ' ::: $CONTROLLER ::: ${seeds[@]} ::: ${N[@]} 
         cd $SHARED_DIR/$DIR/
+        # Print out some time indication
+        duration=$((SECONDS - start ))
+        echo "Finished $CONTROLLER, after $duration s"
     done
 fi 
 
